@@ -53,6 +53,32 @@ public class ChessPiece {
      * @return Collection of valid moves
      */
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
-        return new ArrayList<>();
+        //Initialize ArrayList
+        ArrayList<ChessMove> moveList = new ArrayList<>();
+
+        //Get chess piece
+        ChessPiece pieceToMove = board.getPiece(myPosition);
+
+        //What to do if the piece is a pawn
+        if (pieceToMove.getPieceType() == PieceType.PAWN) {
+            //If the pawn is at the second-to-last square
+            if (myPosition.getRow() == 6) {
+                moveList.add(new ChessMove(myPosition, new ChessPosition(myPosition.getRow() + 1, myPosition.getColumn()), PieceType.QUEEN));
+                moveList.add(new ChessMove(myPosition, new ChessPosition(myPosition.getRow() + 1, myPosition.getColumn()), PieceType.BISHOP));
+                moveList.add(new ChessMove(myPosition, new ChessPosition(myPosition.getRow() + 1, myPosition.getColumn()), PieceType.KNIGHT));
+                moveList.add(new ChessMove(myPosition, new ChessPosition(myPosition.getRow() + 1, myPosition.getColumn()), PieceType.ROOK));
+                moveList.add(new ChessMove(myPosition, new ChessPosition(myPosition.getRow() + 1, myPosition.getColumn()), PieceType.PAWN));
+            } else {
+                moveList.add(new ChessMove(myPosition, new ChessPosition(myPosition.getRow() + 1, myPosition.getColumn()), PieceType.PAWN));
+            }
+            //If the pawn hasn't been moved it can go two spaces
+            if (myPosition.getRow() == 1) {
+                ChessMove moveTwo = new ChessMove(myPosition, new ChessPosition(myPosition.getRow() + 2, myPosition.getColumn()), PieceType.PAWN);
+            }
+
+            if (board.getPiece(new ChessPosition(myPosition.getRow() + 1, myPosition.getColumn() - 1)).getTeamColor() == ChessGame.TeamColor.BLACK) {
+
+            }
+        }
     }
 }
