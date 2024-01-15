@@ -59,6 +59,8 @@ public class ChessPiece {
         //Get chess piece
         ChessPiece pieceToMove = board.getPiece(myPosition);
 
+        ChessPiece frontPiece = board.getPiece(myPosition.getColumn())
+
         //What to do if the piece is a pawn
         if (pieceToMove.getPieceType() == PieceType.PAWN) {
             //If the pawn is at the second-to-last square
@@ -73,11 +75,15 @@ public class ChessPiece {
             }
             //If the pawn hasn't been moved it can go two spaces
             if (myPosition.getRow() == 1) {
-                ChessMove moveTwo = new ChessMove(myPosition, new ChessPosition(myPosition.getRow() + 2, myPosition.getColumn()), PieceType.PAWN);
+                moveList.add(new ChessMove(myPosition, new ChessPosition(myPosition.getRow() + 2, myPosition.getColumn()), PieceType.PAWN));
             }
-
+            //If there is a black piece to the diagonal left of the pawn
             if (board.getPiece(new ChessPosition(myPosition.getRow() + 1, myPosition.getColumn() - 1)).getTeamColor() == ChessGame.TeamColor.BLACK) {
-
+                moveList.add(new ChessMove(myPosition, new ChessPosition(myPosition.getRow() + 1, myPosition.getColumn() - 1), PieceType.PAWN));
+            }
+            //If there is a black piece to the diagonal right of the pawn
+            if (board.getPiece(new ChessPosition(myPosition.getRow() + 1, myPosition.getColumn() + 1)).getTeamColor() == ChessGame.TeamColor.BLACK) {
+                moveList.add(new ChessMove(myPosition, new ChessPosition(myPosition.getRow() + 1, myPosition.getColumn() + 1), PieceType.PAWN));
             }
         }
     }
