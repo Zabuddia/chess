@@ -55,7 +55,7 @@ public class ChessPiece {
      */
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
         //Initialize ArrayList
-        ArrayList<ChessMove> moveList = new ArrayList<>();
+        Collection<ChessMove> moveList = new ArrayList<>();
 
         //Get chess piece
         ChessPiece pieceToMove = board.getPiece(myPosition);
@@ -67,19 +67,21 @@ public class ChessPiece {
 
             } else {
                 //If there is a black piece to the diagonal left of the pawn
+                ChessPiece diagonalLeftPiece = board.getPiece(new ChessPosition(myPosition.getRow() + 1, myPosition.getColumn() - 1));
                 if (myPosition.getColumn() == 0) {
                     //If the pawn is on the very left of the board
-                } else if (board.getPiece(new ChessPosition(myPosition.getRow() + 1, myPosition.getColumn() - 1)).getTeamColor() == ChessGame.TeamColor.BLACK) {
+                } else if (diagonalLeftPiece != null && diagonalLeftPiece.getTeamColor() == ChessGame.TeamColor.BLACK) {
                     moveList.add(new ChessMove(myPosition, new ChessPosition(myPosition.getRow() + 1, myPosition.getColumn() - 1), PieceType.PAWN));
                 }
                 //If there is a black piece to the diagonal right of the pawn
+                ChessPiece diagonalRightPiece = board.getPiece(new ChessPosition(myPosition.getRow() + 1, myPosition.getColumn() + 1));
                 if (myPosition.getColumn() == 7) {
                     //If the pawn is on the very right of the board
-                }else if (board.getPiece(new ChessPosition(myPosition.getRow() + 1, myPosition.getColumn() + 1)).getTeamColor() == ChessGame.TeamColor.BLACK) {
+                }else if (diagonalRightPiece != null && diagonalRightPiece.getTeamColor() == ChessGame.TeamColor.BLACK) {
                     moveList.add(new ChessMove(myPosition, new ChessPosition(myPosition.getRow() + 1, myPosition.getColumn() + 1), PieceType.PAWN));
                 }
                 //If there is a piece in front of the pawn
-                if (board.getPiece(new ChessPosition(myPosition.getRow() + 1, myPosition.getColumn())).getPieceType() != null) {
+                if (board.getPiece(new ChessPosition(myPosition.getRow() + 1, myPosition.getColumn())) != null) {
 
                 } else{
                     //If the pawn is at the second-to-last square
@@ -93,7 +95,7 @@ public class ChessPiece {
                         moveList.add(new ChessMove(myPosition, new ChessPosition(myPosition.getRow() + 1, myPosition.getColumn()), PieceType.PAWN));
                     }
                     //If there is a piece two spaces in front of the pawn
-                    if (board.getPiece(new ChessPosition(myPosition.getRow() + 2, myPosition.getColumn())).getPieceType() != null) {
+                    if (board.getPiece(new ChessPosition(3, myPosition.getColumn())) != null) {
 
                     } else if (myPosition.getRow() == 1) {
                         //If the pawn hasn't been moved it can go two spaces
@@ -105,7 +107,81 @@ public class ChessPiece {
 
         //What to do if the piece is a bishop
         if (pieceToMove.getPieceType() == PieceType.BISHOP) {
-
+            //Save original row and column
+            int originalRow = myPosition.getRow();
+            int originalCol = myPosition.getColumn();
+            //Moves to the top right of the bishop
+            int row = originalRow;
+            int col = originalCol;
+            while (row != 7 && col != 7) {
+                row++;
+                col++;
+                //If there is no piece there
+                if (board.getPiece(new ChessPosition(row, col)) == null) {
+                    moveList.add(new ChessMove(myPosition, new ChessPosition(row, col), PieceType.BISHOP));
+                } else if (board.getPiece(new ChessPosition(row, col)).pieceColor == ChessGame.TeamColor.BLACK) {
+                    //If there is a black piece there
+                    moveList.add(new ChessMove(myPosition, new ChessPosition(row, col), PieceType.BISHOP));
+                    break;
+                } else {
+                    //If there is a white piece there
+                    break;
+                }
+            }
+            //Moves to the top left of the bishop
+            row = originalRow;
+            col = originalCol;
+            while (row != 7 && col != 0) {
+                row++;
+                col--;
+                //If there is no piece there
+                if (board.getPiece(new ChessPosition(row, col)) == null) {
+                    moveList.add(new ChessMove(myPosition, new ChessPosition(row, col), PieceType.BISHOP));
+                } else if (board.getPiece(new ChessPosition(row, col)).pieceColor == ChessGame.TeamColor.BLACK) {
+                    //If there is a black piece there
+                    moveList.add(new ChessMove(myPosition, new ChessPosition(row, col), PieceType.BISHOP));
+                    break;
+                } else {
+                    //If there is a white piece there
+                    break;
+                }
+            }
+            //Moves to the bottom right of the bishop
+            row = originalRow;
+            col = originalCol;
+            while (row != 0 && col != 7) {
+                row--;
+                col++;
+                //If there is no piece there
+                if (board.getPiece(new ChessPosition(row, col)) == null) {
+                    moveList.add(new ChessMove(myPosition, new ChessPosition(row, col), PieceType.BISHOP));
+                } else if (board.getPiece(new ChessPosition(row, col)).pieceColor == ChessGame.TeamColor.BLACK) {
+                    //If there is a black piece there
+                    moveList.add(new ChessMove(myPosition, new ChessPosition(row, col), PieceType.BISHOP));
+                    break;
+                } else {
+                    //If there is a white piece there
+                    break;
+                }
+            }
+            //Moves to the bottom left of the bishop
+            row = originalRow;
+            col = originalCol;
+            while (row != 0 && col != 0) {
+                row--;
+                col--;
+                //If there is no piece there
+                if (board.getPiece(new ChessPosition(row, col)) == null) {
+                    moveList.add(new ChessMove(myPosition, new ChessPosition(row, col), PieceType.BISHOP));
+                } else if (board.getPiece(new ChessPosition(row, col)).pieceColor == ChessGame.TeamColor.BLACK) {
+                    //If there is a black piece there
+                    moveList.add(new ChessMove(myPosition, new ChessPosition(row, col), PieceType.BISHOP));
+                    break;
+                } else {
+                    //If there is a white piece there
+                    break;
+                }
+            }
         }
         return moveList;
     }
