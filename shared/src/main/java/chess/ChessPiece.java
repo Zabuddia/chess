@@ -1,5 +1,6 @@
 package chess;
 
+import javax.lang.model.type.NullType;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -59,32 +60,53 @@ public class ChessPiece {
         //Get chess piece
         ChessPiece pieceToMove = board.getPiece(myPosition);
 
-        ChessPiece frontPiece = board.getPiece(myPosition.getColumn())
-
         //What to do if the piece is a pawn
         if (pieceToMove.getPieceType() == PieceType.PAWN) {
-            //If the pawn is at the second-to-last square
-            if (myPosition.getRow() == 6) {
-                moveList.add(new ChessMove(myPosition, new ChessPosition(myPosition.getRow() + 1, myPosition.getColumn()), PieceType.QUEEN));
-                moveList.add(new ChessMove(myPosition, new ChessPosition(myPosition.getRow() + 1, myPosition.getColumn()), PieceType.BISHOP));
-                moveList.add(new ChessMove(myPosition, new ChessPosition(myPosition.getRow() + 1, myPosition.getColumn()), PieceType.KNIGHT));
-                moveList.add(new ChessMove(myPosition, new ChessPosition(myPosition.getRow() + 1, myPosition.getColumn()), PieceType.ROOK));
-                moveList.add(new ChessMove(myPosition, new ChessPosition(myPosition.getRow() + 1, myPosition.getColumn()), PieceType.PAWN));
+            //Do nothing if the pawn is at the end of the board
+            if (myPosition.getRow() == 7) {
+
             } else {
-                moveList.add(new ChessMove(myPosition, new ChessPosition(myPosition.getRow() + 1, myPosition.getColumn()), PieceType.PAWN));
-            }
-            //If the pawn hasn't been moved it can go two spaces
-            if (myPosition.getRow() == 1) {
-                moveList.add(new ChessMove(myPosition, new ChessPosition(myPosition.getRow() + 2, myPosition.getColumn()), PieceType.PAWN));
-            }
-            //If there is a black piece to the diagonal left of the pawn
-            if (board.getPiece(new ChessPosition(myPosition.getRow() + 1, myPosition.getColumn() - 1)).getTeamColor() == ChessGame.TeamColor.BLACK) {
-                moveList.add(new ChessMove(myPosition, new ChessPosition(myPosition.getRow() + 1, myPosition.getColumn() - 1), PieceType.PAWN));
-            }
-            //If there is a black piece to the diagonal right of the pawn
-            if (board.getPiece(new ChessPosition(myPosition.getRow() + 1, myPosition.getColumn() + 1)).getTeamColor() == ChessGame.TeamColor.BLACK) {
-                moveList.add(new ChessMove(myPosition, new ChessPosition(myPosition.getRow() + 1, myPosition.getColumn() + 1), PieceType.PAWN));
+                //If there is a black piece to the diagonal left of the pawn
+                if (myPosition.getColumn() == 0) {
+                    //If the pawn is on the very left of the board
+                } else if (board.getPiece(new ChessPosition(myPosition.getRow() + 1, myPosition.getColumn() - 1)).getTeamColor() == ChessGame.TeamColor.BLACK) {
+                    moveList.add(new ChessMove(myPosition, new ChessPosition(myPosition.getRow() + 1, myPosition.getColumn() - 1), PieceType.PAWN));
+                }
+                //If there is a black piece to the diagonal right of the pawn
+                if (myPosition.getColumn() == 7) {
+                    //If the pawn is on the very right of the board
+                }else if (board.getPiece(new ChessPosition(myPosition.getRow() + 1, myPosition.getColumn() + 1)).getTeamColor() == ChessGame.TeamColor.BLACK) {
+                    moveList.add(new ChessMove(myPosition, new ChessPosition(myPosition.getRow() + 1, myPosition.getColumn() + 1), PieceType.PAWN));
+                }
+                //If there is a piece in front of the pawn
+                if (board.getPiece(new ChessPosition(myPosition.getRow() + 1, myPosition.getColumn())).getPieceType() != null) {
+
+                } else{
+                    //If the pawn is at the second-to-last square
+                    if (myPosition.getRow() == 6) {
+                        moveList.add(new ChessMove(myPosition, new ChessPosition(myPosition.getRow() + 1, myPosition.getColumn()), PieceType.QUEEN));
+                        moveList.add(new ChessMove(myPosition, new ChessPosition(myPosition.getRow() + 1, myPosition.getColumn()), PieceType.BISHOP));
+                        moveList.add(new ChessMove(myPosition, new ChessPosition(myPosition.getRow() + 1, myPosition.getColumn()), PieceType.KNIGHT));
+                        moveList.add(new ChessMove(myPosition, new ChessPosition(myPosition.getRow() + 1, myPosition.getColumn()), PieceType.ROOK));
+                        moveList.add(new ChessMove(myPosition, new ChessPosition(myPosition.getRow() + 1, myPosition.getColumn()), PieceType.PAWN));
+                    } else {
+                        moveList.add(new ChessMove(myPosition, new ChessPosition(myPosition.getRow() + 1, myPosition.getColumn()), PieceType.PAWN));
+                    }
+                    //If there is a piece two spaces in front of the pawn
+                    if (board.getPiece(new ChessPosition(myPosition.getRow() + 2, myPosition.getColumn())).getPieceType() != null) {
+
+                    } else if (myPosition.getRow() == 1) {
+                        //If the pawn hasn't been moved it can go two spaces
+                        moveList.add(new ChessMove(myPosition, new ChessPosition(myPosition.getRow() + 2, myPosition.getColumn()), PieceType.PAWN));
+                    }
+                }
             }
         }
+
+        //What to do if the piece is a bishop
+        if (pieceToMove.getPieceType() == PieceType.BISHOP) {
+
+        }
+        return moveList;
     }
 }
