@@ -724,6 +724,152 @@ public class ChessPiece {
                 }
             }
         }
+
+        //What to do if the piece is a white rook
+        if (pieceToMove.getPieceType() == PieceType.ROOK && pieceToMove.pieceColor == ChessGame.TeamColor.WHITE) {
+            //Save original row and column
+            int originalRow = myPosition.getRow();
+            int originalCol = myPosition.getColumn();
+            int row = originalRow;
+            //Up moves
+            while (row < 7) {
+                row++;
+                //If there is no piece there
+                if (board.getPiece(new ChessPosition(row + 1, originalCol + 1)) == null) {
+                    moveList.add(new ChessMove(myPosition, new ChessPosition(row + 1, originalCol + 1), null));
+                } else if (board.getPiece(new ChessPosition(row + 1, originalCol + 1)).pieceColor == ChessGame.TeamColor.BLACK) {
+                    //If there is a black piece there
+                    moveList.add(new ChessMove(myPosition, new ChessPosition(row + 1, originalCol + 1), null));
+                    break;
+                } else {
+                    //If there is a white piece there
+                    break;
+                }
+            }
+            //Down moves
+            row = originalRow;
+            while (row > 0) {
+                row--;
+                //If there is no piece there
+                if (board.getPiece(new ChessPosition(row + 1, originalCol + 1)) == null) {
+                    moveList.add(new ChessMove(myPosition, new ChessPosition(row + 1, originalCol + 1), null));
+                } else if (board.getPiece(new ChessPosition(row + 1, originalCol + 1)).pieceColor == ChessGame.TeamColor.BLACK) {
+                    //If there is a black piece there
+                    moveList.add(new ChessMove(myPosition, new ChessPosition(row + 1, originalCol + 1), null));
+                    break;
+                } else {
+                    //If there is a white piece there
+                    break;
+                }
+            }
+
+            int col = originalCol;
+            //Right moves
+            while (col < 7) {
+                col++;
+                //If there is no piece there
+                if (board.getPiece(new ChessPosition(originalRow + 1, col + 1)) == null) {
+                    moveList.add(new ChessMove(myPosition, new ChessPosition(originalRow + 1, col + 1), null));
+                } else if (board.getPiece(new ChessPosition(originalRow + 1, col + 1)).pieceColor == ChessGame.TeamColor.BLACK) {
+                    //If there is a black piece there
+                    moveList.add(new ChessMove(myPosition, new ChessPosition(originalRow + 1, col + 1), null));
+                    break;
+                } else {
+                    //If there is a white piece there
+                    break;
+                }
+            }
+
+            //Left moves
+            col = originalCol;
+            while (col > 0) {
+                col--;
+                //If there is no piece there
+                if (board.getPiece(new ChessPosition(originalRow + 1, col + 1)) == null) {
+                    moveList.add(new ChessMove(myPosition, new ChessPosition(originalRow + 1, col + 1), null));
+                } else if (board.getPiece(new ChessPosition(originalRow + 1, col + 1)).pieceColor == ChessGame.TeamColor.BLACK) {
+                    //If there is a black piece there
+                    moveList.add(new ChessMove(myPosition, new ChessPosition(originalRow + 1, col + 1), null));
+                    break;
+                } else {
+                    //If there is a white piece there
+                    break;
+                }
+            }
+        }
+
+        //What to do if the piece is a black rook
+        if (pieceToMove.getPieceType() == PieceType.ROOK && pieceToMove.pieceColor == ChessGame.TeamColor.BLACK) {
+            //Save original row and column
+            int originalRow = myPosition.getRow();
+            int originalCol = myPosition.getColumn();
+            int row = originalRow;
+            //Up moves
+            while (row < 7) {
+                row++;
+                //If there is no piece there
+                if (board.getPiece(new ChessPosition(row + 1, originalCol + 1)) == null) {
+                    moveList.add(new ChessMove(myPosition, new ChessPosition(row + 1, originalCol + 1), null));
+                } else if (board.getPiece(new ChessPosition(row + 1, originalCol + 1)).pieceColor == ChessGame.TeamColor.WHITE) {
+                    //If there is a black piece there
+                    moveList.add(new ChessMove(myPosition, new ChessPosition(row + 1, originalCol + 1), null));
+                    break;
+                } else {
+                    //If there is a white piece there
+                    break;
+                }
+            }
+            //Down moves
+            row = originalRow;
+            while (row > 0) {
+                row--;
+                //If there is no piece there
+                if (board.getPiece(new ChessPosition(row + 1, originalCol + 1)) == null) {
+                    moveList.add(new ChessMove(myPosition, new ChessPosition(row + 1, originalCol + 1), null));
+                } else if (board.getPiece(new ChessPosition(row + 1, originalCol + 1)).pieceColor == ChessGame.TeamColor.WHITE) {
+                    //If there is a black piece there
+                    moveList.add(new ChessMove(myPosition, new ChessPosition(row + 1, originalCol + 1), null));
+                    break;
+                } else {
+                    //If there is a white piece there
+                    break;
+                }
+            }
+
+            int col = originalCol;
+            //Right moves
+            while (col < 7) {
+                col++;
+                //If there is no piece there
+                if (board.getPiece(new ChessPosition(originalRow + 1, col + 1)) == null) {
+                    moveList.add(new ChessMove(myPosition, new ChessPosition(originalRow + 1, col + 1), null));
+                } else if (board.getPiece(new ChessPosition(originalRow + 1, col + 1)).pieceColor == ChessGame.TeamColor.WHITE) {
+                    //If there is a black piece there
+                    moveList.add(new ChessMove(myPosition, new ChessPosition(originalRow + 1, col + 1), null));
+                    break;
+                } else {
+                    //If there is a white piece there
+                    break;
+                }
+            }
+
+            //Left moves
+            col = originalCol;
+            while (col > 0) {
+                col--;
+                //If there is no piece there
+                if (board.getPiece(new ChessPosition(originalRow + 1, col + 1)) == null) {
+                    moveList.add(new ChessMove(myPosition, new ChessPosition(originalRow + 1, col + 1), null));
+                } else if (board.getPiece(new ChessPosition(originalRow + 1, col + 1)).pieceColor == ChessGame.TeamColor.WHITE) {
+                    //If there is a black piece there
+                    moveList.add(new ChessMove(myPosition, new ChessPosition(originalRow + 1, col + 1), null));
+                    break;
+                } else {
+                    //If there is a white piece there
+                    break;
+                }
+            }
+        }
         return moveList;
     }
 
