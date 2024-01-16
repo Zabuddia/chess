@@ -113,13 +113,13 @@ public class ChessPiece {
             //Moves to the top right of the bishop
             int row = originalRow;
             int col = originalCol;
-            while (row != 7 && col != 7) {
+            while (row != 8 && col != 8) {
                 row++;
                 col++;
                 //If there is no piece there
-                if (board.getPiece(new ChessPosition(row, col)) == null) {
+                if (board.getPiece(new ChessPosition(row - 1, col - 1)) == null) {
                     moveList.add(new ChessMove(myPosition, new ChessPosition(row, col), PieceType.BISHOP));
-                } else if (board.getPiece(new ChessPosition(row, col)).pieceColor == ChessGame.TeamColor.BLACK) {
+                } else if (board.getPiece(new ChessPosition(row - 1, col - 1)).pieceColor == ChessGame.TeamColor.BLACK) {
                     //If there is a black piece there
                     moveList.add(new ChessMove(myPosition, new ChessPosition(row, col), PieceType.BISHOP));
                     break;
@@ -131,13 +131,13 @@ public class ChessPiece {
             //Moves to the top left of the bishop
             row = originalRow;
             col = originalCol;
-            while (row != 7 && col != 0) {
+            while (row != 8 && col != 1) {
                 row++;
                 col--;
                 //If there is no piece there
-                if (board.getPiece(new ChessPosition(row, col)) == null) {
+                if (board.getPiece(new ChessPosition(row - 1, col - 1)) == null) {
                     moveList.add(new ChessMove(myPosition, new ChessPosition(row, col), PieceType.BISHOP));
-                } else if (board.getPiece(new ChessPosition(row, col)).pieceColor == ChessGame.TeamColor.BLACK) {
+                } else if (board.getPiece(new ChessPosition(row - 1, col - 1)).pieceColor == ChessGame.TeamColor.BLACK) {
                     //If there is a black piece there
                     moveList.add(new ChessMove(myPosition, new ChessPosition(row, col), PieceType.BISHOP));
                     break;
@@ -149,13 +149,13 @@ public class ChessPiece {
             //Moves to the bottom right of the bishop
             row = originalRow;
             col = originalCol;
-            while (row != 0 && col != 7) {
+            while (row != 1 && col != 8) {
                 row--;
                 col++;
                 //If there is no piece there
-                if (board.getPiece(new ChessPosition(row, col)) == null) {
+                if (board.getPiece(new ChessPosition(row - 1, col - 1)) == null) {
                     moveList.add(new ChessMove(myPosition, new ChessPosition(row, col), PieceType.BISHOP));
-                } else if (board.getPiece(new ChessPosition(row, col)).pieceColor == ChessGame.TeamColor.BLACK) {
+                } else if (board.getPiece(new ChessPosition(row - 1, col - 1)).pieceColor == ChessGame.TeamColor.BLACK) {
                     //If there is a black piece there
                     moveList.add(new ChessMove(myPosition, new ChessPosition(row, col), PieceType.BISHOP));
                     break;
@@ -167,13 +167,13 @@ public class ChessPiece {
             //Moves to the bottom left of the bishop
             row = originalRow;
             col = originalCol;
-            while (row != 0 && col != 0) {
+            while (row != 1 && col != 1) {
                 row--;
                 col--;
                 //If there is no piece there
-                if (board.getPiece(new ChessPosition(row, col)) == null) {
+                if (board.getPiece(new ChessPosition(row - 1, col - 1)) == null) {
                     moveList.add(new ChessMove(myPosition, new ChessPosition(row, col), PieceType.BISHOP));
-                } else if (board.getPiece(new ChessPosition(row, col)).pieceColor == ChessGame.TeamColor.BLACK) {
+                } else if (board.getPiece(new ChessPosition(row - 1, col - 1)).pieceColor == ChessGame.TeamColor.BLACK) {
                     //If there is a black piece there
                     moveList.add(new ChessMove(myPosition, new ChessPosition(row, col), PieceType.BISHOP));
                     break;
