@@ -609,35 +609,17 @@ public class ChessPiece {
      * @return Collection of valid moves
      */
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
-        Collection<ChessMove> moveList = new ArrayList<>();
-
         //Get chess piece
         ChessPiece pieceToMove = board.getPiece(myPosition);
 
-        if (pieceToMove.getPieceType() == PieceType.BISHOP) {
-            return bishopMoves(board, myPosition, pieceToMove);
-        }
-
-        if (pieceToMove.getPieceType() == PieceType.KING) {
-            return kingMoves(board, myPosition, pieceToMove);
-        }
-
-        if (pieceToMove.getPieceType() == PieceType.KNIGHT) {
-            return knightMoves(board, myPosition, pieceToMove);
-        }
-
-        if (pieceToMove.getPieceType() == PieceType.ROOK) {
-            return rookMoves(board, myPosition, pieceToMove);
-        }
-
-        if (pieceToMove.getPieceType() == PieceType.QUEEN) {
-            return queenMoves(board, myPosition, pieceToMove);
-        }
-
-        if (pieceToMove.getPieceType() == PieceType.PAWN) {
-            return pawnMoves(board, myPosition, pieceToMove);
-        }
-        return moveList;
+        return switch (pieceToMove.getPieceType()) {
+            case BISHOP -> bishopMoves(board, myPosition, pieceToMove);
+            case KING -> kingMoves(board, myPosition, pieceToMove);
+            case KNIGHT -> knightMoves(board, myPosition, pieceToMove);
+            case ROOK -> rookMoves(board, myPosition, pieceToMove);
+            case QUEEN -> queenMoves(board, myPosition, pieceToMove);
+            case PAWN -> pawnMoves(board, myPosition, pieceToMove);
+        };
     }
 
     @Override
