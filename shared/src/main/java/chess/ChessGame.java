@@ -70,14 +70,25 @@ public class ChessGame {
         ChessPosition startPosition = move.startPosition();
         ChessPosition endPosition = move.endPosition();
         ChessPiece piece = board.getPiece(startPosition);
+        ChessPiece.PieceType promotion = move.promotionPiece();
 
+        //Invalid if it is not the team's turn
         if (piece.getTeamColor() != teamTurn) {
             throw new InvalidMoveException();
         }
 
+        //Invalid if it is not in the validMoves list or if it keeps or puts the king in check
         if (validMoves(startPosition).contains(move)) {
             board.removePiece(startPosition);
             board.addPiece(endPosition, piece);
+            if (isInCheck(teamTurn)) {
+                board.addPiece(startPosition, piece);
+                board.removePiece(endPosition);
+                throw new InvalidMoveException();
+            }
+            if (promotion != null) {
+                piece.setPieceType(promotion);
+            }
         } else {
             throw new InvalidMoveException();
         }
