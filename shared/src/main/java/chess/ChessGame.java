@@ -1,5 +1,6 @@
 package chess;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 /**
@@ -49,9 +50,11 @@ public class ChessGame {
      * startPosition
      */
     public Collection<ChessMove> validMoves(ChessPosition startPosition) {
+        Collection<ChessMove> validMoveList = new ArrayList<>();
+
         ChessPiece piece = board.getPiece(startPosition);
         if (piece == null) {
-            return null;
+            return validMoveList;
         } else {
             return piece.pieceMoves(board, startPosition);
         }
@@ -68,11 +71,21 @@ public class ChessGame {
         ChessPosition endPosition = move.endPosition();
         ChessPiece piece = board.getPiece(startPosition);
 
+        if (piece.getTeamColor() != teamTurn) {
+            throw new InvalidMoveException();
+        }
+
         if (validMoves(startPosition).contains(move)) {
             board.removePiece(startPosition);
             board.addPiece(endPosition, piece);
         } else {
             throw new InvalidMoveException();
+        }
+
+        if (getTeamTurn().equals(TeamColor.WHITE)) {
+            setTeamTurn(TeamColor.BLACK);
+        } else {
+            setTeamTurn(TeamColor.WHITE);
         }
     }
 
@@ -84,15 +97,15 @@ public class ChessGame {
      */
     public boolean isInCheck(TeamColor teamColor) {
         ChessPosition kingPosition = board.getKingPosition(teamColor);
+        Collection<ChessPosition> occupiedPositionsList = board.occupiedPositions();
 
-        for (ChessPosition occupiedPosition : board.occupiedPositions()) {
+        for (ChessPosition occupiedPosition : occupiedPositionsList) {
             for (ChessMove move : validMoves(occupiedPosition)) {
                 if (move.endPosition().equals(kingPosition)) {
                     return true;
                 }
             }
         }
-
         return false;
     }
 

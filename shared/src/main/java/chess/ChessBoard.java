@@ -61,7 +61,6 @@ public class ChessBoard {
                 }
             }
         }
-
         return occupiedPositionsList;
     }
 
