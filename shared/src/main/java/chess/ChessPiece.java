@@ -149,8 +149,6 @@ public class ChessPiece {
                 kingMoveList.add(new ChessMove(myPosition, newPosition, null));
             } else if (board.getPiece(newPosition).pieceColor != king.pieceColor) {
                 kingMoveList.add(new ChessMove(myPosition, newPosition, null));
-            } else {
-
             }
         }
 
@@ -161,8 +159,6 @@ public class ChessPiece {
                 kingMoveList.add(new ChessMove(myPosition, newPosition, null));
             } else if (board.getPiece(newPosition).pieceColor != king.pieceColor) {
                 kingMoveList.add(new ChessMove(myPosition, newPosition, null));
-            } else {
-
             }
         }
 
@@ -173,8 +169,6 @@ public class ChessPiece {
                 kingMoveList.add(new ChessMove(myPosition, newPosition, null));
             } else if (board.getPiece(newPosition).pieceColor != king.pieceColor) {
                 kingMoveList.add(new ChessMove(myPosition, newPosition, null));
-            } else {
-
             }
         }
 
@@ -185,8 +179,6 @@ public class ChessPiece {
                 kingMoveList.add(new ChessMove(myPosition, newPosition, null));
             } else if (board.getPiece(newPosition).pieceColor != king.pieceColor) {
                 kingMoveList.add(new ChessMove(myPosition, newPosition, null));
-            } else {
-
             }
         }
 
@@ -197,8 +189,6 @@ public class ChessPiece {
                 kingMoveList.add(new ChessMove(myPosition, newPosition, null));
             } else if (board.getPiece(newPosition).pieceColor != king.pieceColor) {
                 kingMoveList.add(new ChessMove(myPosition, newPosition, null));
-            } else {
-
             }
         }
 
@@ -209,8 +199,6 @@ public class ChessPiece {
                 kingMoveList.add(new ChessMove(myPosition, newPosition, null));
             } else if (board.getPiece(newPosition).pieceColor != king.pieceColor) {
                 kingMoveList.add(new ChessMove(myPosition, newPosition, null));
-            } else {
-
             }
         }
 
@@ -221,8 +209,6 @@ public class ChessPiece {
                 kingMoveList.add(new ChessMove(myPosition, newPosition, null));
             } else if (board.getPiece(newPosition).pieceColor != king.pieceColor) {
                 kingMoveList.add(new ChessMove(myPosition, newPosition, null));
-            } else {
-
             }
         }
 
@@ -233,8 +219,6 @@ public class ChessPiece {
                 kingMoveList.add(new ChessMove(myPosition, newPosition, null));
             } else if (board.getPiece(newPosition).pieceColor != king.pieceColor) {
                 kingMoveList.add(new ChessMove(myPosition, newPosition, null));
-            } else {
-
             }
         }
         return kingMoveList;
@@ -255,8 +239,6 @@ public class ChessPiece {
                 knightMoveList.add(new ChessMove(myPosition, newPosition, null));
             } else if (board.getPiece(newPosition).pieceColor != knight.pieceColor) {
                 knightMoveList.add(new ChessMove(myPosition, newPosition, null));
-            } else {
-
             }
         }
 
@@ -267,8 +249,6 @@ public class ChessPiece {
                 knightMoveList.add(new ChessMove(myPosition, newPosition, null));
             } else if (board.getPiece(newPosition).pieceColor != knight.pieceColor) {
                 knightMoveList.add(new ChessMove(myPosition, newPosition, null));
-            } else {
-
             }
         }
 
@@ -279,8 +259,6 @@ public class ChessPiece {
                 knightMoveList.add(new ChessMove(myPosition, newPosition, null));
             } else if (board.getPiece(newPosition).pieceColor != knight.pieceColor) {
                 knightMoveList.add(new ChessMove(myPosition, newPosition, null));
-            } else {
-
             }
         }
 
@@ -291,8 +269,6 @@ public class ChessPiece {
                 knightMoveList.add(new ChessMove(myPosition, newPosition, null));
             } else if (board.getPiece(newPosition).pieceColor != knight.pieceColor) {
                 knightMoveList.add(new ChessMove(myPosition, newPosition, null));
-            } else {
-
             }
         }
 
@@ -303,8 +279,6 @@ public class ChessPiece {
                 knightMoveList.add(new ChessMove(myPosition, newPosition, null));
             } else if (board.getPiece(newPosition).pieceColor != knight.pieceColor) {
                 knightMoveList.add(new ChessMove(myPosition, newPosition, null));
-            } else {
-
             }
         }
 
@@ -315,8 +289,6 @@ public class ChessPiece {
                 knightMoveList.add(new ChessMove(myPosition, newPosition, null));
             } else if (board.getPiece(newPosition).pieceColor != knight.pieceColor) {
                 knightMoveList.add(new ChessMove(myPosition, newPosition, null));
-            } else {
-
             }
         }
 
@@ -327,8 +299,6 @@ public class ChessPiece {
                 knightMoveList.add(new ChessMove(myPosition, newPosition, null));
             } else if (board.getPiece(newPosition).pieceColor != knight.pieceColor) {
                 knightMoveList.add(new ChessMove(myPosition, newPosition, null));
-            } else {
-
             }
         }
 
@@ -339,8 +309,6 @@ public class ChessPiece {
                 knightMoveList.add(new ChessMove(myPosition, newPosition, null));
             } else if (board.getPiece(newPosition).pieceColor != knight.pieceColor) {
                 knightMoveList.add(new ChessMove(myPosition, newPosition, null));
-            } else {
-
             }
         }
         return knightMoveList;
@@ -455,18 +423,14 @@ public class ChessPiece {
 
                 if (col < 7) {
                     ChessPiece rightPiece = board.getPiece(new ChessPosition(row + 2, col + 2));
-                    if (rightPiece == null) {
-
-                    } else if (rightPiece.pieceColor != pawn.pieceColor) {
+                    if (rightPiece != null && rightPiece.pieceColor != pawn.pieceColor) {
                         newPosition = new ChessPosition(row + 2, col + 2);
                         pawnMoveList.add(new ChessMove(myPosition, newPosition, null));
                     }
                 }
                 if (col > 0) {
                     ChessPiece leftPiece = board.getPiece(new ChessPosition(row + 2, col));
-                    if (leftPiece == null) {
-
-                    } else if (leftPiece.pieceColor != pawn.pieceColor) {
+                    if (leftPiece != null && leftPiece.pieceColor != pawn.pieceColor) {
                         newPosition = new ChessPosition(row + 2, col);
                         pawnMoveList.add(new ChessMove(myPosition, newPosition, null));
                     }
@@ -486,9 +450,7 @@ public class ChessPiece {
 
                 if (col < 7) {
                     ChessPiece rightPiece = board.getPiece(new ChessPosition(row + 2, col + 2));
-                    if (rightPiece == null) {
-
-                    } else if (rightPiece.pieceColor != pawn.pieceColor) {
+                    if (rightPiece != null && rightPiece.pieceColor != pawn.pieceColor) {
                         newPosition = new ChessPosition(row + 2, col + 2);
                         pawnMoveList.add(new ChessMove(myPosition, newPosition, PieceType.QUEEN));
                         pawnMoveList.add(new ChessMove(myPosition, newPosition, PieceType.ROOK));
@@ -499,9 +461,7 @@ public class ChessPiece {
 
                 if (col > 0) {
                     ChessPiece leftPiece = board.getPiece(new ChessPosition(row + 2, col));
-                    if (leftPiece == null) {
-
-                    } else if (leftPiece.pieceColor != pawn.pieceColor) {
+                    if (leftPiece != null && leftPiece.pieceColor != pawn.pieceColor) {
                         newPosition = new ChessPosition(row + 2, col);
                         pawnMoveList.add(new ChessMove(myPosition, newPosition, PieceType.QUEEN));
                         pawnMoveList.add(new ChessMove(myPosition, newPosition, PieceType.ROOK));
@@ -532,9 +492,7 @@ public class ChessPiece {
 
                 if (col < 7) {
                     ChessPiece rightPiece = board.getPiece(new ChessPosition(row, col + 2));
-                    if (rightPiece == null) {
-
-                    } else if (rightPiece.pieceColor != pawn.pieceColor) {
+                    if (rightPiece != null && rightPiece.pieceColor != pawn.pieceColor) {
                         newPosition = new ChessPosition(row, col + 2);
                         pawnMoveList.add(new ChessMove(myPosition, newPosition, null));
                     }
@@ -542,9 +500,7 @@ public class ChessPiece {
 
                 if (col > 0) {
                     ChessPiece leftPiece = board.getPiece(new ChessPosition(row, col));
-                    if (leftPiece == null) {
-
-                    } else if (leftPiece.pieceColor != pawn.pieceColor) {
+                    if (leftPiece != null && leftPiece.pieceColor != pawn.pieceColor) {
                         newPosition = new ChessPosition(row, col);
                         pawnMoveList.add(new ChessMove(myPosition, newPosition, null));
                     }
@@ -564,9 +520,7 @@ public class ChessPiece {
 
                 if (col < 7) {
                     ChessPiece rightPiece = board.getPiece(new ChessPosition(row, col + 2));
-                    if (rightPiece == null) {
-
-                    } else if (rightPiece.pieceColor != pawn.pieceColor) {
+                    if (rightPiece != null && rightPiece.pieceColor != pawn.pieceColor) {
                         newPosition = new ChessPosition(row, col + 2);
                         pawnMoveList.add(new ChessMove(myPosition, newPosition, PieceType.QUEEN));
                         pawnMoveList.add(new ChessMove(myPosition, newPosition, PieceType.ROOK));
@@ -577,9 +531,7 @@ public class ChessPiece {
 
                 if (col > 0) {
                     ChessPiece leftPiece = board.getPiece(new ChessPosition(row, col));
-                    if (leftPiece == null) {
-
-                    } else if (leftPiece.pieceColor != pawn.pieceColor) {
+                    if (leftPiece != null && leftPiece.pieceColor != pawn.pieceColor) {
                         newPosition = new ChessPosition(row, col);
                         pawnMoveList.add(new ChessMove(myPosition, newPosition, PieceType.QUEEN));
                         pawnMoveList.add(new ChessMove(myPosition, newPosition, PieceType.ROOK));

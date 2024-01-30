@@ -50,7 +50,11 @@ public class ChessGame {
      */
     public Collection<ChessMove> validMoves(ChessPosition startPosition) {
         ChessPiece piece = board.getPiece(startPosition);
-        return piece.pieceMoves(board, startPosition);
+        if (piece == null) {
+            return null;
+        } else {
+            return piece.pieceMoves(board, startPosition);
+        }
     }
 
     /**
@@ -79,7 +83,22 @@ public class ChessGame {
      * @return True if the specified team is in check
      */
     public boolean isInCheck(TeamColor teamColor) {
-        throw new RuntimeException("Not implemented");
+        ChessPosition kingPosition = board.getKingPosition(teamColor);
+
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                ChessPosition position = new ChessPosition(i + 1, j + 1);
+                ChessPiece piece = board.getPiece(position);
+                if (piece != null) {
+                    for (ChessMove move : validMoves(position)) {
+                        if (move.endPosition().equals(kingPosition)) {
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+        return false;
     }
 
     /**

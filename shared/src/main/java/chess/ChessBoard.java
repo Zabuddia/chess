@@ -38,6 +38,17 @@ public class ChessBoard {
         return squares[position.getRow()][position.getColumn()];
     }
 
+    public ChessPosition getKingPosition(ChessGame.TeamColor color) {
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                if (squares[i][j].getTeamColor() == color && squares[i][j].getPieceType() == ChessPiece.PieceType.KING) {
+                    return new ChessPosition(i + 1, j + 1);
+                }
+            }
+        }
+        return null;
+    }
+
     /**
      * Sets the board to the default starting board
      * (How the game of chess normally starts)
