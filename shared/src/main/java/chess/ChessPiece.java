@@ -47,7 +47,7 @@ public class ChessPiece {
         return type;
     }
 
-    private static Collection<ChessMove> bishopMoves(ChessBoard board, ChessPosition myPosition, ChessPiece bishop) {
+    private Collection<ChessMove> bishopMoves(ChessBoard board, ChessPosition myPosition, ChessPiece bishop) {
         Collection<ChessMove> bishopMoveList = new ArrayList<>();
 
         int originalRow = myPosition.getRow();
@@ -134,7 +134,7 @@ public class ChessPiece {
         return bishopMoveList;
     }
 
-    private static Collection<ChessMove> kingMoves(ChessBoard board, ChessPosition myPosition, ChessPiece king) {
+    private Collection<ChessMove> kingMoves(ChessBoard board, ChessPosition myPosition, ChessPiece king) {
         Collection<ChessMove> kingMoveList = new ArrayList<>();
 
         int row = myPosition.getRow();
@@ -240,7 +240,7 @@ public class ChessPiece {
         return kingMoveList;
     }
 
-    private static Collection<ChessMove> knightMoves(ChessBoard board, ChessPosition myPosition, ChessPiece knight) {
+    private Collection<ChessMove> knightMoves(ChessBoard board, ChessPosition myPosition, ChessPiece knight) {
         Collection<ChessMove> knightMoveList = new ArrayList<>();
 
         int row = myPosition.getRow();
@@ -346,7 +346,7 @@ public class ChessPiece {
         return knightMoveList;
     }
 
-    private static Collection<ChessMove> rookMoves(ChessBoard board, ChessPosition myPosition, ChessPiece rook) {
+    private Collection<ChessMove> rookMoves(ChessBoard board, ChessPosition myPosition, ChessPiece rook) {
         Collection<ChessMove> rookMoveList = new ArrayList<>();
 
         int originalRow = myPosition.getRow();
@@ -426,7 +426,7 @@ public class ChessPiece {
         return rookMoveList;
     }
 
-    private static Collection<ChessMove> queenMoves(ChessBoard board, ChessPosition myPosition, ChessPiece queen) {
+    private Collection<ChessMove> queenMoves(ChessBoard board, ChessPosition myPosition, ChessPiece queen) {
         Collection<ChessMove> queenMoveList = new ArrayList<>();
         Collection<ChessMove> rookMoveList = rookMoves(board, myPosition, queen);
         Collection<ChessMove> bishopMoveList = bishopMoves(board, myPosition, queen);
@@ -436,7 +436,7 @@ public class ChessPiece {
         return queenMoveList;
     }
 
-    private static Collection<ChessMove> pawnMoves(ChessBoard board, ChessPosition myPosition, ChessPiece pawn) {
+    private Collection<ChessMove> pawnMoves(ChessBoard board, ChessPosition myPosition, ChessPiece pawn) {
         Collection<ChessMove> pawnMoveList = new ArrayList<>();
 
         int row = myPosition.getRow();
@@ -608,7 +608,7 @@ public class ChessPiece {
      *
      * @return Collection of valid moves
      */
-    public static Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
+    public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
         //Get chess piece
         ChessPiece pieceToMove = board.getPiece(myPosition);
 
