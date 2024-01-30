@@ -62,6 +62,19 @@ public class ChessBoard {
         return null;
     }
 
+    public Collection<ChessPosition> occupiedPositions() {
+        Collection<ChessPosition> occupiedPositionsList = new ArrayList<>();
+
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                if (squares[i][j] != null) {
+                    occupiedPositionsList.add(new ChessPosition(i + 1, j + 1));
+                }
+            }
+        }
+        return occupiedPositionsList;
+    }
+
     public Collection<ChessPosition> occupiedPositionsOfAColor(ChessGame.TeamColor color) {
         Collection<ChessPosition> occupiedPositionsList = new ArrayList<>();
 

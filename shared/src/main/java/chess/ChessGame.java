@@ -142,15 +142,13 @@ public class ChessGame {
                 ChessPosition endPosition = move.endPosition();
                 ChessPiece piece = boardCopy.getPiece(startPosition);
 
-                if (validMoves(startPosition).contains(move)) {
-                    boardCopy.removePiece(startPosition);
-                    boardCopy.addPiece(endPosition, piece);
-                    setBoard(boardCopy);
-                    if (!isInCheck(teamColor)) {
-                        return false;
-                    }
-                    setBoard(originalBoard);
+                boardCopy.removePiece(startPosition);
+                boardCopy.addPiece(endPosition, piece);
+                setBoard(boardCopy);
+                if (!isInCheck(teamColor)) {
+                    return false;
                 }
+                setBoard(originalBoard);
             }
         }
         return true;
@@ -164,7 +162,31 @@ public class ChessGame {
      * @return True if the specified team is in stalemate, otherwise false
      */
     public boolean isInStalemate(TeamColor teamColor) {
-        throw new RuntimeException("Not implemented");
+        if (isInCheck(teamColor)) {
+            return false;
+        }
+
+        Collection<ChessPosition> occupiedPositionsList = board.occupiedPositionsOfAColor(teamColor);
+        ChessBoard originalBoard = board;
+
+        for (ChessPosition occupiedPosition : occupiedPositionsList) {
+            Collection<ChessMove> validMoveList = validMoves(occupiedPosition);
+            for (ChessMove move : validMoveList) {
+                ChessBoard boardCopy = new ChessBoard(originalBoard);
+                ChessPosition startPosition = move.startPosition();
+                ChessPosition endPosition = move.endPosition();
+                ChessPiece piece = boardCopy.getPiece(startPosition);
+
+                boardCopy.removePiece(startPosition);
+                boardCopy.addPiece(endPosition, piece);
+                setBoard(boardCopy);
+                if (!isInCheck(teamColor)) {
+                    return false;
+                }
+                setBoard(originalBoard);
+            }
+        }
+        return true;
     }
 
     /**
