@@ -53,11 +53,10 @@ public class ChessGame {
         Collection<ChessMove> validMoveList = new ArrayList<>();
 
         ChessPiece piece = board.getPiece(startPosition);
-        if (piece == null) {
-            return validMoveList;
-        } else {
-            return piece.pieceMoves(board, startPosition);
+        if (piece != null) {
+            validMoveList.addAll(piece.pieceMoves(board, startPosition));
         }
+        return validMoveList;
     }
 
     /**
@@ -108,7 +107,8 @@ public class ChessGame {
      */
     public boolean isInCheck(TeamColor teamColor) {
         ChessPosition kingPosition = board.getKingPosition(teamColor);
-        Collection<ChessPosition> occupiedPositionsList = board.occupiedPositions();
+        TeamColor opponentColor = (teamColor == TeamColor.WHITE) ? TeamColor.BLACK : TeamColor.WHITE;
+        Collection<ChessPosition> occupiedPositionsList = board.occupiedPositionsOfAColor(opponentColor);
 
         for (ChessPosition occupiedPosition : occupiedPositionsList) {
             for (ChessMove move : validMoves(occupiedPosition)) {
@@ -127,7 +127,16 @@ public class ChessGame {
      * @return True if the specified team is in checkmate
      */
     public boolean isInCheckmate(TeamColor teamColor) {
-        throw new RuntimeException("Not implemented");
+        if (!isInCheck(teamColor)) {
+            return false;
+        }
+
+        Collection<ChessPosition> occupiedPositionsList = board.occupiedPositionsOfAColor(teamColor);
+        ChessBoard boardCopy = new ChessBoard(board);
+        for (ChessPosition occupiedPosition : occupiedPositionsList) {
+
+        }
+        return true;
     }
 
     /**

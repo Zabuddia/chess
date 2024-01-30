@@ -11,9 +11,20 @@ import java.util.Collection;
  * signature of the existing methods.
  */
 public class ChessBoard {
-    private final ChessPiece[][] squares = new ChessPiece[8][8];
+    private final ChessPiece[][] squares;
     public ChessBoard() {
-        
+        this.squares = new ChessPiece[8][8];
+    }
+
+    public ChessBoard(ChessBoard copyBoard) {
+        this.squares = new ChessPiece[8][8];
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                if (copyBoard.squares[i][j] != null) {
+                    this.squares[i][j] = new ChessPiece(copyBoard.squares[i][j].getTeamColor(), copyBoard.squares[i][j].getPieceType());
+                }
+            }
+        }
     }
 
     /**
@@ -51,12 +62,12 @@ public class ChessBoard {
         return null;
     }
 
-    public Collection<ChessPosition> occupiedPositions() {
+    public Collection<ChessPosition> occupiedPositionsOfAColor(ChessGame.TeamColor color) {
         Collection<ChessPosition> occupiedPositionsList = new ArrayList<>();
 
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
-                if (squares[i][j] != null) {
+                if (squares[i][j] != null && squares[i][j].getTeamColor() == color) {
                     occupiedPositionsList.add(new ChessPosition(i + 1, j + 1));
                 }
             }
@@ -112,7 +123,6 @@ public class ChessBoard {
         squares[6][6] = new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.PAWN);
         squares[6][7] = new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.PAWN);
     }
-
     @Override
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder();
