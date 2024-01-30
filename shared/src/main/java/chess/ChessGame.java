@@ -1,5 +1,6 @@
 package chess;
 
+import javax.xml.validation.Validator;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -53,9 +54,33 @@ public class ChessGame {
         Collection<ChessMove> validMoveList = new ArrayList<>();
 
         ChessPiece piece = board.getPiece(startPosition);
+
         if (piece != null) {
             validMoveList.addAll(piece.pieceMoves(board, startPosition));
+        } else {
+            return validMoveList;
         }
+
+        ChessGame.TeamColor pieceColor = piece.getTeamColor();
+        Collection<ChessMove> invalidMoveList = new ArrayList<>();
+
+        for (ChessMove move : validMoveList) {
+            ChessPosition endPosition = move.endPosition();
+            ChessPiece savedPiece = board.getPiece(endPosition);
+            board.removePiece(startPosition);
+            board.addPiece(endPosition, piece);
+            if (isInCheck(pieceColor)) {
+                board.addPiece(startPosition, piece);
+                board.removePiece(endPosition);
+                board.addPiece(endPosition, savedPiece);
+                invalidMoveList.add(move);
+                continue;
+            }
+            board.addPiece(startPosition, piece);
+            board.removePiece(endPosition);
+            board.addPiece(endPosition, savedPiece);
+        }
+        validMoveList.removeAll(invalidMoveList);
         return validMoveList;
     }
 
@@ -111,7 +136,8 @@ public class ChessGame {
         Collection<ChessPosition> occupiedPositionsList = board.occupiedPositionsOfAColor(opponentColor);
 
         for (ChessPosition occupiedPosition : occupiedPositionsList) {
-            for (ChessMove move : validMoves(occupiedPosition)) {
+            ChessPiece piece = board.getPiece(occupiedPosition);
+            for (ChessMove move : piece.pieceMoves(board, occupiedPosition)) {
                 if (move.endPosition().equals(kingPosition)) {
                     return true;
                 }
