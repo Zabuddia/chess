@@ -19,54 +19,6 @@ public class ChessBoard {
     private boolean blackRookQueensideMoved;
     private boolean blackRookKingsideMoved;
 
-    public boolean isKingMoved(ChessGame.TeamColor color) {
-        if (color == ChessGame.TeamColor.WHITE) {
-            return whiteKingMoved;
-        } else {
-            return blackKingMoved;
-        }
-    }
-
-    public boolean isRookQueensideMoved(ChessGame.TeamColor color) {
-        if (color == ChessGame.TeamColor.WHITE) {
-            return whiteRookQueensideMoved;
-        } else {
-            return blackRookQueensideMoved;
-        }
-    }
-
-    public boolean isRookKingsideMoved(ChessGame.TeamColor color) {
-        if (color == ChessGame.TeamColor.WHITE) {
-            return whiteRookKingsideMoved;
-        } else {
-            return blackRookKingsideMoved;
-        }
-    }
-
-    public void setKingMoved(ChessGame.TeamColor color) {
-        if (color == ChessGame.TeamColor.WHITE) {
-            whiteKingMoved = true;
-        } else {
-            blackKingMoved = true;
-        }
-    }
-
-    public void setRookMoved(ChessPosition rookPosition, ChessGame.TeamColor color) {
-        if (color == ChessGame.TeamColor.WHITE) {
-            if (rookPosition.getColumn() == 0 && rookPosition.getRow() == 0) {
-                whiteRookQueensideMoved = true;
-            } else if (rookPosition.getColumn() == 7 && rookPosition.getRow() == 0){
-                whiteRookKingsideMoved = true;
-            }
-        } else {
-            if (rookPosition.getColumn() == 0 && rookPosition.getRow() == 7) {
-                blackRookQueensideMoved = true;
-            } else if (rookPosition.getColumn() == 7 && rookPosition.getRow() == 7){
-                blackRookKingsideMoved = true;
-            }
-        }
-    }
-
     public ChessBoard() {
         this.squares = new ChessPiece[8][8];
         whiteKingMoved = blackKingMoved = whiteRookQueensideMoved = whiteRookKingsideMoved = blackRookQueensideMoved = blackRookKingsideMoved = false;
@@ -113,22 +65,6 @@ public class ChessBoard {
         return squares[position.getRow()][position.getColumn()];
     }
 
-    public ChessPosition getRookKingsidePosition(ChessGame.TeamColor color) {
-        if (color == ChessGame.TeamColor.WHITE) {
-            return new ChessPosition(1, 1);
-        } else {
-            return new ChessPosition(8, 1);
-        }
-    }
-
-    public ChessPosition getRookQueensidePosition(ChessGame.TeamColor color) {
-        if (color == ChessGame.TeamColor.WHITE) {
-            return new ChessPosition(1, 8);
-        } else {
-            return new ChessPosition(8, 8);
-        }
-    }
-
     public ChessPosition getKingPosition(ChessGame.TeamColor color) {
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
@@ -164,6 +100,54 @@ public class ChessBoard {
             }
         }
         return occupiedPositionsList;
+    }
+
+    public boolean isKingMoved(ChessGame.TeamColor color) {
+        if (color == ChessGame.TeamColor.WHITE) {
+            return whiteKingMoved;
+        } else {
+            return blackKingMoved;
+        }
+    }
+
+    public boolean isRookQueensideMoved(ChessGame.TeamColor color) {
+        if (color == ChessGame.TeamColor.WHITE) {
+            return whiteRookQueensideMoved;
+        } else {
+            return blackRookQueensideMoved;
+        }
+    }
+
+    public boolean isRookKingsideMoved(ChessGame.TeamColor color) {
+        if (color == ChessGame.TeamColor.WHITE) {
+            return whiteRookKingsideMoved;
+        } else {
+            return blackRookKingsideMoved;
+        }
+    }
+
+    public void setKingMoved(ChessGame.TeamColor color) {
+        if (color == ChessGame.TeamColor.WHITE) {
+            whiteKingMoved = true;
+        } else {
+            blackKingMoved = true;
+        }
+    }
+
+    public void setRookMoved(ChessPosition rookPosition, ChessGame.TeamColor color) {
+        if (color == ChessGame.TeamColor.WHITE) {
+            if (rookPosition.getColumn() == 0 && rookPosition.getRow() == 0) {
+                whiteRookQueensideMoved = true;
+            } else if (rookPosition.getColumn() == 7 && rookPosition.getRow() == 0){
+                whiteRookKingsideMoved = true;
+            }
+        } else {
+            if (rookPosition.getColumn() == 0 && rookPosition.getRow() == 7) {
+                blackRookQueensideMoved = true;
+            } else if (rookPosition.getColumn() == 7 && rookPosition.getRow() == 7){
+                blackRookKingsideMoved = true;
+            }
+        }
     }
 
     public boolean castleQueensideSpacesEmpty(ChessGame.TeamColor color) {
