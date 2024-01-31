@@ -61,6 +61,19 @@ public class ChessGame {
             return validMoveList;
         }
 
+        if (piece.getPieceType() == ChessPiece.PieceType.KING && !board.isKingMoved(teamTurn)) {
+            if (!board.isRookQueensideMoved(teamTurn) && board.castleQueensideSpacesEmpty(teamTurn)) {
+                ChessPosition endPosition = new ChessPosition(startPosition.getRow() + 1, startPosition.getColumn() - 1);
+                ChessMove castleMove = new ChessMove(startPosition, endPosition, null);
+                validMoveList.add(castleMove);
+            }
+            if (!board.isRookKingsideMoved(teamTurn) && board.castleKingsideSpacesEmpty(teamTurn)) {
+                ChessPosition endPosition = new ChessPosition(startPosition.getRow() + 1, startPosition.getColumn() + 3);
+                ChessMove castleMove = new ChessMove(startPosition, endPosition, null);
+                validMoveList.add(castleMove);
+            }
+        }
+
         ChessGame.TeamColor pieceColor = piece.getTeamColor();
         Collection<ChessMove> invalidMoveList = new ArrayList<>();
 
@@ -110,6 +123,14 @@ public class ChessGame {
             }
         } else {
             throw new InvalidMoveException();
+        }
+
+        if (piece.getPieceType() == ChessPiece.PieceType.KING) {
+            board.setKingMoved(teamTurn);
+        }
+
+        if (piece.getPieceType() == ChessPiece.PieceType.ROOK) {
+            board.setRookMoved(startPosition, teamTurn);
         }
 
         if (getTeamTurn().equals(TeamColor.WHITE)) {

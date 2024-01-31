@@ -12,8 +12,64 @@ import java.util.Collection;
  */
 public class ChessBoard {
     private final ChessPiece[][] squares;
+    private boolean whiteKingMoved;
+    private boolean blackKingMoved;
+    private boolean whiteRookQueensideMoved;
+    private boolean whiteRookKingsideMoved;
+    private boolean blackRookQueensideMoved;
+    private boolean blackRookKingsideMoved;
+
+    public boolean isKingMoved(ChessGame.TeamColor color) {
+        if (color == ChessGame.TeamColor.WHITE) {
+            return whiteKingMoved;
+        } else {
+            return blackKingMoved;
+        }
+    }
+
+    public boolean isRookQueensideMoved(ChessGame.TeamColor color) {
+        if (color == ChessGame.TeamColor.WHITE) {
+            return whiteRookQueensideMoved;
+        } else {
+            return blackRookQueensideMoved;
+        }
+    }
+
+    public boolean isRookKingsideMoved(ChessGame.TeamColor color) {
+        if (color == ChessGame.TeamColor.WHITE) {
+            return whiteRookKingsideMoved;
+        } else {
+            return blackRookKingsideMoved;
+        }
+    }
+
+    public void setKingMoved(ChessGame.TeamColor color) {
+        if (color == ChessGame.TeamColor.WHITE) {
+            whiteKingMoved = true;
+        } else {
+            blackKingMoved = true;
+        }
+    }
+
+    public void setRookMoved(ChessPosition rookPosition, ChessGame.TeamColor color) {
+        if (color == ChessGame.TeamColor.WHITE) {
+            if (rookPosition.getColumn() == 0 && rookPosition.getRow() == 0) {
+                whiteRookQueensideMoved = true;
+            } else if (rookPosition.getColumn() == 7 && rookPosition.getRow() == 0){
+                whiteRookKingsideMoved = true;
+            }
+        } else {
+            if (rookPosition.getColumn() == 0 && rookPosition.getRow() == 7) {
+                blackRookQueensideMoved = true;
+            } else if (rookPosition.getColumn() == 7 && rookPosition.getRow() == 7){
+                blackRookKingsideMoved = true;
+            }
+        }
+    }
+
     public ChessBoard() {
         this.squares = new ChessPiece[8][8];
+        whiteKingMoved = blackKingMoved = whiteRookQueensideMoved = whiteRookKingsideMoved = blackRookQueensideMoved = blackRookKingsideMoved = false;
     }
 
     public ChessBoard(ChessBoard copyBoard) {
@@ -25,6 +81,12 @@ public class ChessBoard {
                 }
             }
         }
+        this.whiteKingMoved = copyBoard.whiteKingMoved;
+        this.blackKingMoved = copyBoard.blackKingMoved;
+        this.whiteRookQueensideMoved = copyBoard.whiteRookQueensideMoved;
+        this.whiteRookKingsideMoved = copyBoard.whiteRookKingsideMoved;
+        this.blackRookQueensideMoved = copyBoard.blackRookQueensideMoved;
+        this.blackRookKingsideMoved = copyBoard.blackRookKingsideMoved;
     }
 
     /**
@@ -49,6 +111,22 @@ public class ChessBoard {
      */
     public ChessPiece getPiece(ChessPosition position) {
         return squares[position.getRow()][position.getColumn()];
+    }
+
+    public ChessPosition getRookKingsidePosition(ChessGame.TeamColor color) {
+        if (color == ChessGame.TeamColor.WHITE) {
+            return new ChessPosition(1, 1);
+        } else {
+            return new ChessPosition(8, 1);
+        }
+    }
+
+    public ChessPosition getRookQueensidePosition(ChessGame.TeamColor color) {
+        if (color == ChessGame.TeamColor.WHITE) {
+            return new ChessPosition(1, 8);
+        } else {
+            return new ChessPosition(8, 8);
+        }
     }
 
     public ChessPosition getKingPosition(ChessGame.TeamColor color) {
@@ -86,6 +164,40 @@ public class ChessBoard {
             }
         }
         return occupiedPositionsList;
+    }
+
+    public boolean castleQueensideSpacesEmpty(ChessGame.TeamColor color) {
+        if (color == ChessGame.TeamColor.WHITE) {
+            for (ChessPosition position : occupiedPositions()) {
+                if (position.getRow() == 0 && ((position.getColumn() == 1) || (position.getColumn() == 2) || (position.getColumn() == 3))) {
+                    return false;
+                }
+            }
+        } else {
+            for (ChessPosition position : occupiedPositions()) {
+                if (position.getRow() == 7 && ((position.getColumn() == 1) || (position.getColumn() == 2) || (position.getColumn() == 3))) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    public boolean castleKingsideSpacesEmpty(ChessGame.TeamColor color) {
+        if (color == ChessGame.TeamColor.WHITE) {
+            for (ChessPosition position : occupiedPositions()) {
+                if (position.getRow() == 0 && ((position.getColumn() == 5) || (position.getColumn() == 6))) {
+                    return false;
+                }
+            }
+        } else {
+            for (ChessPosition position : occupiedPositions()) {
+                if (position.getRow() == 7 && ((position.getColumn() == 5) || (position.getColumn() == 6))) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     /**
