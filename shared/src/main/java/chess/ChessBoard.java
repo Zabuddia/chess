@@ -129,19 +129,13 @@ public class ChessBoard {
     public boolean isRookQueensideThere(ChessGame.TeamColor color) {
         if (color == ChessGame.TeamColor.WHITE && squares[0][0] != null && squares[0][0].getPieceType() == ChessPiece.PieceType.ROOK && squares[0][0].getTeamColor() == ChessGame.TeamColor.WHITE) {
             return true;
-        } else if (color == ChessGame.TeamColor.BLACK && squares[7][0] != null && squares[7][0].getPieceType() == ChessPiece.PieceType.ROOK && squares[7][0].getTeamColor() == ChessGame.TeamColor.BLACK) {
-            return true;
-        }
-        return false;
+        } else return color == ChessGame.TeamColor.BLACK && squares[7][0] != null && squares[7][0].getPieceType() == ChessPiece.PieceType.ROOK && squares[7][0].getTeamColor() == ChessGame.TeamColor.BLACK;
     }
 
     public boolean isRookKingsideThere(ChessGame.TeamColor color) {
         if (color == ChessGame.TeamColor.WHITE && squares[0][7] != null && squares[0][7].getPieceType() == ChessPiece.PieceType.ROOK && squares[0][7].getTeamColor() == ChessGame.TeamColor.WHITE) {
             return true;
-        } else if (color == ChessGame.TeamColor.BLACK && squares[7][7] != null && squares[7][7].getPieceType() == ChessPiece.PieceType.ROOK && squares[7][7].getTeamColor() == ChessGame.TeamColor.BLACK) {
-            return true;
-        }
-        return false;
+        } else return color == ChessGame.TeamColor.BLACK && squares[7][7] != null && squares[7][7].getPieceType() == ChessPiece.PieceType.ROOK && squares[7][7].getTeamColor() == ChessGame.TeamColor.BLACK;
     }
 
     public void setKingMoved(ChessGame.TeamColor color) {
