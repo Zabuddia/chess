@@ -55,7 +55,6 @@ public class ChessGame {
 
         ChessPiece piece = board.getPiece(startPosition);
 
-
         if (piece != null) {
             validMoveList.addAll(piece.pieceMoves(board, startPosition));
         } else {
@@ -68,12 +67,16 @@ public class ChessGame {
             if ((!board.isRookQueensideMoved(pieceColor)) && board.castleQueensideSpacesEmpty(pieceColor)) {
                 ChessPosition endPosition = new ChessPosition(startPosition.getRow() + 1, startPosition.getColumn() - 1);
                 ChessMove castleMove = new ChessMove(startPosition, endPosition, null);
-                validMoveList.add(castleMove);
+                if (!board.isRookQueensideInDanger(castleMove)) {
+                    validMoveList.add(castleMove);
+                }
             }
             if ((!board.isRookKingsideMoved(pieceColor)) && board.castleKingsideSpacesEmpty(pieceColor)) {
                 ChessPosition endPosition = new ChessPosition(startPosition.getRow() + 1, startPosition.getColumn() + 3);
                 ChessMove castleMove = new ChessMove(startPosition, endPosition, null);
-                validMoveList.add(castleMove);
+                if (!board.isRookKingsideInDanger(castleMove)) {
+                    validMoveList.add(castleMove);
+                }
             }
         }
 
