@@ -202,34 +202,48 @@ public class ChessBoard {
 
     public boolean isRookQueensideInDanger(ChessMove move) {
         if (move.endPosition().getRow() == 0 && move.endPosition().getColumn() == 2) {
-            ChessGame.TeamColor color = ChessGame.TeamColor.WHITE;
-            for (ChessPosition occupiedPosition : occupiedPositionsList) {
-                ChessPiece piece = board.getPiece(occupiedPosition);
-                for (ChessMove opponentPotentialMove : piece.pieceMoves(board, occupiedPosition)) {
-                    if (opponentPotentialMove.endPosition().equals(kingPosition)) {
+            for (ChessPosition occupiedPosition : occupiedPositionsOfAColor(ChessGame.TeamColor.BLACK)) {
+                ChessPiece piece = getPiece(occupiedPosition);
+                for (ChessMove opponentPotentialMove : piece.pieceMoves(this, occupiedPosition)) {
+                    if (opponentPotentialMove.endPosition().equals(new ChessPosition(1, 4))) {
                         return true;
                     }
                 }
             }
         } else if (move.endPosition().getRow() == 7 && move.endPosition().getColumn() == 2) {
-            ChessGame.TeamColor color = ChessGame.TeamColor.BLACK;
-            for (ChessPosition occupiedPosition : occupiedPositionsList) {
-                ChessPiece piece = board.getPiece(occupiedPosition);
-                for (ChessMove opponentPotentialMove : piece.pieceMoves(board, occupiedPosition)) {
-                    if (opponentPotentialMove.endPosition().equals(kingPosition)) {
+            for (ChessPosition occupiedPosition : occupiedPositionsOfAColor(ChessGame.TeamColor.WHITE)) {
+                ChessPiece piece = getPiece(occupiedPosition);
+                for (ChessMove opponentPotentialMove : piece.pieceMoves(this, occupiedPosition)) {
+                    if (opponentPotentialMove.endPosition().equals(new ChessPosition(8, 4))) {
                         return true;
                     }
                 }
             }
         }
+        return false;
     }
 
     public boolean isRookKingsideInDanger(ChessMove move) {
         if (move.endPosition().getRow() == 0 && move.endPosition().getColumn() == 6) {
-
+            for (ChessPosition occupiedPosition : occupiedPositionsOfAColor(ChessGame.TeamColor.BLACK)) {
+                ChessPiece piece = getPiece(occupiedPosition);
+                for (ChessMove opponentPotentialMove : piece.pieceMoves(this, occupiedPosition)) {
+                    if (opponentPotentialMove.endPosition().equals(new ChessPosition(1, 6))) {
+                        return true;
+                    }
+                }
+            }
         } else if (move.endPosition().getRow() == 7 && move.endPosition().getColumn() == 6) {
-
+            for (ChessPosition occupiedPosition : occupiedPositionsOfAColor(ChessGame.TeamColor.WHITE)) {
+                ChessPiece piece = getPiece(occupiedPosition);
+                for (ChessMove opponentPotentialMove : piece.pieceMoves(this, occupiedPosition)) {
+                    if (opponentPotentialMove.endPosition().equals(new ChessPosition(8, 6))) {
+                        return true;
+                    }
+                }
+            }
         }
+        return false;
     }
 
     public void castleRook(ChessGame.TeamColor color, ChessPosition kingPosition) {
