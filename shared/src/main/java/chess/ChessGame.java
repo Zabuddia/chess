@@ -64,14 +64,14 @@ public class ChessGame {
         ChessGame.TeamColor pieceColor = piece.getTeamColor();
 
         if (piece.getPieceType() == ChessPiece.PieceType.KING && !board.isKingMoved(pieceColor)) {
-            if ((!board.isRookQueensideMoved(pieceColor)) && board.castleQueensideSpacesEmpty(pieceColor)) {
+            if (board.isRookQueensideThere(pieceColor) && (!board.isRookQueensideMoved(pieceColor)) && board.castleQueensideSpacesEmpty(pieceColor)) {
                 ChessPosition endPosition = new ChessPosition(startPosition.getRow() + 1, startPosition.getColumn() - 1);
                 ChessMove castleMove = new ChessMove(startPosition, endPosition, null);
                 if (!board.isRookQueensideInDanger(castleMove)) {
                     validMoveList.add(castleMove);
                 }
             }
-            if ((!board.isRookKingsideMoved(pieceColor)) && board.castleKingsideSpacesEmpty(pieceColor)) {
+            if (board.isRookKingsideThere(pieceColor) && (!board.isRookKingsideMoved(pieceColor)) && board.castleKingsideSpacesEmpty(pieceColor)) {
                 ChessPosition endPosition = new ChessPosition(startPosition.getRow() + 1, startPosition.getColumn() + 3);
                 ChessMove castleMove = new ChessMove(startPosition, endPosition, null);
                 if (!board.isRookKingsideInDanger(castleMove)) {
