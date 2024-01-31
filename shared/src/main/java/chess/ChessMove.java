@@ -10,6 +10,8 @@ import java.util.Objects;
  */
 public record ChessMove(ChessPosition startPosition, ChessPosition endPosition, ChessPiece.PieceType promotionPiece) {
 
+    public ChessPosition getStartPosition() {return startPosition;}
+    public ChessPosition getEndPosition() {return endPosition;}
     /**
      * @return ChessPosition of starting location
      */
