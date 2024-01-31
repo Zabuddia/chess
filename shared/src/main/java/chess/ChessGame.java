@@ -133,6 +133,11 @@ public class ChessGame {
             board.setRookMoved(startPosition, teamTurn);
         }
 
+        int differenceBetweenCols = endPosition.getColumn() - startPosition.getColumn();
+        if (piece.getPieceType() == ChessPiece.PieceType.KING && Math.abs(differenceBetweenCols) == 2) {
+            board.castleRook(teamTurn, endPosition);
+        }
+
         if (getTeamTurn().equals(TeamColor.WHITE)) {
             setTeamTurn(TeamColor.BLACK);
         } else {

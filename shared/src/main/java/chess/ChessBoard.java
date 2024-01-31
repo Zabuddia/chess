@@ -200,6 +200,36 @@ public class ChessBoard {
         return true;
     }
 
+    public void castleRook(ChessGame.TeamColor color, ChessPosition kingPosition) {
+        if (color == ChessGame.TeamColor.WHITE && kingPosition.getColumn() == 2) {
+            ChessPosition originalRookPosition = new ChessPosition(1, 1);
+            ChessPiece rook = getPiece(originalRookPosition);
+            ChessPosition newRookPosition = new ChessPosition(1, 4);
+            addPiece(newRookPosition, rook);
+            removePiece(originalRookPosition);
+        } else if (color == ChessGame.TeamColor.WHITE && kingPosition.getColumn() == 6) {
+            ChessPosition originalRookPosition = new ChessPosition(1, 8);
+            ChessPiece rook = getPiece(originalRookPosition);
+            ChessPosition newRookPosition = new ChessPosition(1, 6);
+            addPiece(newRookPosition, rook);
+            removePiece(originalRookPosition);
+        }
+
+        if (color == ChessGame.TeamColor.BLACK && kingPosition.getColumn() == 2) {
+            ChessPosition originalRookPosition = new ChessPosition(8, 1);
+            ChessPiece rook = getPiece(originalRookPosition);
+            ChessPosition newRookPosition = new ChessPosition(8, 4);
+            addPiece(newRookPosition, rook);
+            removePiece(originalRookPosition);
+        } else if (color == ChessGame.TeamColor.BLACK && kingPosition.getColumn() == 6) {
+            ChessPosition originalRookPosition = new ChessPosition(8, 8);
+            ChessPiece rook = getPiece(originalRookPosition);
+            ChessPosition newRookPosition = new ChessPosition(8, 6);
+            addPiece(newRookPosition, rook);
+            removePiece(originalRookPosition);
+        }
+    }
+
     /**
      * Sets the board to the default starting board
      * (How the game of chess normally starts)
