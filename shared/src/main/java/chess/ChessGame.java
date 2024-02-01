@@ -83,6 +83,9 @@ public class ChessGame {
             }
         }
 
+        //En Passant
+        int validMovesLength = validMoveList.size();
+
         if (pieceColor == TeamColor.WHITE) {
             //En Passant white left
             if (previousMove != null) {
@@ -93,12 +96,8 @@ public class ChessGame {
                     ChessPosition endPosition = new ChessPosition(previousMove.endPosition().getRow() + 2, previousMove.endPosition().getColumn() + 1);
                     ChessMove enPassantMove = new ChessMove(startPosition, endPosition, null);
                     validMoveList.add(enPassantMove);
-                    enPassantMoveValid = true;
-                } else {
-                    enPassantMoveValid = false;
                 }
             }
-
             //En Passant white right
             if (previousMove != null) {
                 ChessPiece pieceInPreviousMove = board.getPiece(previousMove.endPosition());
@@ -108,9 +107,6 @@ public class ChessGame {
                     ChessPosition endPosition = new ChessPosition(previousMove.endPosition().getRow() + 2, previousMove.endPosition().getColumn() + 1);
                     ChessMove enPassantMove = new ChessMove(startPosition, endPosition, null);
                     validMoveList.add(enPassantMove);
-                    enPassantMoveValid = true;
-                } else {
-                    enPassantMoveValid = false;
                 }
             }
         } else {
@@ -123,12 +119,8 @@ public class ChessGame {
                     ChessPosition endPosition = new ChessPosition(previousMove.endPosition().getRow(), previousMove.endPosition().getColumn() + 1);
                     ChessMove enPassantMove = new ChessMove(startPosition, endPosition, null);
                     validMoveList.add(enPassantMove);
-                    enPassantMoveValid = true;
-                } else {
-                    enPassantMoveValid = false;
                 }
             }
-
             //En Passant black right
             if (previousMove != null) {
                 ChessPiece pieceInPreviousMove = board.getPiece(previousMove.endPosition());
@@ -138,13 +130,11 @@ public class ChessGame {
                     ChessPosition endPosition = new ChessPosition(previousMove.endPosition().getRow(), previousMove.endPosition().getColumn() + 1);
                     ChessMove enPassantMove = new ChessMove(startPosition, endPosition, null);
                     validMoveList.add(enPassantMove);
-                    enPassantMoveValid = true;
-                } else {
-                    enPassantMoveValid = false;
                 }
             }
         }
 
+        enPassantMoveValid = validMovesLength + 1 == validMoveList.size();
 
         Collection<ChessMove> invalidMoveList = new ArrayList<>();
 
