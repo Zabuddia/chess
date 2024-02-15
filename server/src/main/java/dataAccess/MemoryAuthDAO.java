@@ -1,4 +1,8 @@
 package dataAccess;
 
-public class MemoryAuthDAO implements AuthDAO{
+public class MemoryAuthDAO implements AuthDAO {
+    @Override
+    public void clearAuth() {
+
+    }
 }
