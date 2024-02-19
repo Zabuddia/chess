@@ -16,15 +16,16 @@ public class ClearServiceTest {
     @DisplayName("Clear Service Test")
     public void clearTest() {
         ChessGame chessGame = new ChessGame();
-        UserData user = new UserData("buddia", "12345", "fife.alan@gmail.com");
-        AuthData auth = new AuthData("54321", "buddia");
+        String username = "buddia";
+        String password = "12345";
+        String email = "fife.alan@gmail.com";
         GameData game = new GameData(1111, "buddia", "waffleiron", "game1", chessGame);
         UserDAO userDAO = new MemoryUserDAO();
         AuthDAO authDAO = new MemoryAuthDAO();
         GameDAO gameDAO = new MemoryGameDAO();
 
-        userDAO.createUser(user);
-        authDAO.createAuth(auth);
+        userDAO.createUser(username, password, email);
+        authDAO.createAuth(username);
         gameDAO.createGame(game);
 
         ClearService clearService = new ClearService();
