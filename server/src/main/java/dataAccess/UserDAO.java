@@ -8,4 +8,6 @@ public interface UserDAO {
     void createUser(String username, String password, String email);
 
     UserData getUser(String username);
+
+    boolean verifyUser(String username, String password);
 }

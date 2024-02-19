@@ -28,4 +28,22 @@ public class MemoryUserDAO implements UserDAO {
         }
         return null;
     }
+
+    @Override
+    public boolean verifyUser(String username, String password) {
+        UserData userToVerify = null;
+        for (UserData user : userList) {
+            if (Objects.equals(user.username(), username)) {
+                userToVerify = user;
+            }
+        }
+        if (userToVerify == null) {
+            return false;
+        }
+        if (Objects.equals(userToVerify.password(), password)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 }

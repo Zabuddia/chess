@@ -45,8 +45,6 @@ public class RegisterServiceTests {
         RegisterService registerService = new RegisterService();
         String authToken = registerService.register(username, password, email);
 
-        AuthData auth = new AuthData(authToken, username);
-
         Assertions.assertEquals(MemoryUserDAO.userList.size(), 1, "User was added to userList");
         Assertions.assertTrue(MemoryAuthDAO.authList.isEmpty(), "Auth was added to authList");
         Assertions.assertEquals("Username already exists", authToken, "Authtoken was created");
