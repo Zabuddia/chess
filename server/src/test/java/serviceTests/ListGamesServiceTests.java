@@ -10,7 +10,7 @@ import service.ListGamesService;
 
 import java.util.Collection;
 
-public class ListGamesTests {
+public class ListGamesServiceTests {
 
     @Test
     @DisplayName("List Games")

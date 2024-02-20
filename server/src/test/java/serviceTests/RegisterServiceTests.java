@@ -9,8 +9,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import service.RegisterService;
 
-import java.util.Objects;
-
 public class RegisterServiceTests {
 
     @Test
