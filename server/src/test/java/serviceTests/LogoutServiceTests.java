@@ -19,10 +19,10 @@ public class LogoutServiceTests {
         AuthData auth = new AuthData(authToken, username);
         MemoryAuthDAO.authList.add(auth);
 
-        LogoutRequest logoutRequest = new LogoutRequest(authToken);
+        LogoutRequest logoutRequest = new LogoutRequest(true);
         LogoutService logoutService = new LogoutService();
 
-        logoutService.logout(logoutRequest);
+        logoutService.logout(logoutRequest, authToken);
 
         Assertions.assertTrue(MemoryAuthDAO.authList.isEmpty(), "Did not clear authToken");
     }
@@ -37,10 +37,10 @@ public class LogoutServiceTests {
         AuthData auth = new AuthData(authToken, username);
         MemoryAuthDAO.authList.add(auth);
 
-        LogoutRequest logoutRequest = new LogoutRequest(unauthorizedAuthToken);
+        LogoutRequest logoutRequest = new LogoutRequest(true);
         LogoutService logoutService = new LogoutService();
 
-        logoutService.logout(logoutRequest);
+        logoutService.logout(logoutRequest, unauthorizedAuthToken);
 
         Assertions.assertEquals(MemoryAuthDAO.authList.size(), 1, "Cleared the authToken when unauthorized to do so");
     }

@@ -12,9 +12,9 @@ public class LogoutHandler {
     private final LogoutService logoutService = new LogoutService();
 
     public String handleLogout(Request request, Response response) {
+        String authToken = request.headers("Authorization");
         LogoutRequest logoutRequest = gson.fromJson(request.body(), LogoutRequest.class);
-
-        LogoutResponse logoutResponse = logoutService.logout(logoutRequest);
+        LogoutResponse logoutResponse = logoutService.logout(logoutRequest, authToken);
         return gson.toJson(logoutResponse);
     }
 }

@@ -27,10 +27,10 @@ public class ListGamesServiceTests {
 
         gameDAO.createGame(gameName);
 
-        ListGamesRequest listGamesRequest = new ListGamesRequest(authToken);
+        ListGamesRequest listGamesRequest = new ListGamesRequest(true);
         ListGamesService listGamesService = new ListGamesService();
 
-        Collection<GameData> listOfGames = listGamesService.listGames(listGamesRequest).listOfGames();
+        Collection<GameData> listOfGames = listGamesService.listGames(listGamesRequest, authToken).listOfGames();
 
         Assertions.assertNotNull(listOfGames, "Did not send the list of games");
     }
@@ -50,10 +50,10 @@ public class ListGamesServiceTests {
 
         gameDAO.createGame(gameName);
 
-        ListGamesRequest listGamesRequest = new ListGamesRequest(unauthorizedAuthToken);
+        ListGamesRequest listGamesRequest = new ListGamesRequest(true);
         ListGamesService listGamesService = new ListGamesService();
 
-        Collection<GameData> listOfGames = listGamesService.listGames(listGamesRequest).listOfGames();
+        Collection<GameData> listOfGames = listGamesService.listGames(listGamesRequest, unauthorizedAuthToken).listOfGames();
 
         Assertions.assertNull(listOfGames, "Sent listOfGames even when unauthorized");
     }

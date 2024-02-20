@@ -8,18 +8,20 @@ import response.JoinGameResponse;
 import java.util.Objects;
 
 public class JoinGameService {
-    public JoinGameResponse joinGame(JoinGameRequest joinGameRequest) {
-        String authToken = joinGameRequest.authToken();
-        ChessGame.TeamColor clientColor = joinGameRequest.playerColor();
-        int gameID = joinGameRequest.gameID();
-        AuthDAO authDAO = new MemoryAuthDAO();
-        if (!authDAO.getAuth(authToken)) {
+    private final AuthDAO authDAO = new MemoryAuthDAO();
+    private final GameDAO gameDAO = new MemoryGameDAO();
+    public boolean validateAuth(String authToken) {
+        return authDAO.getAuth(authToken);
+    }
+    public JoinGameResponse joinGame(JoinGameRequest joinGameRequest, String authToken) {
+        if (!validateAuth(authToken)) {
             return new JoinGameResponse(401, "message", "Error: unauthorized");
         }
+        ChessGame.TeamColor clientColor = joinGameRequest.playerColor();
+        int gameID = joinGameRequest.gameID();
 
         String username = authDAO.getUsername(authToken);
 
-        GameDAO gameDAO = new MemoryGameDAO();
         if (!gameDAO.getGame(gameID)) {
             return new JoinGameResponse(400, "message", "Error: bad request");
         }

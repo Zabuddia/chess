@@ -12,9 +12,11 @@ public class CreateGameHandler {
     private final CreateGameService createGameService = new CreateGameService();
 
     public String handleCreateGame(Request request, Response response) {
+        String authToken = request.headers("Authorization");
+
         CreateGameRequest createGameRequest = gson.fromJson(request.body(), CreateGameRequest.class);
 
-        CreateGameResponse createGameResponse = createGameService.createGame(createGameRequest);
+        CreateGameResponse createGameResponse = createGameService.createGame(authToken, createGameRequest);
         return gson.toJson(createGameResponse);
     }
 }

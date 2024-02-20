@@ -8,11 +8,11 @@ import request.LoginRequest;
 import response.LoginResponse;
 
 public class LoginService {
+    private final UserDAO userDAO = new MemoryUserDAO();
+    private final AuthDAO authDAO = new MemoryAuthDAO();
     public LoginResponse login(LoginRequest loginRequest) {
         String username = loginRequest.username();
         String password = loginRequest.password();
-        UserDAO userDAO = new MemoryUserDAO();
-        AuthDAO authDAO = new MemoryAuthDAO();
 
         if (!userDAO.verifyUser(username, password)) {
             return new LoginResponse(401, "message", "Error: unauthorized", null, null);

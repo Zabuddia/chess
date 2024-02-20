@@ -12,9 +12,11 @@ public class ListGamesHandler {
     private final ListGamesService listGamesService = new ListGamesService();
 
     public String handleListGames(Request request, Response response) {
+        String authToken = request.headers("Authorization");
+
         ListGamesRequest listGamesRequest = gson.fromJson(request.body(), ListGamesRequest.class);
 
-        ListGamesResponse listGamesResponse = listGamesService.listGames(listGamesRequest);
+        ListGamesResponse listGamesResponse = listGamesService.listGames(listGamesRequest, authToken);
         return gson.toJson(listGamesResponse);
     }
 }

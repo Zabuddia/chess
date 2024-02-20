@@ -1,3 +1,3 @@
 package request;
 
-public record ListGamesRequest(String authToken) {}
+public record ListGamesRequest(boolean listGames) {}

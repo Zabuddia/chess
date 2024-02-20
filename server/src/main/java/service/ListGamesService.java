@@ -8,15 +8,15 @@ import request.ListGamesRequest;
 import response.ListGamesResponse;
 
 public class ListGamesService {
-    public ListGamesResponse listGames(ListGamesRequest listGamesRequest) {
-        String authToken = listGamesRequest.authToken();
-        AuthDAO authDAO = new MemoryAuthDAO();
-        if (!authDAO.getAuth(authToken)) {
+    private final AuthDAO authDAO = new MemoryAuthDAO();
+    private final GameDAO gameDAO = new MemoryGameDAO();
+    public boolean validateAuth(String authToken) {
+        return authDAO.getAuth(authToken);
+    }
+    public ListGamesResponse listGames(ListGamesRequest listGamesRequest, String authToken) {
+        if (!validateAuth(authToken)) {
             return new ListGamesResponse(401, "message", "Error: unauthorized", null);
         }
-
-        GameDAO gameDAO = new MemoryGameDAO();
-
         return new ListGamesResponse(200, null, null, gameDAO.listGames());
     }
 }
