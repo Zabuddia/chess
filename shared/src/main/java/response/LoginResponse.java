@@ -1,4 +1,3 @@
 package response;
 
-public class LoginResponse {
-}
+public record LoginResponse(int responseNum, String message, String error, String username, String authToken) {}

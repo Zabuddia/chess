@@ -21,15 +21,16 @@ public class LoginServiceTests {
         MemoryUserDAO.userList.add(user);
 
         LoginService loginService = new LoginService();
-        String authToken = loginService.login(username, password);
+        String error = loginService.login(username, password).error();
 
         Assertions.assertEquals(MemoryAuthDAO.authList.size(), 1, "AuthToken was not created");
-        Assertions.assertNotEquals("Incorrect password", authToken, "Says incorrect password when password is correct");
+        Assertions.assertNotEquals("Error: unauthorized", error, "Says incorrect password when password is correct");
     }
 
     @Test
     @DisplayName("Incorrect password")
     public void incorrectPasswordTest() {
+        MemoryAuthDAO.authList.clear();
         String username = "buddia";
         String password = "12345";
         String email = "fife.alan@gmail.com";
@@ -39,9 +40,9 @@ public class LoginServiceTests {
         MemoryUserDAO.userList.add(user);
 
         LoginService loginService = new LoginService();
-        String authToken = loginService.login(username, incorrectPassword);
+        String error = loginService.login(username, incorrectPassword).error();
 
         Assertions.assertEquals(MemoryAuthDAO.authList.size(), 0, "AuthToken was created when it should not have been");
-        Assertions.assertEquals("Incorrect password", authToken, "Says correct password when password is incorrect");
+        Assertions.assertEquals("Error: unauthorized", error, "Says correct password when password is incorrect");
     }
 }

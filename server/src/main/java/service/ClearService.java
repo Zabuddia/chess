@@ -3,9 +3,10 @@ package service;
 import dataAccess.MemoryAuthDAO;
 import dataAccess.MemoryGameDAO;
 import dataAccess.MemoryUserDAO;
+import response.ClearResponse;
 
 public class ClearService {
-    public void clear() {
+    public ClearResponse clear() {
         MemoryUserDAO userDAO = new MemoryUserDAO();
         MemoryAuthDAO authDAO = new MemoryAuthDAO();
         MemoryGameDAO gameDAO = new MemoryGameDAO();
@@ -13,5 +14,7 @@ public class ClearService {
         userDAO.clearUser();
         authDAO.clearAuth();
         gameDAO.clearGame();
+
+        return new ClearResponse(200, null, null);
     }
 }

@@ -2,15 +2,18 @@ package service;
 
 import dataAccess.AuthDAO;
 import dataAccess.MemoryAuthDAO;
+import response.LogoutResponse;
 
 public class LogoutService {
-    public void logout(String authToken) {
+    public LogoutResponse logout(String authToken) {
         AuthDAO authDAO = new MemoryAuthDAO();
 
         if (!authDAO.getAuth(authToken)) {
-            return;
+            return new LogoutResponse(401, "message", "Error: unauthorized");
         }
 
         authDAO.deleteAuth(authToken);
+
+        return new LogoutResponse(200, null, null);
     }
 }

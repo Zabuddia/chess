@@ -28,9 +28,9 @@ public class ListGamesServiceTests {
 
         ListGamesService listGamesService = new ListGamesService();
 
-        Collection<GameData> listOfGames = listGamesService.listGames(authToken);
+        Collection<GameData> listOfGames = listGamesService.listGames(authToken).listOfGames();
 
-        Assertions.assertFalse(listOfGames.isEmpty(), "Did not send the list of games");
+        Assertions.assertNotNull(listOfGames, "Did not send the list of games");
     }
 
     @Test
@@ -50,7 +50,7 @@ public class ListGamesServiceTests {
 
         ListGamesService listGamesService = new ListGamesService();
 
-        Collection<GameData> listOfGames = listGamesService.listGames(unauthorizedAuthToken);
+        Collection<GameData> listOfGames = listGamesService.listGames(unauthorizedAuthToken).listOfGames();
 
         Assertions.assertNull(listOfGames, "Sent listOfGames even when unauthorized");
     }

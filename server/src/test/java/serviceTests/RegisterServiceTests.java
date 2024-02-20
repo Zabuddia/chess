@@ -7,6 +7,7 @@ import model.UserData;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import response.RegisterResponse;
 import service.RegisterService;
 
 public class RegisterServiceTests {
@@ -14,6 +15,7 @@ public class RegisterServiceTests {
     @Test
     @DisplayName("Register a user")
     public void registerTest() {
+        MemoryUserDAO.userList.clear();
         String username = "buddia";
         String password = "12345";
         String email = "fife.alan@gmail.com";
@@ -21,13 +23,15 @@ public class RegisterServiceTests {
         UserData user = new UserData(username, password, email);
 
         RegisterService registerService = new RegisterService();
-        String authToken = registerService.register(username, password, email);
+        RegisterResponse response = registerService.register(username, password, email);
+        String authToken = response.authToken();
+        String error = response.error();
 
         AuthData auth = new AuthData(authToken, username);
 
         Assertions.assertTrue(MemoryUserDAO.userList.contains(user), "New UserData was not created");
         Assertions.assertTrue(MemoryAuthDAO.authList.contains(auth),"New AuthData was not created");
-        Assertions.assertNotEquals("Username already exists", authToken, "Says username already exits when it doesn't");
+        Assertions.assertNotEquals("Error: already taken", error, "Says username already exits when it doesn't");
     }
 
     @Test
@@ -41,10 +45,10 @@ public class RegisterServiceTests {
         MemoryUserDAO.userList.add(user);
 
         RegisterService registerService = new RegisterService();
-        String authToken = registerService.register(username, password, email);
+        String error = registerService.register(username, password, email).error();
 
         Assertions.assertEquals(MemoryUserDAO.userList.size(), 1, "User was added to userList");
         Assertions.assertTrue(MemoryAuthDAO.authList.isEmpty(), "Auth was added to authList");
-        Assertions.assertEquals("Username already exists", authToken, "Authtoken was created");
+        Assertions.assertEquals("Error: already taken", error, "Authtoken was created");
     }
 }

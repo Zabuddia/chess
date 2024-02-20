@@ -1,4 +1,3 @@
 package response;
 
-public class LogoutResponse {
-}
+public record LogoutResponse(int responseNum, String message, String error) {}

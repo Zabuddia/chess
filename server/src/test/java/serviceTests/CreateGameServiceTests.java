@@ -21,7 +21,7 @@ public class CreateGameServiceTests {
         String gameName = "game1";
 
         CreateGameService createGameService = new CreateGameService();
-        int gameID = createGameService.createGame(authToken, gameName);
+        int gameID = createGameService.createGame(authToken, gameName).gameID();
 
         Assertions.assertNotEquals(gameID, -1, "Did not create the game");
     }
@@ -39,7 +39,7 @@ public class CreateGameServiceTests {
         String gameName = "game1";
 
         CreateGameService createGameService = new CreateGameService();
-        int gameID = createGameService.createGame(unauthorizedAuthToken, gameName);
+        int gameID = createGameService.createGame(unauthorizedAuthToken, gameName).gameID();
 
         Assertions.assertEquals(gameID, -1, "Created game even when unauthorized");
     }

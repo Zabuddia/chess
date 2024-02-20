@@ -1,4 +1,4 @@
 package response;
 
-public class ClearResponse {
-}
+public record ClearResponse(int responseNum, String message, String error) {}
+

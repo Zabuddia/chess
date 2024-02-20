@@ -1,4 +1,3 @@
 package response;
 
-public class JoinGameResponse {
-}
+public record JoinGameResponse(int responseNum, String message, String error) {}
