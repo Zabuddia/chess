@@ -2,10 +2,12 @@ package service;
 
 import dataAccess.AuthDAO;
 import dataAccess.MemoryAuthDAO;
+import request.LogoutRequest;
 import response.LogoutResponse;
 
 public class LogoutService {
-    public LogoutResponse logout(String authToken) {
+    public LogoutResponse logout(LogoutRequest logoutRequest) {
+        String authToken = logoutRequest.authToken();
         AuthDAO authDAO = new MemoryAuthDAO();
 
         if (!authDAO.getAuth(authToken)) {

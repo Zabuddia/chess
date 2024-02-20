@@ -4,6 +4,7 @@ import dataAccess.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import request.ClearRequest;
 import service.ClearService;
 
 public class ClearServiceTests {
@@ -23,8 +24,9 @@ public class ClearServiceTests {
         authDAO.createAuth(username);
         gameDAO.createGame(gameName);
 
+        ClearRequest clearRequest = new ClearRequest(true);
         ClearService clearService = new ClearService();
-        clearService.clear();
+        clearService.clear(clearRequest);
 
         Assertions.assertTrue(MemoryUserDAO.userList.isEmpty(), "UserList is not empty");
         Assertions.assertTrue(MemoryAuthDAO.authList.isEmpty(), "AuthList is not empty");

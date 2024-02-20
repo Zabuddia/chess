@@ -6,6 +6,7 @@ import model.GameData;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import request.ListGamesRequest;
 import service.ListGamesService;
 
 import java.util.Collection;
@@ -26,9 +27,10 @@ public class ListGamesServiceTests {
 
         gameDAO.createGame(gameName);
 
+        ListGamesRequest listGamesRequest = new ListGamesRequest(authToken);
         ListGamesService listGamesService = new ListGamesService();
 
-        Collection<GameData> listOfGames = listGamesService.listGames(authToken).listOfGames();
+        Collection<GameData> listOfGames = listGamesService.listGames(listGamesRequest).listOfGames();
 
         Assertions.assertNotNull(listOfGames, "Did not send the list of games");
     }
@@ -48,9 +50,10 @@ public class ListGamesServiceTests {
 
         gameDAO.createGame(gameName);
 
+        ListGamesRequest listGamesRequest = new ListGamesRequest(unauthorizedAuthToken);
         ListGamesService listGamesService = new ListGamesService();
 
-        Collection<GameData> listOfGames = listGamesService.listGames(unauthorizedAuthToken).listOfGames();
+        Collection<GameData> listOfGames = listGamesService.listGames(listGamesRequest).listOfGames();
 
         Assertions.assertNull(listOfGames, "Sent listOfGames even when unauthorized");
     }

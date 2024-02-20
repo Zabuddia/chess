@@ -5,6 +5,7 @@ import model.AuthData;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import request.LogoutRequest;
 import service.LogoutService;
 
 public class LogoutServiceTests {
@@ -18,9 +19,10 @@ public class LogoutServiceTests {
         AuthData auth = new AuthData(authToken, username);
         MemoryAuthDAO.authList.add(auth);
 
+        LogoutRequest logoutRequest = new LogoutRequest(authToken);
         LogoutService logoutService = new LogoutService();
 
-        logoutService.logout(authToken);
+        logoutService.logout(logoutRequest);
 
         Assertions.assertTrue(MemoryAuthDAO.authList.isEmpty(), "Did not clear authToken");
     }
@@ -35,9 +37,10 @@ public class LogoutServiceTests {
         AuthData auth = new AuthData(authToken, username);
         MemoryAuthDAO.authList.add(auth);
 
+        LogoutRequest logoutRequest = new LogoutRequest(unauthorizedAuthToken);
         LogoutService logoutService = new LogoutService();
 
-        logoutService.logout(unauthorizedAuthToken);
+        logoutService.logout(logoutRequest);
 
         Assertions.assertEquals(MemoryAuthDAO.authList.size(), 1, "Cleared the authToken when unauthorized to do so");
     }

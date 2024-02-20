@@ -5,10 +5,14 @@ import dataAccess.MemoryAuthDAO;
 import dataAccess.MemoryUserDAO;
 import dataAccess.UserDAO;
 import model.UserData;
+import request.RegisterRequest;
 import response.RegisterResponse;
 
 public class RegisterService {
-    public RegisterResponse register(String username, String password, String email) {
+    public RegisterResponse register(RegisterRequest registerRequest) {
+        String username = registerRequest.username();
+        String password = registerRequest.password();
+        String email = registerRequest.email();
         UserDAO userDAO = new MemoryUserDAO();
         AuthDAO authDAO = new MemoryAuthDAO();
         UserData user = userDAO.getUser(username);

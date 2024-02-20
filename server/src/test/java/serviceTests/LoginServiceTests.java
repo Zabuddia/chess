@@ -6,6 +6,7 @@ import model.UserData;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import request.LoginRequest;
 import service.LoginService;
 
 public class LoginServiceTests {
@@ -20,8 +21,9 @@ public class LoginServiceTests {
         UserData user = new UserData(username, password, email);
         MemoryUserDAO.userList.add(user);
 
+        LoginRequest loginRequest = new LoginRequest(username, password);
         LoginService loginService = new LoginService();
-        String error = loginService.login(username, password).error();
+        String error = loginService.login(loginRequest).error();
 
         Assertions.assertEquals(MemoryAuthDAO.authList.size(), 1, "AuthToken was not created");
         Assertions.assertNotEquals("Error: unauthorized", error, "Says incorrect password when password is correct");
@@ -39,8 +41,9 @@ public class LoginServiceTests {
         UserData user = new UserData(username, password, email);
         MemoryUserDAO.userList.add(user);
 
+        LoginRequest loginRequest = new LoginRequest(username, incorrectPassword);
         LoginService loginService = new LoginService();
-        String error = loginService.login(username, incorrectPassword).error();
+        String error = loginService.login(loginRequest).error();
 
         Assertions.assertEquals(MemoryAuthDAO.authList.size(), 0, "AuthToken was created when it should not have been");
         Assertions.assertEquals("Error: unauthorized", error, "Says correct password when password is incorrect");

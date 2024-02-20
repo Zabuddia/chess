@@ -7,6 +7,7 @@ import model.UserData;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import request.RegisterRequest;
 import response.RegisterResponse;
 import service.RegisterService;
 
@@ -22,8 +23,9 @@ public class RegisterServiceTests {
 
         UserData user = new UserData(username, password, email);
 
+        RegisterRequest registerRequest = new RegisterRequest(username, password, email);
         RegisterService registerService = new RegisterService();
-        RegisterResponse response = registerService.register(username, password, email);
+        RegisterResponse response = registerService.register(registerRequest);
         String authToken = response.authToken();
         String error = response.error();
 
@@ -44,8 +46,9 @@ public class RegisterServiceTests {
         UserData user = new UserData(username, password, email);
         MemoryUserDAO.userList.add(user);
 
+        RegisterRequest registerRequest = new RegisterRequest(username, password, email);
         RegisterService registerService = new RegisterService();
-        String error = registerService.register(username, password, email).error();
+        String error = registerService.register(registerRequest).error();
 
         Assertions.assertEquals(MemoryUserDAO.userList.size(), 1, "User was added to userList");
         Assertions.assertTrue(MemoryAuthDAO.authList.isEmpty(), "Auth was added to authList");

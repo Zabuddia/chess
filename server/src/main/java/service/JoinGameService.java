@@ -2,12 +2,16 @@ package service;
 
 import chess.ChessGame;
 import dataAccess.*;
+import request.JoinGameRequest;
 import response.JoinGameResponse;
 
 import java.util.Objects;
 
 public class JoinGameService {
-    public JoinGameResponse joinGame(String authToken, ChessGame.TeamColor clientColor, int gameID) {
+    public JoinGameResponse joinGame(JoinGameRequest joinGameRequest) {
+        String authToken = joinGameRequest.authToken();
+        ChessGame.TeamColor clientColor = joinGameRequest.playerColor();
+        int gameID = joinGameRequest.gameID();
         AuthDAO authDAO = new MemoryAuthDAO();
         if (!authDAO.getAuth(authToken)) {
             return new JoinGameResponse(401, "message", "Error: unauthorized");

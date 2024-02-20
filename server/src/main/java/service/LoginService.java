@@ -4,10 +4,13 @@ import dataAccess.AuthDAO;
 import dataAccess.MemoryAuthDAO;
 import dataAccess.MemoryUserDAO;
 import dataAccess.UserDAO;
+import request.LoginRequest;
 import response.LoginResponse;
 
 public class LoginService {
-    public LoginResponse login(String username, String password) {
+    public LoginResponse login(LoginRequest loginRequest) {
+        String username = loginRequest.username();
+        String password = loginRequest.password();
         UserDAO userDAO = new MemoryUserDAO();
         AuthDAO authDAO = new MemoryAuthDAO();
 

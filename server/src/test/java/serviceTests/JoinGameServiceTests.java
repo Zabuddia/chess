@@ -8,6 +8,7 @@ import model.GameData;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import request.JoinGameRequest;
 import service.JoinGameService;
 
 public class JoinGameServiceTests {
@@ -31,8 +32,9 @@ public class JoinGameServiceTests {
 
         MemoryGameDAO.gameList.add(gameData);
 
+        JoinGameRequest joinGameRequest = new  JoinGameRequest(authToken, ChessGame.TeamColor.BLACK, gameID);
         JoinGameService joinGameService = new JoinGameService();
-        String result = joinGameService.joinGame(authToken, ChessGame.TeamColor.BLACK, gameID).error();
+        String result = joinGameService.joinGame(joinGameRequest).error();
 
         Assertions.assertNull(result, "Did not update game");
         Assertions.assertTrue(MemoryGameDAO.gameList.contains(expectedGameData), "Did not update game correctly");
@@ -57,8 +59,9 @@ public class JoinGameServiceTests {
 
         MemoryGameDAO.gameList.add(gameData);
 
+        JoinGameRequest joinGameRequest = new  JoinGameRequest(authToken, null, gameID);
         JoinGameService joinGameService = new JoinGameService();
-        String result = joinGameService.joinGame(authToken, null, gameID).error();
+        String result = joinGameService.joinGame(joinGameRequest).error();
 
         Assertions.assertNull(result, "Did not update game");
         Assertions.assertTrue(MemoryGameDAO.gameList.contains(expectedGameData), "Did not update game correctly");
@@ -84,8 +87,9 @@ public class JoinGameServiceTests {
 
         MemoryGameDAO.gameList.add(gameData);
 
+        JoinGameRequest joinGameRequest = new  JoinGameRequest(unauthorizedAuthToken, ChessGame.TeamColor.BLACK, gameID);
         JoinGameService joinGameService = new JoinGameService();
-        String result = joinGameService.joinGame(unauthorizedAuthToken, ChessGame.TeamColor.BLACK, gameID).error();
+        String result = joinGameService.joinGame(joinGameRequest).error();
 
         Assertions.assertEquals(result, "Error: unauthorized", "Did not recognize that the user is unauthorized");
         Assertions.assertFalse(MemoryGameDAO.gameList.contains(expectedGameData), "Joined game without authorization");
@@ -110,8 +114,9 @@ public class JoinGameServiceTests {
 
         MemoryGameDAO.gameList.add(gameData);
 
+        JoinGameRequest joinGameRequest = new  JoinGameRequest(authToken, ChessGame.TeamColor.WHITE, gameID);
         JoinGameService joinGameService = new JoinGameService();
-        String result = joinGameService.joinGame(authToken, ChessGame.TeamColor.WHITE, gameID).error();
+        String result = joinGameService.joinGame(joinGameRequest).error();
 
         Assertions.assertEquals(result, "Error: already taken", "Did not recognize that the color was already taken");
         Assertions.assertFalse(MemoryGameDAO.gameList.contains(unexpectedGameData), "Updated game even though color was already taken");
@@ -137,8 +142,9 @@ public class JoinGameServiceTests {
 
         MemoryGameDAO.gameList.add(gameData);
 
+        JoinGameRequest joinGameRequest = new  JoinGameRequest(authToken, ChessGame.TeamColor.BLACK, wrongGameID);
         JoinGameService joinGameService = new JoinGameService();
-        String result = joinGameService.joinGame(authToken, ChessGame.TeamColor.BLACK, wrongGameID).error();
+        String result = joinGameService.joinGame(joinGameRequest).error();
 
         Assertions.assertEquals(result, "Error: bad request", "Did not recognize that there is no game with that ID");
         Assertions.assertFalse(MemoryGameDAO.gameList.contains(unexpectedGameData), "Updated game to incorrect ID");
