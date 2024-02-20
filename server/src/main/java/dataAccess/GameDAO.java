@@ -3,8 +3,12 @@ package dataAccess;
 import model.AuthData;
 import model.GameData;
 
+import java.util.Collection;
+
 public interface GameDAO {
     void clearGame();
 
-    void createGame(GameData game);
+    void createGame(String gameName);
+
+    Collection<GameData> listGames();
 }
