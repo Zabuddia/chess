@@ -15,12 +15,12 @@ public class CreateGameService {
     }
     public CreateGameResponse createGame(String authToken, CreateGameRequest createGameRequest) {
         if (!validateAuth(authToken)) {
-            return new CreateGameResponse(401, "message", "Error: unauthorized", -1);
+            return new CreateGameResponse("message", "Error: unauthorized", -1);
         }
 
         String gameName = createGameRequest.gameName();
 
         int gameID = gameDAO.createGame(gameName);
-        return new CreateGameResponse(200, "gameID", null, gameID);
+        return new CreateGameResponse("gameID", null, gameID);
     }
 }

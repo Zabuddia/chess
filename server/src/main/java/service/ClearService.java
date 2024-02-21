@@ -14,6 +14,6 @@ public class ClearService {
         authDAO.clearAuth();
         gameDAO.clearGame();
 
-        return new ClearResponse(200, null, null);
+        return new ClearResponse(null, null);
     }
 }

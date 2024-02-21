@@ -15,9 +15,9 @@ public class LoginService {
         String password = loginRequest.password();
 
         if (!userDAO.verifyUser(username, password)) {
-            return new LoginResponse(401, "message", "Error: unauthorized", null, null);
+            return new LoginResponse("message", "Error: unauthorized", null, null);
         }
 
-        return new LoginResponse(200, null, null, username, authDAO.createAuth(username));
+        return new LoginResponse(null, null, username, authDAO.createAuth(username));
     }
 }

@@ -17,9 +17,9 @@ public class RegisterService {
         String email = registerRequest.email();
         UserData user = userDAO.getUser(username);
         if (user != null) {
-            return new RegisterResponse(403, "message", "Error: already taken", null, null);
+            return new RegisterResponse("message", "Error: already taken", null, null);
         }
         userDAO.createUser(username, password, email);
-        return new RegisterResponse(200, null, null, username, authDAO.createAuth(username));
+        return new RegisterResponse(null, null, username, authDAO.createAuth(username));
     }
 }
