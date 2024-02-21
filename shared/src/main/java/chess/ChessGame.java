@@ -1,6 +1,5 @@
 package chess;
 
-import javax.xml.validation.Validator;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -54,17 +53,13 @@ public class ChessGame {
      */
     public Collection<ChessMove> validMoves(ChessPosition startPosition) {
         Collection<ChessMove> validMoveList = new ArrayList<>();
-
         ChessPiece piece = board.getPiece(startPosition);
-
         if (piece != null) {
             validMoveList.addAll(piece.pieceMoves(board, startPosition));
         } else {
             return validMoveList;
         }
-
         ChessGame.TeamColor pieceColor = piece.getTeamColor();
-
         //Castling
         if (piece.getPieceType() == ChessPiece.PieceType.KING && !board.isKingMoved(pieceColor)) {
             if (board.isRookQueensideThere(pieceColor) && (!board.isRookQueensideMoved(pieceColor)) && board.castleQueensideSpacesEmpty(pieceColor)) {
@@ -82,10 +77,8 @@ public class ChessGame {
                 }
             }
         }
-
         //En Passant
         int validMovesLength = validMoveList.size();
-
         if (pieceColor == TeamColor.WHITE) {
             //En Passant white left
             if (previousMove != null) {
@@ -93,8 +86,8 @@ public class ChessGame {
                 int previousMoveCol = previousMove.endPosition().getColumn();
                 int differenceBetweenPreviousMoveRows = Math.abs(previousMove.endPosition().getRow() - previousMove.startPosition().getRow());
                 if (piece.getPieceType() == ChessPiece.PieceType.PAWN && pieceInPreviousMove.getPieceType() == ChessPiece.PieceType.PAWN && pieceInPreviousMove.getTeamColor() != pieceColor && differenceBetweenPreviousMoveRows == 2 && previousMoveCol == startPosition.getColumn() - 1) {
-                    ChessPosition endPosition = new ChessPosition(previousMove.endPosition().getRow() + 2, previousMove.endPosition().getColumn() + 1);
-                    ChessMove enPassantMove = new ChessMove(startPosition, endPosition, null);
+                    ChessPosition endPositionWhiteLeft = new ChessPosition(previousMove.endPosition().getRow() + 2, previousMove.endPosition().getColumn() + 1);
+                    ChessMove enPassantMove = new ChessMove(startPosition, endPositionWhiteLeft, null);
                     validMoveList.add(enPassantMove);
                 }
             }
@@ -104,8 +97,8 @@ public class ChessGame {
                 int previousMoveCol = previousMove.endPosition().getColumn();
                 int differenceBetweenPreviousMoveRows = Math.abs(previousMove.endPosition().getRow() - previousMove.startPosition().getRow());
                 if (piece.getPieceType() == ChessPiece.PieceType.PAWN && pieceInPreviousMove.getPieceType() == ChessPiece.PieceType.PAWN && pieceInPreviousMove.getTeamColor() != pieceColor && differenceBetweenPreviousMoveRows == 2 && previousMoveCol == startPosition.getColumn() + 1) {
-                    ChessPosition endPosition = new ChessPosition(previousMove.endPosition().getRow() + 2, previousMove.endPosition().getColumn() + 1);
-                    ChessMove enPassantMove = new ChessMove(startPosition, endPosition, null);
+                    ChessPosition endPositionWhiteRight = new ChessPosition(previousMove.endPosition().getRow() + 2, previousMove.endPosition().getColumn() + 1);
+                    ChessMove enPassantMove = new ChessMove(startPosition, endPositionWhiteRight, null);
                     validMoveList.add(enPassantMove);
                 }
             }
@@ -116,8 +109,8 @@ public class ChessGame {
                 int previousMoveCol = previousMove.endPosition().getColumn();
                 int differenceBetweenPreviousMoveRows = Math.abs(previousMove.endPosition().getRow() - previousMove.startPosition().getRow());
                 if (piece.getPieceType() == ChessPiece.PieceType.PAWN && pieceInPreviousMove.getPieceType() == ChessPiece.PieceType.PAWN && pieceInPreviousMove.getTeamColor() != pieceColor && differenceBetweenPreviousMoveRows == 2 && previousMoveCol == startPosition.getColumn() - 1) {
-                    ChessPosition endPosition = new ChessPosition(previousMove.endPosition().getRow(), previousMove.endPosition().getColumn() + 1);
-                    ChessMove enPassantMove = new ChessMove(startPosition, endPosition, null);
+                    ChessPosition endPositionBlackLeft = new ChessPosition(previousMove.endPosition().getRow(), previousMove.endPosition().getColumn() + 1);
+                    ChessMove enPassantMove = new ChessMove(startPosition, endPositionBlackLeft, null);
                     validMoveList.add(enPassantMove);
                 }
             }
@@ -127,17 +120,14 @@ public class ChessGame {
                 int previousMoveCol = previousMove.endPosition().getColumn();
                 int differenceBetweenPreviousMoveRows = Math.abs(previousMove.endPosition().getRow() - previousMove.startPosition().getRow());
                 if (piece.getPieceType() == ChessPiece.PieceType.PAWN && pieceInPreviousMove.getPieceType() == ChessPiece.PieceType.PAWN && pieceInPreviousMove.getTeamColor() != pieceColor && differenceBetweenPreviousMoveRows == 2 && previousMoveCol == startPosition.getColumn() + 1) {
-                    ChessPosition endPosition = new ChessPosition(previousMove.endPosition().getRow(), previousMove.endPosition().getColumn() + 1);
-                    ChessMove enPassantMove = new ChessMove(startPosition, endPosition, null);
+                    ChessPosition endPositionBlackRight = new ChessPosition(previousMove.endPosition().getRow(), previousMove.endPosition().getColumn() + 1);
+                    ChessMove enPassantMove = new ChessMove(startPosition, endPositionBlackRight, null);
                     validMoveList.add(enPassantMove);
                 }
             }
         }
-
         enPassantMoveValid = validMovesLength + 1 == validMoveList.size();
-
         Collection<ChessMove> invalidMoveList = new ArrayList<>();
-
         for (ChessMove move : validMoveList) {
             ChessPosition endPosition = move.endPosition();
             ChessPiece savedPiece = board.getPiece(endPosition);
