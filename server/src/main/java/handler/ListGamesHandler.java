@@ -7,6 +7,8 @@ import service.ListGamesService;
 import spark.Request;
 import spark.Response;
 
+import java.util.Objects;
+
 public class ListGamesHandler {
     private final Gson gson = new Gson();
     private final ListGamesService listGamesService = new ListGamesService();
@@ -17,6 +19,12 @@ public class ListGamesHandler {
         ListGamesRequest listGamesRequest = gson.fromJson(request.body(), ListGamesRequest.class);
 
         ListGamesResponse listGamesResponse = listGamesService.listGames(listGamesRequest, authToken);
+        if (Objects.equals(listGamesResponse.error(), "Error: unauthorized")) {
+            response.status(401);
+        } else {
+            response.status(200);
+        }
+
         return gson.toJson(listGamesResponse);
     }
 }

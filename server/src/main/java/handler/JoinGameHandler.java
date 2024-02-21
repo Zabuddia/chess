@@ -7,6 +7,8 @@ import service.JoinGameService;
 import spark.Request;
 import spark.Response;
 
+import java.util.Objects;
+
 public class JoinGameHandler {
     private final Gson gson = new Gson();
     private final JoinGameService joinGameService = new JoinGameService();
@@ -17,6 +19,15 @@ public class JoinGameHandler {
         JoinGameRequest joinGameRequest = gson.fromJson(request.body(), JoinGameRequest.class);
 
         JoinGameResponse joinGameResponse = joinGameService.joinGame(joinGameRequest, authToken);
+        if (Objects.equals(joinGameResponse.error(), "Error: bad request")) {
+            response.status(400);
+        } else if(Objects.equals(joinGameResponse.error(), "Error: unauthorized")) {
+            response.status(401);
+        } else if (Objects.equals(joinGameResponse.error(), "Error: already taken")) {
+            response.status(403);
+        } else {
+            response.status(200);
+        }
 
         return gson.toJson(joinGameResponse);
     }

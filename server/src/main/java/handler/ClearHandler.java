@@ -15,6 +15,8 @@ public class ClearHandler {
         ClearRequest clearRequest = gson.fromJson(request.body(), ClearRequest.class);
 
         ClearResponse clearResponse = clearService.clear(clearRequest);
+        response.status(200);
+
         return gson.toJson(clearResponse);
     }
 }
