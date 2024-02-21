@@ -27,7 +27,7 @@ public class RegisterServiceTests {
         RegisterService registerService = new RegisterService();
         RegisterResponse response = registerService.register(registerRequest);
         String authToken = response.authToken();
-        String error = response.error();
+        String error = response.message();
 
         AuthData auth = new AuthData(authToken, username);
 
@@ -48,7 +48,7 @@ public class RegisterServiceTests {
 
         RegisterRequest registerRequest = new RegisterRequest(username, password, email);
         RegisterService registerService = new RegisterService();
-        String error = registerService.register(registerRequest).error();
+        String error = registerService.register(registerRequest).message();
 
         Assertions.assertEquals(MemoryUserDAO.userList.size(), 1, "User was added to userList");
         Assertions.assertTrue(MemoryAuthDAO.authList.isEmpty(), "Auth was added to authList");

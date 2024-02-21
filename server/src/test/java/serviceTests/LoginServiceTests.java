@@ -23,7 +23,7 @@ public class LoginServiceTests {
 
         LoginRequest loginRequest = new LoginRequest(username, password);
         LoginService loginService = new LoginService();
-        String error = loginService.login(loginRequest).error();
+        String error = loginService.login(loginRequest).message();
 
         Assertions.assertEquals(MemoryAuthDAO.authList.size(), 1, "AuthToken was not created");
         Assertions.assertNotEquals("Error: unauthorized", error, "Says incorrect password when password is correct");
@@ -43,7 +43,7 @@ public class LoginServiceTests {
 
         LoginRequest loginRequest = new LoginRequest(username, incorrectPassword);
         LoginService loginService = new LoginService();
-        String error = loginService.login(loginRequest).error();
+        String error = loginService.login(loginRequest).message();
 
         Assertions.assertEquals(MemoryAuthDAO.authList.size(), 0, "AuthToken was created when it should not have been");
         Assertions.assertEquals("Error: unauthorized", error, "Says correct password when password is incorrect");
