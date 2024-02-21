@@ -19,6 +19,9 @@ public class RegisterService {
         if (user != null) {
             return new RegisterResponse("Error: already taken", null, null);
         }
+        if (password == null) {
+            return new RegisterResponse("Error: bad request", null, null);
+        }
         userDAO.createUser(username, password, email);
         return new RegisterResponse(null, username, authDAO.createAuth(username));
     }

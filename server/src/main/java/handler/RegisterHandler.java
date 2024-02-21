@@ -19,6 +19,8 @@ public class RegisterHandler {
         RegisterResponse registerResponse = registerService.register(registerRequest);
         if (Objects.equals(registerResponse.message(), "Error: already taken")) {
             response.status(403);
+        } else if (Objects.equals(registerResponse.message(), "Error: bad request")){
+            response.status(400);
         } else {
             response.status(200);
         }

@@ -15,7 +15,7 @@ public class CreateGameService {
     }
     public CreateGameResponse createGame(String authToken, CreateGameRequest createGameRequest) {
         if (!validateAuth(authToken)) {
-            return new CreateGameResponse("Error: unauthorized", -1);
+            return new CreateGameResponse("Error: unauthorized", null);
         }
 
         String gameName = createGameRequest.gameName();

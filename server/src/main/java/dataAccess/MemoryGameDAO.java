@@ -18,7 +18,7 @@ public class MemoryGameDAO implements GameDAO {
         ChessGame newGame = new ChessGame();
         GameData game = new GameData(gameList.size(), null, null, gameName, newGame);
         gameList.add(game);
-        return gameList.size() - 1;
+        return gameList.size();
     }
 
     @Override
