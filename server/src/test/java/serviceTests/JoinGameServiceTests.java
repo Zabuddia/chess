@@ -3,6 +3,7 @@ package serviceTests;
 import chess.ChessGame;
 import dataAccess.MemoryAuthDAO;
 import dataAccess.MemoryGameDAO;
+import dataAccess.MemoryUserDAO;
 import model.AuthData;
 import model.GameData;
 import org.junit.jupiter.api.Assertions;
@@ -16,6 +17,10 @@ public class JoinGameServiceTests {
     @Test
     @DisplayName("Join Game With Color")
     public void joinGameWithColorTest() {
+        MemoryAuthDAO.authList.clear();
+        MemoryUserDAO.userList.clear();
+        MemoryGameDAO.gameList.clear();
+
         String username = "buddia";
         String authToken = "12345";
 
@@ -43,6 +48,10 @@ public class JoinGameServiceTests {
     @Test
     @DisplayName("Join Game Without Color")
     public void joinGameWithoutColorTest() {
+        MemoryAuthDAO.authList.clear();
+        MemoryUserDAO.userList.clear();
+        MemoryGameDAO.gameList.clear();
+
         String username = "buddia";
         String authToken = "12345";
 
@@ -70,6 +79,10 @@ public class JoinGameServiceTests {
     @Test
     @DisplayName("Unauthorized Join Game")
     public void unauthorizedJoinGameTest() {
+        MemoryAuthDAO.authList.clear();
+        MemoryUserDAO.userList.clear();
+        MemoryGameDAO.gameList.clear();
+
         String username = "buddia";
         String authToken = "12345";
         String unauthorizedAuthToken = "54321";
@@ -98,6 +111,10 @@ public class JoinGameServiceTests {
     @Test
     @DisplayName("Join Game Already Taken")
     public void alreadyTakenTest() {
+        MemoryAuthDAO.authList.clear();
+        MemoryUserDAO.userList.clear();
+        MemoryGameDAO.gameList.clear();
+
         String username = "buddia";
         String authToken = "12345";
 
@@ -125,6 +142,10 @@ public class JoinGameServiceTests {
     @Test
     @DisplayName("GameID doesn't exist")
     public void gameIDDoesntExistTest() {
+        MemoryAuthDAO.authList.clear();
+        MemoryUserDAO.userList.clear();
+        MemoryGameDAO.gameList.clear();
+
         String username = "buddia";
         String authToken = "12345";
 

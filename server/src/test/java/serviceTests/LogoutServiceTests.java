@@ -1,6 +1,8 @@
 package serviceTests;
 
 import dataAccess.MemoryAuthDAO;
+import dataAccess.MemoryGameDAO;
+import dataAccess.MemoryUserDAO;
 import model.AuthData;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -13,6 +15,10 @@ public class LogoutServiceTests {
     @Test
     @DisplayName("Logout")
     public void logoutTest() {
+        MemoryAuthDAO.authList.clear();
+        MemoryUserDAO.userList.clear();
+        MemoryGameDAO.gameList.clear();
+
         String username = "buddia";
         String authToken = "12345";
 
@@ -30,6 +36,10 @@ public class LogoutServiceTests {
     @Test
     @DisplayName("Unauthorized logout")
     public void unauthorizedLogoutTest() {
+        MemoryAuthDAO.authList.clear();
+        MemoryUserDAO.userList.clear();
+        MemoryGameDAO.gameList.clear();
+
         String username = "buddia";
         String authToken = "12345";
         String unauthorizedAuthToken = "54321";

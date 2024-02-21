@@ -1,6 +1,7 @@
 package serviceTests;
 
 import dataAccess.MemoryAuthDAO;
+import dataAccess.MemoryGameDAO;
 import dataAccess.MemoryUserDAO;
 import model.AuthData;
 import model.UserData;
@@ -16,7 +17,10 @@ public class RegisterServiceTests {
     @Test
     @DisplayName("Register a user")
     public void registerTest() {
+        MemoryAuthDAO.authList.clear();
         MemoryUserDAO.userList.clear();
+        MemoryGameDAO.gameList.clear();
+
         String username = "buddia";
         String password = "12345";
         String email = "fife.alan@gmail.com";
@@ -39,6 +43,10 @@ public class RegisterServiceTests {
     @Test
     @DisplayName("User already exists")
     public void userAlreadyExistsTest() {
+        MemoryAuthDAO.authList.clear();
+        MemoryUserDAO.userList.clear();
+        MemoryGameDAO.gameList.clear();
+
         String username = "buddia";
         String password = "12345";
         String email = "fife.alan@gmail.com";

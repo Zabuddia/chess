@@ -10,13 +10,16 @@ import request.ListGamesRequest;
 import service.ListGamesService;
 
 import java.util.ArrayList;
-import java.util.Collection;
 
 public class ListGamesServiceTests {
 
     @Test
     @DisplayName("List Games")
     public void listGamesTest() {
+        MemoryAuthDAO.authList.clear();
+        MemoryUserDAO.userList.clear();
+        MemoryGameDAO.gameList.clear();
+
         String username = "buddia";
         String authToken = "12345";
 
@@ -39,6 +42,10 @@ public class ListGamesServiceTests {
     @Test
     @DisplayName("Unauthorized List Games")
     public void unauthorizedListGamesTest() {
+        MemoryAuthDAO.authList.clear();
+        MemoryUserDAO.userList.clear();
+        MemoryGameDAO.gameList.clear();
+
         String username = "buddia";
         String authToken = "12345";
         String unauthorizedAuthToken = "54321";

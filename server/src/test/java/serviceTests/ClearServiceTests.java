@@ -12,6 +12,10 @@ public class ClearServiceTests {
     @Test
     @DisplayName("Clear Service Test")
     public void clearTest() {
+        MemoryAuthDAO.authList.clear();
+        MemoryUserDAO.userList.clear();
+        MemoryGameDAO.gameList.clear();
+
         String username = "buddia";
         String password = "12345";
         String email = "fife.alan@gmail.com";
