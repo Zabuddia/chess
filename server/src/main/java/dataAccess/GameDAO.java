@@ -4,6 +4,7 @@ import chess.ChessGame;
 import model.AuthData;
 import model.GameData;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 public interface GameDAO {
@@ -11,7 +12,7 @@ public interface GameDAO {
 
     int createGame(String gameName);
 
-    Collection<GameData> listGames();
+    ArrayList<GameData> listGames();
 
     boolean getGame(int gameID);
 

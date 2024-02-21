@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import request.ListGamesRequest;
 import service.ListGamesService;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 public class ListGamesServiceTests {
@@ -30,7 +31,7 @@ public class ListGamesServiceTests {
         ListGamesRequest listGamesRequest = new ListGamesRequest(true);
         ListGamesService listGamesService = new ListGamesService();
 
-        Collection<GameData> listOfGames = listGamesService.listGames(listGamesRequest, authToken).listOfGames();
+        ArrayList<GameData> listOfGames = listGamesService.listGames(listGamesRequest, authToken).games();
 
         Assertions.assertNotNull(listOfGames, "Did not send the list of games");
     }
@@ -53,7 +54,7 @@ public class ListGamesServiceTests {
         ListGamesRequest listGamesRequest = new ListGamesRequest(true);
         ListGamesService listGamesService = new ListGamesService();
 
-        Collection<GameData> listOfGames = listGamesService.listGames(listGamesRequest, unauthorizedAuthToken).listOfGames();
+        ArrayList<GameData> listOfGames = listGamesService.listGames(listGamesRequest, unauthorizedAuthToken).games();
 
         Assertions.assertNull(listOfGames, "Sent listOfGames even when unauthorized");
     }
