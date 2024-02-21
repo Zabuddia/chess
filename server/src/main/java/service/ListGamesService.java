@@ -15,8 +15,8 @@ public class ListGamesService {
     }
     public ListGamesResponse listGames(ListGamesRequest listGamesRequest, String authToken) {
         if (!validateAuth(authToken)) {
-            return new ListGamesResponse("message", "Error: unauthorized", null);
+            return new ListGamesResponse("Error: unauthorized", null);
         }
-        return new ListGamesResponse(null, null, gameDAO.listGames());
+        return new ListGamesResponse(null, gameDAO.listGames());
     }
 }

@@ -17,7 +17,7 @@ public class RegisterHandler {
         RegisterRequest registerRequest = gson.fromJson(request.body(), RegisterRequest.class);
 
         RegisterResponse registerResponse = registerService.register(registerRequest);
-        if (Objects.equals(registerResponse.error(), "Error: already taken")) {
+        if (Objects.equals(registerResponse.message(), "Error: already taken")) {
             response.status(403);
         } else {
             response.status(200);

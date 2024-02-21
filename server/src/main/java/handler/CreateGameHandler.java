@@ -19,7 +19,7 @@ public class CreateGameHandler {
         CreateGameRequest createGameRequest = gson.fromJson(request.body(), CreateGameRequest.class);
 
         CreateGameResponse createGameResponse = createGameService.createGame(authToken, createGameRequest);
-        if (Objects.equals(createGameResponse.error(), "Error: unauthorized")) {
+        if (Objects.equals(createGameResponse.message(), "Error: unauthorized")) {
             response.status(401);
         } else {
             response.status(200);

@@ -17,7 +17,7 @@ public class LoginHandler {
         LoginRequest loginRequest = gson.fromJson(request.body(), LoginRequest.class);
 
         LoginResponse loginResponse = loginService.login(loginRequest);
-        if (Objects.equals(loginResponse.error(), "Error: unauthorized")) {
+        if (Objects.equals(loginResponse.message(), "Error: unauthorized")) {
             response.status(401);
         } else {
             response.status(200);

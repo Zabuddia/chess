@@ -17,7 +17,7 @@ public class LogoutHandler {
         String authToken = request.headers("Authorization");
         LogoutRequest logoutRequest = gson.fromJson(request.body(), LogoutRequest.class);
         LogoutResponse logoutResponse = logoutService.logout(logoutRequest, authToken);
-        if (Objects.equals(logoutResponse.error(), "Error: unauthorized")) {
+        if (Objects.equals(logoutResponse.message(), "Error: unauthorized")) {
             response.status(401);
         } else {
             response.status(200);

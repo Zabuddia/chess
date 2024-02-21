@@ -15,7 +15,7 @@ public class JoinGameService {
     }
     public JoinGameResponse joinGame(JoinGameRequest joinGameRequest, String authToken) {
         if (!validateAuth(authToken)) {
-            return new JoinGameResponse("message", "Error: unauthorized");
+            return new JoinGameResponse("Error: unauthorized");
         }
         ChessGame.TeamColor clientColor = joinGameRequest.playerColor();
         int gameID = joinGameRequest.gameID();
@@ -23,18 +23,18 @@ public class JoinGameService {
         String username = authDAO.getUsername(authToken);
 
         if (!gameDAO.getGame(gameID)) {
-            return new JoinGameResponse("message", "Error: bad request");
+            return new JoinGameResponse("Error: bad request");
         }
 
         String response = gameDAO.updateGame(clientColor, gameID, username);
 
         if (Objects.equals(response, "No game with that ID")) {
-            return new JoinGameResponse("message", "Error: bad request");
+            return new JoinGameResponse("Error: bad request");
         }
         if (Objects.equals(response, "Already taken")) {
-            return new JoinGameResponse("message", "Error: already taken");
+            return new JoinGameResponse("Error: already taken");
         }
 
-        return new JoinGameResponse(null, null);
+        return new JoinGameResponse(null);
     }
 }

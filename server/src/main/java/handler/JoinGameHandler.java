@@ -19,11 +19,11 @@ public class JoinGameHandler {
         JoinGameRequest joinGameRequest = gson.fromJson(request.body(), JoinGameRequest.class);
 
         JoinGameResponse joinGameResponse = joinGameService.joinGame(joinGameRequest, authToken);
-        if (Objects.equals(joinGameResponse.error(), "Error: bad request")) {
+        if (Objects.equals(joinGameResponse.message(), "Error: bad request")) {
             response.status(400);
-        } else if(Objects.equals(joinGameResponse.error(), "Error: unauthorized")) {
+        } else if(Objects.equals(joinGameResponse.message(), "Error: unauthorized")) {
             response.status(401);
-        } else if (Objects.equals(joinGameResponse.error(), "Error: already taken")) {
+        } else if (Objects.equals(joinGameResponse.message(), "Error: already taken")) {
             response.status(403);
         } else {
             response.status(200);

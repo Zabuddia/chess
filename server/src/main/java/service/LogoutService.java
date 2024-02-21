@@ -12,10 +12,10 @@ public class LogoutService {
     }
     public LogoutResponse logout(LogoutRequest logoutRequest, String authToken) {
         if (!validateAuth(authToken)) {
-            return new LogoutResponse("message", "Error: unauthorized");
+            return new LogoutResponse("Error: unauthorized");
         }
         authDAO.deleteAuth(authToken);
 
-        return new LogoutResponse(null, null);
+        return new LogoutResponse(null);
     }
 }

@@ -1,3 +1,3 @@
 package response;
 
-public record LoginResponse(String message, String error, String username, String authToken) {}
+public record LoginResponse(String message, String username, String authToken) {}

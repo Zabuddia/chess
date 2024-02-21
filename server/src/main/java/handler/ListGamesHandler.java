@@ -19,7 +19,7 @@ public class ListGamesHandler {
         ListGamesRequest listGamesRequest = gson.fromJson(request.body(), ListGamesRequest.class);
 
         ListGamesResponse listGamesResponse = listGamesService.listGames(listGamesRequest, authToken);
-        if (Objects.equals(listGamesResponse.error(), "Error: unauthorized")) {
+        if (Objects.equals(listGamesResponse.message(), "Error: unauthorized")) {
             response.status(401);
         } else {
             response.status(200);

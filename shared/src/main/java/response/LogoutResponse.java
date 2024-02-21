@@ -1,3 +1,3 @@
 package response;
 
-public record LogoutResponse(String message, String error) {}
+public record LogoutResponse(String message) {}
