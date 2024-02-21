@@ -52,8 +52,8 @@ public class CreateGameServiceTests {
 
         CreateGameRequest createGameRequest = new CreateGameRequest(gameName);
         CreateGameService createGameService = new CreateGameService();
-        int gameID = createGameService.createGame(unauthorizedAuthToken, createGameRequest).gameID();
+        Integer gameID = createGameService.createGame(unauthorizedAuthToken, createGameRequest).gameID();
 
-        Assertions.assertEquals(gameID, -1, "Created game even when unauthorized");
+        Assertions.assertNull(gameID, "Created game even when unauthorized");
     }
 }
