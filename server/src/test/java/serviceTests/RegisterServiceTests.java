@@ -6,6 +6,7 @@ import dataAccess.MemoryUserDAO;
 import model.AuthData;
 import model.UserData;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import request.RegisterRequest;
@@ -13,14 +14,15 @@ import response.RegisterResponse;
 import service.RegisterService;
 
 public class RegisterServiceTests {
-
-    @Test
-    @DisplayName("Register a user")
-    public void registerTest() {
+    @BeforeEach
+    public void clearAll() {
         MemoryAuthDAO.authList.clear();
         MemoryUserDAO.userList.clear();
         MemoryGameDAO.gameList.clear();
-
+    }
+    @Test
+    @DisplayName("Register a user")
+    public void registerTest() {
         String username = "buddia";
         String password = "12345";
         String email = "fife.alan@gmail.com";
@@ -43,10 +45,6 @@ public class RegisterServiceTests {
     @Test
     @DisplayName("User already exists")
     public void userAlreadyExistsTest() {
-        MemoryAuthDAO.authList.clear();
-        MemoryUserDAO.userList.clear();
-        MemoryGameDAO.gameList.clear();
-
         String username = "buddia";
         String password = "12345";
         String email = "fife.alan@gmail.com";

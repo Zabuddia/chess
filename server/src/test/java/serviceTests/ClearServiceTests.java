@@ -2,20 +2,22 @@ package serviceTests;
 
 import dataAccess.*;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import request.ClearRequest;
 import service.ClearService;
 
 public class ClearServiceTests {
-
-    @Test
-    @DisplayName("Clear Service Test")
-    public void clearTest() {
+    @BeforeEach
+    public void clearAll() {
         MemoryAuthDAO.authList.clear();
         MemoryUserDAO.userList.clear();
         MemoryGameDAO.gameList.clear();
-
+    }
+    @Test
+    @DisplayName("Clear Service Test")
+    public void clearTest() {
         String username = "buddia";
         String password = "12345";
         String email = "fife.alan@gmail.com";

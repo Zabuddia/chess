@@ -5,20 +5,22 @@ import dataAccess.MemoryGameDAO;
 import dataAccess.MemoryUserDAO;
 import model.UserData;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import request.LoginRequest;
 import service.LoginService;
 
 public class LoginServiceTests {
-
-    @Test
-    @DisplayName("Login")
-    public void loginTest() {
+    @BeforeEach
+    public void clearAll() {
         MemoryAuthDAO.authList.clear();
         MemoryUserDAO.userList.clear();
         MemoryGameDAO.gameList.clear();
-
+    }
+    @Test
+    @DisplayName("Login")
+    public void loginTest() {
         String username = "buddia";
         String password = "12345";
         String email = "fife.alan@gmail.com";
@@ -37,10 +39,6 @@ public class LoginServiceTests {
     @Test
     @DisplayName("Incorrect password")
     public void incorrectPasswordTest() {
-        MemoryAuthDAO.authList.clear();
-        MemoryUserDAO.userList.clear();
-        MemoryGameDAO.gameList.clear();
-
         String username = "buddia";
         String password = "12345";
         String email = "fife.alan@gmail.com";

@@ -5,20 +5,22 @@ import dataAccess.MemoryGameDAO;
 import dataAccess.MemoryUserDAO;
 import model.AuthData;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import request.CreateGameRequest;
 import service.CreateGameService;
 
 public class CreateGameServiceTests {
-
-    @Test
-    @DisplayName("Create Game")
-    public void creteGameTest() {
+    @BeforeEach
+    public void clearAll() {
         MemoryAuthDAO.authList.clear();
         MemoryUserDAO.userList.clear();
         MemoryGameDAO.gameList.clear();
-
+    }
+    @Test
+    @DisplayName("Create Game")
+    public void creteGameTest() {
         String username = "buddia";
         String authToken = "12345";
 
@@ -37,10 +39,6 @@ public class CreateGameServiceTests {
     @Test
     @DisplayName("Unauthorized Create Game")
     public void unauthorizedCreateGameTest() {
-        MemoryAuthDAO.authList.clear();
-        MemoryUserDAO.userList.clear();
-        MemoryGameDAO.gameList.clear();
-
         String username = "buddia";
         String authToken = "12345";
         String unauthorizedAuthToken = "54321";

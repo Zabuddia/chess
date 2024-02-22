@@ -4,6 +4,7 @@ import dataAccess.*;
 import model.AuthData;
 import model.GameData;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import request.ListGamesRequest;
@@ -12,14 +13,15 @@ import service.ListGamesService;
 import java.util.ArrayList;
 
 public class ListGamesServiceTests {
-
-    @Test
-    @DisplayName("List Games")
-    public void listGamesTest() {
+    @BeforeEach
+    public void clearAll() {
         MemoryAuthDAO.authList.clear();
         MemoryUserDAO.userList.clear();
         MemoryGameDAO.gameList.clear();
-
+    }
+    @Test
+    @DisplayName("List Games")
+    public void listGamesTest() {
         String username = "buddia";
         String authToken = "12345";
 
@@ -42,10 +44,6 @@ public class ListGamesServiceTests {
     @Test
     @DisplayName("Unauthorized List Games")
     public void unauthorizedListGamesTest() {
-        MemoryAuthDAO.authList.clear();
-        MemoryUserDAO.userList.clear();
-        MemoryGameDAO.gameList.clear();
-
         String username = "buddia";
         String authToken = "12345";
         String unauthorizedAuthToken = "54321";
