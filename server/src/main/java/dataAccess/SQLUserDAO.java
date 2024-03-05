@@ -4,6 +4,8 @@ import model.UserData;
 
 import javax.xml.crypto.Data;
 
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
 public class SQLUserDAO extends SQLDAO implements UserDAO {
     public SQLUserDAO() {
 
@@ -21,6 +23,7 @@ public class SQLUserDAO extends SQLDAO implements UserDAO {
     public void createUser(String username, String password, String email) {
         var statement = "INSERT INTO user (username, password, email) VALUES (?, ?, ?)";
         try {
+            BcryptPasswordEncoder bcryptPasswordEncoder = new BcryptPasswordEncoder();
             executeUpdate(statement, username, password, email);
         } catch (DataAccessException e) {
             e.printStackTrace();

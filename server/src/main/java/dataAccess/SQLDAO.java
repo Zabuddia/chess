@@ -37,7 +37,10 @@ public class SQLDAO {
                     ");",
             "CREATE TABLE IF NOT EXISTS game (" +
                     "gameID INT PRIMARY KEY AUTO_INCREMENT," +
+                    "whiteUsername VARCHAR(255)," +
+                    "blackUsername VARCHAR(255)," +
                     "gameName VARCHAR(255) NOT NULL" +
+                    "game VARCHAR(255) NOT NULL," +
                     ");",
             "CREATE TABLE IF NOT EXISTS auth (" +
                     "authToken VARCHAR(255) PRIMARY KEY," +
