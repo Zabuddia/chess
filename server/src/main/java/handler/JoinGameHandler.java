@@ -7,8 +7,6 @@ import service.JoinGameService;
 import spark.Request;
 import spark.Response;
 
-import java.util.Objects;
-
 public class JoinGameHandler {
     private final Gson gson = new Gson();
     private final JoinGameService joinGameService = new JoinGameService();

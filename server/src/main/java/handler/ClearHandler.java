@@ -6,7 +6,6 @@ import response.ClearResponse;
 import service.ClearService;
 import spark.Request;
 import spark.Response;
-import spark.Route;
 
 public class ClearHandler {
     private final Gson gson = new Gson();

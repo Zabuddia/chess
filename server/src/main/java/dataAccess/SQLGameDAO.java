@@ -5,7 +5,10 @@ import model.GameData;
 
 import java.util.ArrayList;
 
-public class SQLGameDAO implements GameDAO {
+public class SQLGameDAO extends SQLDAO implements GameDAO {
+    public SQLGameDAO() {
+        configureDatabase();
+    }
     public void clearGame() {
 
     }
@@ -25,4 +28,5 @@ public class SQLGameDAO implements GameDAO {
     public String updateGame(ChessGame.TeamColor clientColor, int gameID, String username) {
         return null;
     }
+
 }

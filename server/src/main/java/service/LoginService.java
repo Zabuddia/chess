@@ -1,15 +1,12 @@
 package service;
 
-import dataAccess.AuthDAO;
-import dataAccess.MemoryAuthDAO;
-import dataAccess.MemoryUserDAO;
-import dataAccess.UserDAO;
+import dataAccess.*;
 import request.LoginRequest;
 import response.LoginResponse;
 
 public class LoginService {
-    private final UserDAO userDAO = new MemoryUserDAO();
-    private final AuthDAO authDAO = new MemoryAuthDAO();
+    private final UserDAO userDAO = new SQLUserDAO();
+    private final AuthDAO authDAO = new SQLAuthDAO();
     public LoginResponse login(LoginRequest loginRequest) {
         String username = loginRequest.username();
         String password = loginRequest.password();

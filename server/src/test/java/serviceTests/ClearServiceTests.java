@@ -22,9 +22,9 @@ public class ClearServiceTests {
         String password = "12345";
         String email = "fife.alan@gmail.com";
         String gameName = "game1";
-        UserDAO userDAO = new MemoryUserDAO();
-        AuthDAO authDAO = new MemoryAuthDAO();
-        GameDAO gameDAO = new MemoryGameDAO();
+        MemoryUserDAO userDAO = new MemoryUserDAO();
+        MemoryAuthDAO authDAO = new MemoryAuthDAO();
+        MemoryGameDAO gameDAO = new MemoryGameDAO();
 
         userDAO.createUser(username, password, email);
         authDAO.createAuth(username);

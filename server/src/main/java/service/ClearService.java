@@ -5,9 +5,9 @@ import request.ClearRequest;
 import response.ClearResponse;
 
 public class ClearService {
-    private final UserDAO userDAO = new MemoryUserDAO();
-    private final AuthDAO authDAO = new MemoryAuthDAO();
-    private final GameDAO gameDAO = new MemoryGameDAO();
+    private final UserDAO userDAO = new SQLUserDAO();
+    private final AuthDAO authDAO = new SQLAuthDAO();
+    private final GameDAO gameDAO = new SQLGameDAO();
     public ClearResponse clear(ClearRequest clearRequest) {
 
         userDAO.clearUser();

@@ -1,15 +1,12 @@
 package service;
 
-import dataAccess.AuthDAO;
-import dataAccess.GameDAO;
-import dataAccess.MemoryAuthDAO;
-import dataAccess.MemoryGameDAO;
+import dataAccess.*;
 import request.CreateGameRequest;
 import response.CreateGameResponse;
 
 public class CreateGameService {
-    private final AuthDAO authDAO = new MemoryAuthDAO();
-    private final GameDAO gameDAO = new MemoryGameDAO();
+    private final AuthDAO authDAO = new SQLAuthDAO();
+    private final GameDAO gameDAO = new SQLGameDAO();
     public boolean validateAuth(String authToken) {
         return authDAO.getAuth(authToken);
     }

@@ -1,16 +1,13 @@
 package service;
 
-import dataAccess.AuthDAO;
-import dataAccess.MemoryAuthDAO;
-import dataAccess.MemoryUserDAO;
-import dataAccess.UserDAO;
+import dataAccess.*;
 import model.UserData;
 import request.RegisterRequest;
 import response.RegisterResponse;
 
 public class RegisterService {
-    private final UserDAO userDAO = new MemoryUserDAO();
-    private final AuthDAO authDAO = new MemoryAuthDAO();
+    private final UserDAO userDAO = new SQLUserDAO();
+    private final AuthDAO authDAO = new SQLAuthDAO();
     public RegisterResponse register(RegisterRequest registerRequest) {
         String username = registerRequest.username();
         String password = registerRequest.password();

@@ -8,8 +8,8 @@ import response.JoinGameResponse;
 import java.util.Objects;
 
 public class JoinGameService {
-    private final AuthDAO authDAO = new MemoryAuthDAO();
-    private final GameDAO gameDAO = new MemoryGameDAO();
+    private final AuthDAO authDAO = new SQLAuthDAO();
+    private final GameDAO gameDAO = new SQLGameDAO();
     public boolean validateAuth(String authToken) {
         return authDAO.getAuth(authToken);
     }

@@ -8,25 +8,18 @@ import java.util.Collection;
 
 public class MemoryGameDAO implements GameDAO {
     public static ArrayList<GameData> gameList = new ArrayList<>();
-    @Override
     public void clearGame() {
         gameList.clear();
     }
-
-    @Override
     public int createGame(String gameName) {
         ChessGame newGame = new ChessGame();
         GameData game = new GameData(gameList.size() + 1, null, null, gameName, newGame);
         gameList.add(game);
         return gameList.size();
     }
-
-    @Override
     public ArrayList<GameData> listGames() {
         return gameList;
     }
-
-    @Override
     public boolean getGame(int gameID) {
         for (GameData game : gameList) {
             if (game.gameID() == gameID) {
@@ -35,8 +28,6 @@ public class MemoryGameDAO implements GameDAO {
         }
         return false;
     }
-
-    @Override
     public String updateGame(ChessGame.TeamColor clientColor, int gameID, String username) {
         GameData gameToUpdate = null;
         for (GameData game : gameList) {

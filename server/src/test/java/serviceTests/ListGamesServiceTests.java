@@ -29,7 +29,7 @@ public class ListGamesServiceTests {
         MemoryAuthDAO.authList.add(auth);
 
         String gameName = "game1";
-        GameDAO gameDAO = new MemoryGameDAO();
+        MemoryGameDAO gameDAO = new MemoryGameDAO();
 
         gameDAO.createGame(gameName);
 
@@ -52,7 +52,7 @@ public class ListGamesServiceTests {
         MemoryAuthDAO.authList.add(auth);
 
         String gameName = "game1";
-        GameDAO gameDAO = new MemoryGameDAO();
+        MemoryGameDAO gameDAO = new MemoryGameDAO();
 
         gameDAO.createGame(gameName);
 

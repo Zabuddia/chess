@@ -2,11 +2,12 @@ package service;
 
 import dataAccess.AuthDAO;
 import dataAccess.MemoryAuthDAO;
+import dataAccess.SQLAuthDAO;
 import request.LogoutRequest;
 import response.LogoutResponse;
 
 public class LogoutService {
-    private final AuthDAO authDAO = new MemoryAuthDAO();
+    private final AuthDAO authDAO = new SQLAuthDAO();
     public boolean validateAuth(String authToken) {
         return authDAO.getAuth(authToken);
     }
