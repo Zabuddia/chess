@@ -8,7 +8,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 public class SQLUserDAO extends SQLDAO implements UserDAO {
     public SQLUserDAO() {
-
         configureDatabase();
     }
     public void clearUser() {
@@ -23,8 +22,9 @@ public class SQLUserDAO extends SQLDAO implements UserDAO {
     public void createUser(String username, String password, String email) {
         var statement = "INSERT INTO user (username, password, email) VALUES (?, ?, ?)";
         try {
-            BcryptPasswordEncoder bcryptPasswordEncoder = new BcryptPasswordEncoder();
-            executeUpdate(statement, username, password, email);
+            BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+            String hashedPassword = encoder.encode(password);
+            executeUpdate(statement, username, hashedPassword, email);
         } catch (DataAccessException e) {
             e.printStackTrace();
         }
@@ -51,11 +51,30 @@ public class SQLUserDAO extends SQLDAO implements UserDAO {
         return null;
     }
 
+    private String readHashedPasswordFromDatabase(String username) {
+        try (var conn = DatabaseManager.getConnection()) {
+            var statement = "SELECT password FROM user WHERE username = ?";
+            try (var preparedStatement = conn.prepareStatement(statement)) {
+                preparedStatement.setString(1, username);
+                try (var resultSet = preparedStatement.executeQuery()) {
+                    if (resultSet.next()) {
+                        return resultSet.getString("password");
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public boolean verifyUser(String username, String password) {
         var user = getUser(username);
+        var hashedPassword = readHashedPasswordFromDatabase(username);
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         if (user == null) {
             return false;
         }
-        return user.password().equals(password);
+        return encoder.matches(password, hashedPassword);
     }
 }
