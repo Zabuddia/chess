@@ -18,6 +18,6 @@ public class CreateGameService {
         String gameName = createGameRequest.gameName();
 
         int gameID = gameDAO.createGame(gameName);
-        return new CreateGameResponse("gameID", gameID);
+        return new CreateGameResponse(null, gameID);
     }
 }
