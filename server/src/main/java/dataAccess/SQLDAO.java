@@ -6,6 +6,20 @@ import java.sql.Statement;
 import static java.sql.Types.NULL;
 
 public class SQLDAO {
+    public static boolean isEmpty(String tableName) {
+        try (var conn = DatabaseManager.getConnection()) {
+            var statement = "SELECT * FROM " + tableName;
+            try (var preparedStatement = conn.prepareStatement(statement)) {
+                try (var resultSet = preparedStatement.executeQuery()) {
+                    return !resultSet.next();
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
     protected int executeUpdate(String statement, Object... params) throws DataAccessException {
         try (var conn = DatabaseManager.getConnection()) {
             try (var preparedStatement = conn.prepareStatement(statement, Statement.RETURN_GENERATED_KEYS)) {

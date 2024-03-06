@@ -6,14 +6,22 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import request.ClearRequest;
+import request.CreateGameRequest;
+import request.RegisterRequest;
+import response.RegisterResponse;
 import service.ClearService;
+import service.CreateGameService;
+import service.RegisterService;
 
 public class ClearServiceTests {
+    AuthDAO authDAO = new SQLAuthDAO();
+    UserDAO userDAO = new SQLUserDAO();
+    GameDAO gameDAO = new SQLGameDAO();
     @BeforeEach
     public void clearAll() {
-        MemoryAuthDAO.authList.clear();
-        MemoryUserDAO.userList.clear();
-        MemoryGameDAO.gameList.clear();
+        authDAO.clearAuth();
+        userDAO.clearUser();
+        gameDAO.clearGame();
     }
     @Test
     @DisplayName("Clear Service Test")
@@ -22,20 +30,21 @@ public class ClearServiceTests {
         String password = "12345";
         String email = "fife.alan@gmail.com";
         String gameName = "game1";
-        MemoryUserDAO userDAO = new MemoryUserDAO();
-        MemoryAuthDAO authDAO = new MemoryAuthDAO();
-        MemoryGameDAO gameDAO = new MemoryGameDAO();
 
-        userDAO.createUser(username, password, email);
-        authDAO.createAuth(username);
-        gameDAO.createGame(gameName);
+        RegisterRequest registerRequest = new RegisterRequest(username, password, email);
+        RegisterService registerService = new RegisterService();
+        RegisterResponse registerResponse = registerService.register(registerRequest);
+
+        CreateGameRequest createGameRequest = new CreateGameRequest(gameName);
+        CreateGameService createGameService = new CreateGameService();
+        createGameService.createGame(registerResponse.authToken(), createGameRequest);
 
         ClearRequest clearRequest = new ClearRequest(true);
         ClearService clearService = new ClearService();
         clearService.clear(clearRequest);
 
-        Assertions.assertTrue(MemoryUserDAO.userList.isEmpty(), "UserList is not empty");
-        Assertions.assertTrue(MemoryAuthDAO.authList.isEmpty(), "AuthList is not empty");
-        Assertions.assertTrue(MemoryGameDAO.gameList.isEmpty(), "GameList is not empty");
+        Assertions.assertTrue(SQLDAO.isEmpty("user"), "user is not empty");
+        Assertions.assertTrue(SQLDAO.isEmpty("auth"), "auth is not empty");
+        Assertions.assertTrue(SQLDAO.isEmpty("game"), "game is not empty");
     }
 }
