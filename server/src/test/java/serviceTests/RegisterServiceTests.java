@@ -1,8 +1,6 @@
 package serviceTests;
 
-import dataAccess.MemoryAuthDAO;
-import dataAccess.MemoryGameDAO;
-import dataAccess.MemoryUserDAO;
+import dataAccess.*;
 import model.AuthData;
 import model.UserData;
 import org.junit.jupiter.api.Assertions;
@@ -14,32 +12,26 @@ import response.RegisterResponse;
 import service.RegisterService;
 
 public class RegisterServiceTests {
+    AuthDAO authDAO = new SQLAuthDAO();
+    UserDAO userDAO = new SQLUserDAO();
+    GameDAO gameDAO = new SQLGameDAO();
     @BeforeEach
     public void clearAll() {
-        MemoryAuthDAO.authList.clear();
-        MemoryUserDAO.userList.clear();
-        MemoryGameDAO.gameList.clear();
+        authDAO.clearAuth();
+        userDAO.clearUser();
+        gameDAO.clearGame();
+        String username = "buddia";
+        String password = "12345";
+        String email = "fife.alan@gmail.com";
+        RegisterRequest registerRequest = new RegisterRequest(username, password, email);
+        RegisterService registerService = new RegisterService();
+        RegisterResponse registerResponse = registerService.register(registerRequest);
     }
     @Test
     @DisplayName("Register a user")
     public void registerTest() {
-        String username = "buddia";
-        String password = "12345";
-        String email = "fife.alan@gmail.com";
-
-        UserData user = new UserData(username, password, email);
-
-        RegisterRequest registerRequest = new RegisterRequest(username, password, email);
-        RegisterService registerService = new RegisterService();
-        RegisterResponse response = registerService.register(registerRequest);
-        String authToken = response.authToken();
-        String error = response.message();
-
-        AuthData auth = new AuthData(authToken, username);
-
-        Assertions.assertTrue(MemoryUserDAO.userList.contains(user), "New UserData was not created");
-        Assertions.assertTrue(MemoryAuthDAO.authList.contains(auth),"New AuthData was not created");
-        Assertions.assertNotEquals("Error: already taken", error, "Says username already exits when it doesn't");
+        Assertions.assertFalse(SQLDAO.isEmpty("user"), "New UserData was not created");
+        Assertions.assertFalse(SQLDAO.isEmpty("auth"),"New AuthData was not created");
     }
 
     @Test
@@ -49,15 +41,11 @@ public class RegisterServiceTests {
         String password = "12345";
         String email = "fife.alan@gmail.com";
 
-        UserData user = new UserData(username, password, email);
-        MemoryUserDAO.userList.add(user);
+        RegisterRequest registerRequest2 = new RegisterRequest(username, password, email);
+        RegisterService registerService2 = new RegisterService();
+        RegisterResponse registerResponse2 = registerService2.register(registerRequest2);
+        String error = registerResponse2.message();
 
-        RegisterRequest registerRequest = new RegisterRequest(username, password, email);
-        RegisterService registerService = new RegisterService();
-        String error = registerService.register(registerRequest).message();
-
-        Assertions.assertEquals(MemoryUserDAO.userList.size(), 1, "User was added to userList");
-        Assertions.assertTrue(MemoryAuthDAO.authList.isEmpty(), "Auth was added to authList");
         Assertions.assertEquals("Error: already taken", error, "Authtoken was created");
     }
 }

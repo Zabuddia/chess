@@ -54,7 +54,7 @@ public class CreateGameServiceTests {
 
         RegisterRequest registerRequest = new RegisterRequest(username, password, email);
         RegisterService registerService = new RegisterService();
-        RegisterResponse registerResponse = registerService.register(registerRequest);
+        registerService.register(registerRequest);
 
         CreateGameRequest createGameRequest = new CreateGameRequest(gameName);
         CreateGameService createGameService = new CreateGameService();
