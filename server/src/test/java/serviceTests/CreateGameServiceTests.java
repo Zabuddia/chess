@@ -1,37 +1,45 @@
 package serviceTests;
 
-import dataAccess.MemoryAuthDAO;
-import dataAccess.MemoryGameDAO;
-import dataAccess.MemoryUserDAO;
+import dataAccess.*;
 import model.AuthData;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import request.CreateGameRequest;
+import request.RegisterRequest;
+import response.CreateGameResponse;
+import response.RegisterResponse;
 import service.CreateGameService;
+import service.RegisterService;
 
 public class CreateGameServiceTests {
+    AuthDAO authDAO = new SQLAuthDAO();
+    UserDAO userDAO = new SQLUserDAO();
+    GameDAO gameDAO = new SQLGameDAO();
     @BeforeEach
     public void clearAll() {
-        MemoryAuthDAO.authList.clear();
-        MemoryUserDAO.userList.clear();
-        MemoryGameDAO.gameList.clear();
+        authDAO.clearAuth();
+        userDAO.clearUser();
+        gameDAO.clearGame();
     }
     @Test
     @DisplayName("Create Game")
     public void creteGameTest() {
         String username = "buddia";
-        String authToken = "12345";
-
-        AuthData auth = new AuthData(authToken, username);
-        MemoryAuthDAO.authList.add(auth);
-
+        String password = "12345";
+        String email = "fife.alan@gmail.com";
         String gameName = "game1";
+
+        RegisterRequest registerRequest = new RegisterRequest(username, password, email);
+        RegisterService registerService = new RegisterService();
+        RegisterResponse registerResponse = registerService.register(registerRequest);
 
         CreateGameRequest createGameRequest = new CreateGameRequest(gameName);
         CreateGameService createGameService = new CreateGameService();
-        int gameID = createGameService.createGame(authToken, createGameRequest).gameID();
+        CreateGameResponse createGameResponse = createGameService.createGame(registerResponse.authToken(), createGameRequest);
+
+        int gameID = createGameResponse.gameID();
 
         Assertions.assertNotEquals(gameID, -1, "Did not create the game");
     }
@@ -40,18 +48,18 @@ public class CreateGameServiceTests {
     @DisplayName("Unauthorized Create Game")
     public void unauthorizedCreateGameTest() {
         String username = "buddia";
-        String authToken = "12345";
-        String unauthorizedAuthToken = "54321";
-
-        AuthData auth = new AuthData(authToken, username);
-        MemoryAuthDAO.authList.add(auth);
-
+        String password = "12345";
+        String email = "fife.alan@gmail.com";
         String gameName = "game1";
+
+        RegisterRequest registerRequest = new RegisterRequest(username, password, email);
+        RegisterService registerService = new RegisterService();
+        RegisterResponse registerResponse = registerService.register(registerRequest);
 
         CreateGameRequest createGameRequest = new CreateGameRequest(gameName);
         CreateGameService createGameService = new CreateGameService();
-        Integer gameID = createGameService.createGame(unauthorizedAuthToken, createGameRequest).gameID();
+        createGameService.createGame("unauthorized", createGameRequest);
 
-        Assertions.assertNull(gameID, "Created game even when unauthorized");
+        Assertions.assertTrue(SQLDAO.isEmpty("game"), "Created game even when unauthorized");
     }
 }
