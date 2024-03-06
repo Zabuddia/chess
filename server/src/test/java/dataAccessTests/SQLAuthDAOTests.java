@@ -28,5 +28,6 @@ public class SQLAuthDAOTests {
         RegisterService registerService = new RegisterService();
         registerService.register(registerRequest);
         authDAO.clearAuth();
+        Assertions.assertTrue(SQLDAO.isEmpty("auth"), "auth was not cleared");
     }
 }

@@ -19,7 +19,21 @@ public class SQLDAO {
         }
         return false;
     }
-
+    public static int tableSize(String tableName) {
+        try (var conn = DatabaseManager.getConnection()) {
+            var statement = "SELECT COUNT(*) FROM " + tableName;
+            try (var preparedStatement = conn.prepareStatement(statement)) {
+                try (var resultSet = preparedStatement.executeQuery()) {
+                    if (resultSet.next()) {
+                        return resultSet.getInt(1);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
     protected int executeUpdate(String statement, Object... params) throws DataAccessException {
         try (var conn = DatabaseManager.getConnection()) {
             try (var preparedStatement = conn.prepareStatement(statement, Statement.RETURN_GENERATED_KEYS)) {
