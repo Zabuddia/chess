@@ -3,30 +3,33 @@ package dataAccess;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
+import static java.sql.Types.NULL;
+
 public class SQLDAO {
-    protected int executeUpdate(String statement, Object... args) throws DataAccessException {
+    protected int executeUpdate(String statement, Object... params) throws DataAccessException {
         try (var conn = DatabaseManager.getConnection()) {
             try (var preparedStatement = conn.prepareStatement(statement, Statement.RETURN_GENERATED_KEYS)) {
-                for (int i = 0; i < args.length; i++) {
-                    preparedStatement.setObject(i + 1, args[i]);
-                }
-                int affectedRows = preparedStatement.executeUpdate();
-
-                if (affectedRows == 0) {
-                    throw new DataAccessException("Creating user failed, no rows affected.");
-                }
-
-                try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys()) {
-                    if (generatedKeys.next()) {
-                        return generatedKeys.getInt(1); // Or use another getXXX method if your key is not an int
-                    } else {
-                        throw new DataAccessException("Creating user failed, no ID obtained.");
+                for (var i = 0; i < params.length; i++) {
+                    var param = params[i];
+                    switch (param) {
+                        case String p -> preparedStatement.setString(i + 1, p);
+                        case Integer p -> preparedStatement.setInt(i + 1, p);
+                        case null -> preparedStatement.setNull(i + 1, NULL);
+                        default -> {
+                        }
                     }
+                }
+                preparedStatement.executeUpdate();
+
+                var rs = preparedStatement.getGeneratedKeys();
+                if (rs.next()) {
+                    return rs.getInt(1);
                 }
             }
         } catch (Exception e) {
             throw new DataAccessException("Unable to execute statement. " + e.getMessage());
         }
+        return 0;
     }
 
     protected final String[] createStatements = {
@@ -39,32 +42,36 @@ public class SQLDAO {
                     "gameID INT PRIMARY KEY AUTO_INCREMENT," +
                     "whiteUsername VARCHAR(255)," +
                     "blackUsername VARCHAR(255)," +
-                    "gameName VARCHAR(255) NOT NULL" +
-                    "game VARCHAR(255) NOT NULL," +
+                    "gameName VARCHAR(255) NOT NULL," +
+                    "game BLOB NOT NULL" +
                     ");",
             "CREATE TABLE IF NOT EXISTS auth (" +
                     "authToken VARCHAR(255) PRIMARY KEY," +
-                    "username VARCHAR(255) NOT NULL," +
-                    "FOREIGN KEY (username) REFERENCES user(username)" +
+                    "username VARCHAR(255) NOT NULL" +
                     ");"
     };
-    protected void configureDatabase(){
+
+    protected void configureDatabase() {
+        try {
+            DatabaseManager.createDatabase();
+        } catch (DataAccessException e) {
+            e.printStackTrace();
+        }
         try (var conn = DatabaseManager.getConnection()) {
-            var statement = "SELECT COUNT(*) AS count FROM information_schema.SCHEMATA WHERE SCHEMA_NAME = ?";
-            try (var preparedStatement = conn.prepareStatement(statement)) {
-                preparedStatement.setString(1, DatabaseManager.getDatabaseName());
-                try (var resultSet = preparedStatement.executeQuery()) {
-                    if (resultSet.next()) {
-                        if (resultSet.getInt("count") == 0) {
-                            DatabaseManager.createDatabase();
-                            for (var string : createStatements) {
-                                try (var ps = conn.prepareStatement(string)) {
-                                    ps.executeUpdate();
-                                }
-                            }
-                        }
-                    }
+            for (var statement : createStatements) {
+                try (var preparedStatement = conn.prepareStatement(statement)) {
+                    preparedStatement.executeUpdate();
                 }
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+    protected void deleteDatabase() {
+        try (var conn = DatabaseManager.getConnection()) {
+            var statement = "DROP DATABASE IF EXISTS " + DatabaseManager.getDatabaseName();
+            try (var preparedStatement = conn.prepareStatement(statement)) {
+                preparedStatement.executeUpdate();
             }
         } catch (Exception e) {
             e.printStackTrace();
