@@ -130,6 +130,7 @@ public class ChessClient {
     }
     private static void logout() {
         System.out.println("You have been logged out.");
+        serverFacade.logout(authToken);
         authToken = null;
         preloginUI();
     }
@@ -145,11 +146,14 @@ public class ChessClient {
     private static void listGames() {
         System.out.println("Here are the available games:");
         ArrayList<GameData> games = serverFacade.listGames(authToken);
+        int i = 1;
         for (GameData game : games) {
-            System.out.print(game.gameID() + " ");
-            System.out.print(game.gameName() + " ");
-            System.out.print(game.whiteUsername() + " ");
-            System.out.print(game.blackUsername() + " ");
+            System.out.print(i + ". ");
+            System.out.print("ID: " + game.gameID() + " ");
+            System.out.print("Name: " + game.gameName() + " ");
+            System.out.print("WhitePlayer: " + game.whiteUsername() + " ");
+            System.out.println("BlackPlayer: " + game.blackUsername());
+            i++;
         }
         ChessBoardUI.printBoard();
         postloginUI();

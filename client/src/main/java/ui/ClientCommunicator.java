@@ -15,45 +15,6 @@ import java.util.ArrayList;
 
 public class ClientCommunicator {
     private final String serverUrl = "http://localhost:8080";
-    private final Gson gson = new Gson();
-//    public ArrayList<GameData> get(String urlString) {
-//        try {
-//            URL url = new URL(urlString);
-//            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-//            connection.setReadTimeout(5000);
-//            connection.setRequestMethod("GET");
-//            connection.connect();
-//            if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
-//                InputStream responseBody = connection.getInputStream();
-//                ListGamesResponse listGamesResponse = gson.fromJson(responseBody.toString(), ListGamesResponse.class);
-//                return listGamesResponse.games();
-//            } else {
-//                return null;
-//            }
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//            return null;
-//        }
-//    }
-//    public String post(String urlString, Object object) {
-//        try {
-//            URL url = new URL(urlString);
-//            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-//            connection.setReadTimeout(5000);
-//            connection.setRequestMethod("POST");
-//            connection.setDoOutput(true);
-//            connection.connect();
-//            connection.getOutputStream().write(gson.toJson(object).getBytes());
-//            if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
-//                InputStream responseBody = connection.getInputStream();
-//                return responseBody.toString();
-//            }
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//            return null;
-//        }
-//        return null;
-//    }
     private static <T> T readBody(HttpURLConnection http, Class<T> responseClass) throws IOException {
         T response = null;
         if (http.getContentLength() < 0) {
@@ -80,13 +41,17 @@ public class ClientCommunicator {
             URL url = (new URI(serverUrl + path)).toURL();
             HttpURLConnection http = (HttpURLConnection) url.openConnection();
             http.setRequestMethod(method);
-            http.setDoOutput(true);
 
-            if (authToken != null) {
+            if (!method.equals("GET") && request != null) {
+                http.setDoOutput(true);
+                if (authToken != null) {
+                    http.addRequestProperty("Authorization", authToken);
+                }
+                writeBody(request, http);
+            } else if (authToken != null) {
                 http.addRequestProperty("Authorization", authToken);
             }
 
-            writeBody(request, http);
             http.connect();
             return readBody(http, responseClass);
         } catch (Exception ex) {
@@ -94,4 +59,5 @@ public class ClientCommunicator {
             return null;
         }
     }
+
 }

@@ -58,8 +58,7 @@ public class ChessBoardUI {
 
         drawBlackChessBoard(out);
 
-        out.print(SET_BG_COLOR_BLACK);
-        out.print(SET_TEXT_COLOR_WHITE);
+        out.print(RESET_BG_COLOR);
     }
     private static void drawWhiteChessBoard(PrintStream out) {
         drawEndRow(out, 2);
