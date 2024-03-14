@@ -146,15 +146,15 @@ public class ChessBoardUI {
 
         if (color == 2) {
             if (board[row][col] != null && board[row][col].getTeamColor() == ChessGame.TeamColor.BLACK) {
-                out.print(SET_TEXT_COLOR_BLUE);
-            } else {
                 out.print(SET_TEXT_COLOR_RED);
+            } else {
+                out.print(SET_TEXT_COLOR_BLUE);
             }
         } else {
             if (board[row][col] != null && board[7 - row][7 - col].getTeamColor() == ChessGame.TeamColor.BLACK) {
-                out.print(SET_TEXT_COLOR_BLUE);
-            } else {
                 out.print(SET_TEXT_COLOR_RED);
+            } else {
+                out.print(SET_TEXT_COLOR_BLUE);
             }
         }
 
