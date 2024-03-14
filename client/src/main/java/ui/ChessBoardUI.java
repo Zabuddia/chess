@@ -1,5 +1,8 @@
 package ui;
 
+import chess.ChessGame;
+import chess.ChessPiece;
+
 import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
 
@@ -8,73 +11,43 @@ import static ui.EscapeSequences.*;
 public class ChessBoardUI {
 
     private static final int BOARD_SIZE_IN_SQUARES = 8;
-    private static final char[][][] board = new char[BOARD_SIZE_IN_SQUARES][BOARD_SIZE_IN_SQUARES][2];
+    private static final ChessPiece[][] board = new ChessPiece[BOARD_SIZE_IN_SQUARES][BOARD_SIZE_IN_SQUARES];
     public static void main(String[] args) {
-        board[0][0][0] = 'R';
-        board[0][0][1] = 'B';
-        board[0][1][0] = 'N';
-        board[0][1][1] = 'B';
-        board[0][2][0] = 'B';
-        board[0][2][1] = 'B';
-        board[0][3][0] = 'Q';
-        board[0][3][1] = 'B';
-        board[0][4][0] = 'K';
-        board[0][4][1] = 'B';
-        board[0][5][0] = 'B';
-        board[0][5][1] = 'B';
-        board[0][6][0] = 'N';
-        board[0][6][1] = 'B';
-        board[0][7][0] = 'R';
-        board[0][7][1] = 'B';
-        board[1][0][0] = 'P';
-        board[1][0][1] = 'B';
-        board[1][1][0] = 'P';
-        board[1][1][1] = 'B';
-        board[1][2][0] = 'P';
-        board[1][2][1] = 'B';
-        board[1][3][0] = 'P';
-        board[1][3][1] = 'B';
-        board[1][4][0] = 'P';
-        board[1][4][1] = 'B';
-        board[1][5][0] = 'P';
-        board[1][5][1] = 'B';
-        board[1][6][0] = 'P';
-        board[1][6][1] = 'B';
-        board[1][7][0] = 'P';
-        board[1][7][1] = 'B';
+        //Put all the white pieces in the right beginning spot
+        board[0][0] = new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.ROOK);
+        board[0][1] = new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.KNIGHT);
+        board[0][2] = new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.BISHOP);
+        board[0][3] = new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.QUEEN);
+        board[0][4] = new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.KING);
+        board[0][5] = new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.BISHOP);
+        board[0][6] = new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.KNIGHT);
+        board[0][7] = new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.ROOK);
+        board[1][0] = new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.PAWN);
+        board[1][1] = new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.PAWN);
+        board[1][2] = new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.PAWN);
+        board[1][3] = new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.PAWN);
+        board[1][4] = new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.PAWN);
+        board[1][5] = new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.PAWN);
+        board[1][6] = new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.PAWN);
+        board[1][7] = new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.PAWN);
 
-        board[7][0][0] = 'R';
-        board[7][0][1] = 'W';
-        board[7][1][0] = 'N';
-        board[7][1][1] = 'W';
-        board[7][2][0] = 'B';
-        board[7][2][1] = 'W';
-        board[7][3][0] = 'Q';
-        board[7][3][1] = 'W';
-        board[7][4][0] = 'K';
-        board[7][4][1] = 'W';
-        board[7][5][0] = 'B';
-        board[7][5][1] = 'W';
-        board[7][6][0] = 'N';
-        board[7][6][1] = 'W';
-        board[7][7][0] = 'R';
-        board[7][7][1] = 'W';
-        board[6][0][0] = 'P';
-        board[6][0][1] = 'W';
-        board[6][1][0] = 'P';
-        board[6][1][1] = 'W';
-        board[6][2][0] = 'P';
-        board[6][2][1] = 'W';
-        board[6][3][0] = 'P';
-        board[6][3][1] = 'W';
-        board[6][4][0] = 'P';
-        board[6][4][1] = 'W';
-        board[6][5][0] = 'P';
-        board[6][5][1] = 'W';
-        board[6][6][0] = 'P';
-        board[6][6][1] = 'W';
-        board[6][7][0] = 'P';
-        board[6][7][1] = 'W';
+        //Put all the black pieces in the right beginning spot
+        board[7][0] = new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.ROOK);
+        board[7][1] = new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.KNIGHT);
+        board[7][2] = new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.BISHOP);
+        board[7][3] = new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.QUEEN);
+        board[7][4] = new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.KING);
+        board[7][5] = new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.BISHOP);
+        board[7][6] = new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.KNIGHT);
+        board[7][7] = new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.ROOK);
+        board[6][0] = new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.PAWN);
+        board[6][1] = new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.PAWN);
+        board[6][2] = new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.PAWN);
+        board[6][3] = new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.PAWN);
+        board[6][4] = new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.PAWN);
+        board[6][5] = new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.PAWN);
+        board[6][6] = new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.PAWN);
+        board[6][7] = new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.PAWN);
 
         var out = new PrintStream(System.out, true, StandardCharsets.UTF_8);
 
@@ -145,6 +118,19 @@ public class ChessBoardUI {
         out.print(RESET_BG_COLOR);
         out.println();
     }
+    private static char getLetter(ChessPiece piece) {
+        if (piece == null) {
+            return 0;
+        }
+        return switch (piece.getPieceType()) {
+            case KING -> 'K';
+            case QUEEN -> 'Q';
+            case ROOK -> 'R';
+            case BISHOP -> 'B';
+            case KNIGHT -> 'N';
+            case PAWN -> 'P';
+        };
+    }
     private static void drawSquare(PrintStream out, int row, int col, int color) {
         if ((row + col) % 2 == 0) {
             out.print(SET_BG_COLOR_WHITE);
@@ -155,19 +141,19 @@ public class ChessBoardUI {
         char letter;
 
         if (color == 2) {
-            letter = board[row][col][0];
+            letter = getLetter(board[row][col]);
         } else {
-            letter = board[7 - row][7 - col][0];
+            letter = getLetter(board[7 - row][7 - col]);
         }
 
         if (color == 2) {
-            if (board[row][col][1] == 'B') {
+            if (board[row][col] != null && board[row][col].getTeamColor() == ChessGame.TeamColor.BLACK) {
                 out.print(SET_TEXT_COLOR_BLUE);
             } else {
                 out.print(SET_TEXT_COLOR_RED);
             }
         } else {
-            if (board[7 - row][7 - col][1] == 'B') {
+            if (board[row][col] != null && board[7 - row][7 - col].getTeamColor() == ChessGame.TeamColor.BLACK) {
                 out.print(SET_TEXT_COLOR_BLUE);
             } else {
                 out.print(SET_TEXT_COLOR_RED);
