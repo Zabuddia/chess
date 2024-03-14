@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class ChessClient {
-    private static final ServerFacade serverFacade = new ServerFacade();
+    private static final ServerFacade serverFacade = new ServerFacade(8080);
     private static String authToken = null;
     public static void main(String[] args) {
         preloginUI();

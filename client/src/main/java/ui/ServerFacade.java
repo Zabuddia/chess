@@ -3,16 +3,16 @@ package ui;
 import chess.ChessGame;
 import model.GameData;
 import request.*;
-import response.CreateGameResponse;
-import response.ListGamesResponse;
-import response.LoginResponse;
-import response.RegisterResponse;
-import response.JoinGameResponse;
+import response.*;
 
 import java.util.ArrayList;
 
 public class ServerFacade {
-    private final ClientCommunicator clientCommunicator = new ClientCommunicator();
+    int facadePort;
+    private final ClientCommunicator clientCommunicator = new ClientCommunicator("http://localhost:" + facadePort);
+    public ServerFacade(int port) {
+        facadePort = port;
+    }
     public ArrayList<GameData> listGames(String authToken) {
         var path = "/game";
         ListGamesRequest listGamesRequest = new ListGamesRequest(true);
@@ -45,5 +45,10 @@ public class ServerFacade {
         var path = "/session";
         LogoutRequest logoutRequest = new LogoutRequest(true);
         clientCommunicator.makeRequest("DELETE", path, logoutRequest, null, authToken);
+    }
+    public void clear() {
+        var path = "/db";
+        ClearRequest clearRequest = new ClearRequest(true);
+        clientCommunicator.makeRequest("DELETE", path, clearRequest, ClearResponse.class, null);
     }
 }
