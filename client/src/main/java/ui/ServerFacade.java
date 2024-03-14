@@ -1,16 +1,16 @@
 package ui;
 
-import com.google.gson.Gson;
+import model.GameData;
 
-import java.io.IOException;
-import java.io.OutputStream;
-import java.net.HttpURLConnection;
-import java.net.URI;
-import java.net.URL;
+import java.util.ArrayList;
 
 public class ServerFacade {
     private final String serverUrl;
+    private final ClientCommunicator clientCommunicator = new ClientCommunicator();
     public ServerFacade(String url) {
         serverUrl = url;
+    }
+    public ArrayList<GameData> listGames() {
+        return clientCommunicator.get(serverUrl + "/game");
     }
 }
