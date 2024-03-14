@@ -1,5 +1,6 @@
 package ui;
 
+import chess.ChessGame;
 import model.GameData;
 
 import java.util.ArrayList;
@@ -160,6 +161,7 @@ public class ChessClient {
         System.out.println("Enter White or Black:");
         System.out.print("> ");
         String color = scanner.nextLine();
+        serverFacade.joinGame(ChessGame.TeamColor.valueOf(color.toUpperCase()), Integer.parseInt(gameID), authToken);
         postloginUI();
     }
     private static void joinObserver() {
@@ -167,6 +169,7 @@ public class ChessClient {
         System.out.print("> ");
         Scanner scanner = new Scanner(System.in);
         String gameID = scanner.nextLine();
+        serverFacade.joinGame(null, Integer.parseInt(gameID), authToken);
         postloginUI();
     }
 }

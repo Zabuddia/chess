@@ -1,14 +1,13 @@
 package ui;
 
+import chess.ChessGame;
 import model.GameData;
-import request.CreateGameRequest;
-import request.ListGamesRequest;
-import request.LoginRequest;
-import request.RegisterRequest;
+import request.*;
 import response.CreateGameResponse;
 import response.ListGamesResponse;
 import response.LoginResponse;
 import response.RegisterResponse;
+import response.JoinGameResponse;
 
 import java.util.ArrayList;
 
@@ -36,5 +35,10 @@ public class ServerFacade {
         var path = "/game";
         CreateGameRequest createGameRequest = new CreateGameRequest(gameName);
         clientCommunicator.makeRequest("POST", path, createGameRequest, CreateGameResponse.class, authToken);
+    }
+    public void joinGame(ChessGame.TeamColor color, int gameID, String authToken) {
+        var path = "/game";
+        JoinGameRequest joinGameRequest = new JoinGameRequest(color, gameID);
+        clientCommunicator.makeRequest("POST", path, joinGameRequest, JoinGameResponse.class, authToken);
     }
 }
