@@ -4,6 +4,7 @@ import java.util.Scanner;
 
 public class ChessClient {
     private static final ServerFacade serverFacade = new ServerFacade("http://localhost:8080");
+    private static String authToken = null;
     public static void main(String[] args) {
         preloginUI();
     }
@@ -83,6 +84,7 @@ public class ChessClient {
         System.out.println("Enter your password:");
         System.out.print("> ");
         String password = scanner.nextLine();
+        authToken = serverFacade.login(username, password);
         postloginUI();
     }
     private static void register() {
@@ -96,6 +98,7 @@ public class ChessClient {
         System.out.println("Enter your email:");
         System.out.print("> ");
         String email = scanner.nextLine();
+        authToken = serverFacade.register(username, password, email);
         postloginUI();
     }
     private static void quit() {
@@ -123,6 +126,7 @@ public class ChessClient {
     }
     private static void logout() {
         System.out.println("You have been logged out.");
+        authToken = null;
         preloginUI();
     }
     private static void createGame() {
@@ -130,6 +134,7 @@ public class ChessClient {
         System.out.print("> ");
         Scanner scanner = new Scanner(System.in);
         String gameName = scanner.nextLine();
+        serverFacade.createGame(gameName);
         postloginUI();
     }
     private static void listGames() {

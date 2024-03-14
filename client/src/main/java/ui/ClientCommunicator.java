@@ -11,7 +11,6 @@ import java.net.URL;
 import java.util.ArrayList;
 
 public class ClientCommunicator {
-    private final String serverUrl = "http://localhost:8080";
     private final Gson gson = new Gson();
     public ArrayList<GameData> get(String urlString) {
         try {
@@ -31,5 +30,24 @@ public class ClientCommunicator {
             e.printStackTrace();
             return null;
         }
+    }
+    public String post(String urlString, Object object) {
+        try {
+            URL url = new URL(urlString);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setReadTimeout(5000);
+            connection.setRequestMethod("POST");
+            connection.setDoOutput(true);
+            connection.connect();
+            connection.getOutputStream().write(gson.toJson(object).getBytes());
+            if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
+                InputStream responseBody = connection.getInputStream();
+                return responseBody.toString();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+        return null;
     }
 }
