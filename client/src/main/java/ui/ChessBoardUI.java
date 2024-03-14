@@ -12,7 +12,7 @@ public class ChessBoardUI {
 
     private static final int BOARD_SIZE_IN_SQUARES = 8;
     private static final ChessPiece[][] board = new ChessPiece[BOARD_SIZE_IN_SQUARES][BOARD_SIZE_IN_SQUARES];
-    public static void main(String[] args) {
+    public static void printBoard() {
         board[0][0] = new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.ROOK);
         board[0][1] = new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.KNIGHT);
         board[0][2] = new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.BISHOP);

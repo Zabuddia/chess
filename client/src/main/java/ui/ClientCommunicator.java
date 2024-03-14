@@ -81,6 +81,7 @@ public class ClientCommunicator {
             HttpURLConnection http = (HttpURLConnection) url.openConnection();
             http.setRequestMethod(method);
             http.setDoOutput(true);
+
             if (authToken != null) {
                 http.addRequestProperty("Authorization", authToken);
             }

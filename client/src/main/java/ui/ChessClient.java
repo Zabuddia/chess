@@ -1,5 +1,8 @@
 package ui;
 
+import model.GameData;
+
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class ChessClient {
@@ -139,7 +142,14 @@ public class ChessClient {
     }
     private static void listGames() {
         System.out.println("Here are the available games:");
-        System.out.println(serverFacade.listGames(authToken));
+        ArrayList<GameData> games = serverFacade.listGames(authToken);
+        for (GameData game : games) {
+            System.out.print(game.gameID() + " ");
+            System.out.print(game.gameName() + " ");
+            System.out.print(game.whiteUsername() + " ");
+            System.out.print(game.blackUsername() + " ");
+        }
+        ChessBoardUI.printBoard();
         postloginUI();
     }
     private static void joinGame() {
