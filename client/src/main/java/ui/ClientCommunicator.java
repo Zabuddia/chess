@@ -1,8 +1,6 @@
 package ui;
 
 import com.google.gson.Gson;
-import model.GameData;
-import response.ListGamesResponse;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -11,7 +9,6 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.URL;
-import java.util.ArrayList;
 
 public class ClientCommunicator {
     private final String serverUrl = "http://localhost:8080";
