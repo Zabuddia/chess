@@ -2,30 +2,39 @@ package ui;
 
 import model.GameData;
 import request.CreateGameRequest;
+import request.ListGamesRequest;
 import request.LoginRequest;
 import request.RegisterRequest;
+import response.CreateGameResponse;
+import response.ListGamesResponse;
+import response.LoginResponse;
+import response.RegisterResponse;
 
 import java.util.ArrayList;
 
 public class ServerFacade {
-    private final String serverUrl;
     private final ClientCommunicator clientCommunicator = new ClientCommunicator();
-    public ServerFacade(String url) {
-        serverUrl = url;
-    }
-    public ArrayList<GameData> listGames() {
-        return clientCommunicator.get(serverUrl + "/game");
+    public ArrayList<GameData> listGames(String authToken) {
+        var path = "/game";
+        ListGamesRequest listGamesRequest = new ListGamesRequest(true);
+        ListGamesResponse listGamesResponse = clientCommunicator.makeRequest("GET", path, listGamesRequest, ListGamesResponse.class, authToken);
+        return listGamesResponse.games();
     }
     public String login(String username, String password) {
+        var path = "/session";
         LoginRequest loginRequest = new LoginRequest(username, password);
-        return clientCommunicator.post(serverUrl + "/session", loginRequest);
+        LoginResponse loginResponse = clientCommunicator.makeRequest("POST", path, loginRequest, LoginResponse.class, null);
+        return loginResponse.authToken();
     }
     public String register(String username, String password, String email) {
+        var path = "/user";
         RegisterRequest registerRequest = new RegisterRequest(username, password, email);
-        return clientCommunicator.post(serverUrl + "/user", registerRequest);
+        RegisterResponse registerResponse = clientCommunicator.makeRequest("POST", path, registerRequest, RegisterResponse.class, null);
+        return registerResponse.authToken();
     }
-    public void createGame(String gameName) {
+    public void createGame(String gameName, String authToken) {
+        var path = "/game";
         CreateGameRequest createGameRequest = new CreateGameRequest(gameName);
-        clientCommunicator.post(serverUrl + "/game", createGameRequest);
+        clientCommunicator.makeRequest("POST", path, createGameRequest, CreateGameResponse.class, authToken);
     }
 }

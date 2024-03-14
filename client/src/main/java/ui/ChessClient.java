@@ -3,7 +3,7 @@ package ui;
 import java.util.Scanner;
 
 public class ChessClient {
-    private static final ServerFacade serverFacade = new ServerFacade("http://localhost:8080");
+    private static final ServerFacade serverFacade = new ServerFacade();
     private static String authToken = null;
     public static void main(String[] args) {
         preloginUI();
@@ -134,12 +134,12 @@ public class ChessClient {
         System.out.print("> ");
         Scanner scanner = new Scanner(System.in);
         String gameName = scanner.nextLine();
-        serverFacade.createGame(gameName);
+        serverFacade.createGame(gameName, authToken);
         postloginUI();
     }
     private static void listGames() {
         System.out.println("Here are the available games:");
-        System.out.println(serverFacade.listGames());
+        System.out.println(serverFacade.listGames(authToken));
         postloginUI();
     }
     private static void joinGame() {
