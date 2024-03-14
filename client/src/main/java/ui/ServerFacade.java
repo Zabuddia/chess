@@ -39,6 +39,11 @@ public class ServerFacade {
     public void joinGame(ChessGame.TeamColor color, int gameID, String authToken) {
         var path = "/game";
         JoinGameRequest joinGameRequest = new JoinGameRequest(color, gameID);
-        clientCommunicator.makeRequest("POST", path, joinGameRequest, JoinGameResponse.class, authToken);
+        clientCommunicator.makeRequest("PUT", path, joinGameRequest, JoinGameResponse.class, authToken);
+    }
+    public void logout(String authToken) {
+        var path = "/session";
+        LogoutRequest logoutRequest = new LogoutRequest(true);
+        clientCommunicator.makeRequest("DELETE", path, logoutRequest, null, authToken);
     }
 }

@@ -139,6 +139,7 @@ public class ChessClient {
         Scanner scanner = new Scanner(System.in);
         String gameName = scanner.nextLine();
         serverFacade.createGame(gameName, authToken);
+        ChessBoardUI.printBoard();
         postloginUI();
     }
     private static void listGames() {
@@ -162,6 +163,7 @@ public class ChessClient {
         System.out.print("> ");
         String color = scanner.nextLine();
         serverFacade.joinGame(ChessGame.TeamColor.valueOf(color.toUpperCase()), Integer.parseInt(gameID), authToken);
+        ChessBoardUI.printBoard();
         postloginUI();
     }
     private static void joinObserver() {
@@ -170,6 +172,7 @@ public class ChessClient {
         Scanner scanner = new Scanner(System.in);
         String gameID = scanner.nextLine();
         serverFacade.joinGame(null, Integer.parseInt(gameID), authToken);
+        ChessBoardUI.printBoard();
         postloginUI();
     }
 }
