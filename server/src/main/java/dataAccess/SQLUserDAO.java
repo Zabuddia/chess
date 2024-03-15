@@ -2,8 +2,6 @@ package dataAccess;
 
 import model.UserData;
 
-import javax.xml.crypto.Data;
-
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 public class SQLUserDAO extends SQLDAO implements UserDAO {

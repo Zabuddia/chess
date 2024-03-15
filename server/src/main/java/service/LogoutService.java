@@ -1,7 +1,6 @@
 package service;
 
 import dataAccess.AuthDAO;
-import dataAccess.MemoryAuthDAO;
 import dataAccess.SQLAuthDAO;
 import request.LogoutRequest;
 import response.LogoutResponse;

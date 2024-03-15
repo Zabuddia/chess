@@ -73,6 +73,29 @@ public class SQLGameDAO extends SQLDAO implements GameDAO {
         }
     }
 
+    public GameData getGameData(int gameID) {
+        GameData gameData = null;
+        try (var conn = DatabaseManager.getConnection()) {
+            var statement = "SELECT * FROM game WHERE gameID = ?";
+            try (var preparedStatement = conn.prepareStatement(statement)) {
+                preparedStatement.setInt(1, gameID);
+                try (var resultSet = preparedStatement.executeQuery()) {
+                    if (resultSet.next()) {
+                        String whiteUsername = resultSet.getString("whiteUsername");
+                        String blackUsername = resultSet.getString("blackUsername");
+                        String gameName = resultSet.getString("gameName");
+                        String gameString = resultSet.getString("game");
+                        ChessGame game = gson.fromJson(gameString, ChessGame.class);
+                        gameData = new GameData(gameID, whiteUsername, blackUsername, gameName, game);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return gameData;
+    }
+
     public String updateGame(ChessGame.TeamColor clientColor, int gameID, String username) {
         if (!getGame(gameID)) {
             return "No game with that ID";

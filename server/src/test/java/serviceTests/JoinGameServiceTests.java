@@ -2,8 +2,6 @@ package serviceTests;
 
 import chess.ChessGame;
 import dataAccess.*;
-import model.AuthData;
-import model.GameData;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

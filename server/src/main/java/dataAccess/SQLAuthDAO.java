@@ -52,20 +52,20 @@ public class SQLAuthDAO extends SQLDAO implements AuthDAO {
         }
     }
 
-     public String getUsername(String authToken) {
-         try (var conn = DatabaseManager.getConnection()) {
-             var statement = "SELECT * FROM auth WHERE authToken = ?";
-             try (var preparedStatement = conn.prepareStatement(statement)) {
-                 preparedStatement.setString(1, authToken);
-                 try (var resultSet = preparedStatement.executeQuery()) {
-                     if (resultSet.next()) {
-                         return resultSet.getString("username");
-                     }
-                 }
-             }
-         } catch (Exception e) {
-             e.printStackTrace();
-         }
-         return null;
-     }
+    public String getUsername(String authToken) {
+        try (var conn = DatabaseManager.getConnection()) {
+            var statement = "SELECT * FROM auth WHERE authToken = ?";
+            try (var preparedStatement = conn.prepareStatement(statement)) {
+                preparedStatement.setString(1, authToken);
+                try (var resultSet = preparedStatement.executeQuery()) {
+                    if (resultSet.next()) {
+                        return resultSet.getString("username");
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }
