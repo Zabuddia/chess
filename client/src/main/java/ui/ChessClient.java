@@ -10,7 +10,6 @@ public class ChessClient {
     private static final ServerFacade serverFacade = new ServerFacade(8080);
     private static String authToken = null;
     public static void main(String[] args) {
-        //for the autograder
         preloginUI();
     }
     private static void preloginUI() {
