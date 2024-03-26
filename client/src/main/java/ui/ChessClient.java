@@ -2,13 +2,26 @@ package ui;
 
 import chess.ChessGame;
 import model.GameData;
+import webSocketMessages.serverMessages.ErrorMessage;
+import webSocketMessages.serverMessages.LoadGameMessage;
+import webSocketMessages.serverMessages.NotificationMessage;
+import webSocketMessages.serverMessages.ServerMessage;
 
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class ChessClient {
+public class ChessClient implements ServerMessageObserver{
     private static final ServerFacade serverFacade = new ServerFacade(8080);
     private static String authToken = null;
+    @Override
+    public void notify(ServerMessage message) {
+        switch (message.getServerMessageType()) {
+            case NOTIFICATION -> displayNotification(((NotificationMessage) message).getMessage());
+            case ERROR -> displayError(((ErrorMessage) message).getErrorMessage());
+            case LOAD_GAME -> loadGame(((LoadGameMessage) message).getGame());
+        }
+    }
+
     public static void main(String[] args) {
         preloginUI();
     }
@@ -80,6 +93,42 @@ public class ChessClient {
                 postloginUI();
         }
     }
+    private static void gameplayUI() {
+        System.out.println("Here is what you can do:");
+        System.out.println("Make Move");
+        System.out.println("Highlight Legal Moves");
+        System.out.println("Redraw Chess Board");
+        System.out.println("Leave");
+        System.out.println("Resign");
+        System.out.println("Help");
+        System.out.println();
+        System.out.print("Enter your choice > ");
+        Scanner scanner = new Scanner(System.in);
+        String choice = scanner.nextLine();
+        switch (choice.toLowerCase()) {
+            case "make move":
+                makeMove();
+                break;
+            case "highlight legal moves":
+                highlightLegalMoves();
+                break;
+            case "redraw chess board":
+                redrawChessBoard();
+                break;
+            case "leave":
+                leave();
+                break;
+            case "resign":
+                resign();
+                break;
+            case "help":
+                gameplayHelp();
+                break;
+            default:
+                System.out.println("Invalid choice. Please try again.");
+                gameplayUI();
+        }
+    }
     private static void login() {
         System.out.println("Enter your username:");
         System.out.print("> ");
@@ -127,6 +176,16 @@ public class ChessClient {
         System.out.println("Quit: Exit the game");
         System.out.println("Help: Display this message");
         postloginUI();
+    }
+    private static void gameplayHelp() {
+        System.out.println("Here is what you can do:");
+        System.out.println("Make Move: Make a move in the game");
+        System.out.println("Highlight Legal Moves: Highlight all legal moves for a piece");
+        System.out.println("Redraw Chess Board: Redraw the chess board");
+        System.out.println("Leave: Leave the game");
+        System.out.println("Resign: Resign from the game");
+        System.out.println("Help: Display this message");
+        gameplayUI();
     }
     private static void logout() {
         System.out.println("You have been logged out.");
@@ -178,5 +237,45 @@ public class ChessClient {
         serverFacade.joinGame(null, Integer.parseInt(gameID), authToken);
         ChessBoardUI.printBoard();
         postloginUI();
+    }
+    private static void makeMove() {
+        System.out.println("Enter the move:");
+        System.out.print("> ");
+        Scanner scanner = new Scanner(System.in);
+        String move = scanner.nextLine();
+        // serverFacade.makeMove(move, authToken);
+        gameplayUI();
+    }
+    private static void highlightLegalMoves() {
+        System.out.println("Enter the position of the piece:");
+        System.out.print("> ");
+        Scanner scanner = new Scanner(System.in);
+        String position = scanner.nextLine();
+        // serverFacade.highlightLegalMoves(position, authToken);
+        gameplayUI();
+    }
+    private static void redrawChessBoard() {
+        ChessBoardUI.printBoard();
+        gameplayUI();
+    }
+    private static void leave() {
+        System.out.println("You have left the game.");
+        // serverFacade.leave(authToken);
+        postloginUI();
+    }
+    private static void resign() {
+        System.out.println("You have resigned from the game.");
+        // serverFacade.resign(authToken);
+        postloginUI();
+    }
+    private static void displayNotification(String message) {
+        System.out.println(message);
+    }
+    private static void displayError(String errorMessage) {
+        System.out.println(errorMessage);
+    }
+    private static void loadGame(ChessGame game) {
+        ChessBoardUI.printBoard();
+        gameplayUI();
     }
 }

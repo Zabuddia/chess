@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class WebSocketTests {
+public class WebSocketHandlerTests {
 
     private static WebsocketTestingEnvironment environment;
     private static TestServerFacade serverFacade;

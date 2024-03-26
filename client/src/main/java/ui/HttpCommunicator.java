@@ -10,9 +10,9 @@ import java.net.HttpURLConnection;
 import java.net.URI;
 import java.net.URL;
 
-public class ClientCommunicator {
+public class HttpCommunicator {
     private final String serverUrl;
-    public ClientCommunicator(String url) {
+    public HttpCommunicator(String url) {
         serverUrl = url;
     }
     private static <T> T readBody(HttpURLConnection http, Class<T> responseClass) throws IOException {
