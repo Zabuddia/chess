@@ -1,7 +1,7 @@
 package ui;
 
-import webSocketMessages.serverMessages.ServerMessage;
+import webSocketMessages.serverMessages.ServerMessageInterface;
 
 public interface ServerMessageObserver {
-    void notify(ServerMessage message);
+    void notify(ServerMessageInterface message);
 }

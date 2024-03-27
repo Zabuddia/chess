@@ -1,55 +1,43 @@
 package server.websocket;
 
 import org.eclipse.jetty.websocket.api.Session;
+import webSocketMessages.serverMessages.ServerMessageInterface;
+
 import java.util.concurrent.ConcurrentHashMap;
 
 public class ConnectionManager {
-    public final ConcurrentHashMap<Integer, Connection> connections = new ConcurrentHashMap<>();
+    public final ConcurrentHashMap<String, Connection> connections = new ConcurrentHashMap<>();
+    public final ConcurrentHashMap<String, Integer> gameConnections = new ConcurrentHashMap<>();
 
-    public void addConnection(int gameID, Session session) {
-        Connection connection = new Connection(session, gameID);
-        connections.put(gameID, connection);
+    public void addConnection(String authToken, int gameID, Session session) {
+        var connection = new Connection(session, authToken);
+        connections.put(authToken, connection);
+        gameConnections.put(authToken, gameID);
     }
 
     public void removeConnection(String authToken) {
         connections.remove(authToken);
+        gameConnections.remove(authToken);
     }
 
-    public Connection getConnection(int gameID, Session session) {
-        return connections.get(gameID);
-    }
-
-    public void broadcastMessage(int senderAuthToken, String message) {
-        connections.forEach((authToken, connection) -> {
-            if (!authToken.equals(senderAuthToken) && connection.getSession().isOpen()) {
-                try {
-                    connection.getSession().getRemote().sendString(message);
-                } catch (Exception e) {
-                    System.err.println("Failed to send message to " + authToken + ": " + e.getMessage());
-                }
+    public void broadcastGroup(String excludeAuthToken, int gameID, String message) {
+        connections.forEach((id, connection) -> {
+            if (gameConnections.get(id) == gameID && !connection.getAuthString().equals(excludeAuthToken)) {
+                connection.send(message);
             }
         });
     }
 
-    public void sendMessage(String authToken, String message) {
-        Connection connection = connections.get(authToken);
-        if (connection != null && connection.getSession().isOpen()) {
-            try {
-                connection.getSession().getRemote().sendString(message);
-            } catch (Exception e) {
-                System.err.println("Failed to send message to " + authToken + ": " + e.getMessage());
-            }
-        }
+    public void broadcastOne(String authToken, String message) {
+        connections.get(authToken).send(message);
     }
 
-    public void closeAllConnections() {
-        connections.forEach((authToken, connection) -> {
-            try {
-                connection.getSession().disconnect();
-            } catch (Exception e) {
-                System.err.println("Failed to close connection for " + authToken);
+    public void broadcastAll(int gameID, String message) {
+        connections.forEach((id, connection) -> {
+            if (gameConnections.get(id) == gameID) {
+                connection.send(message);
             }
         });
-        connections.clear();
     }
+
 }

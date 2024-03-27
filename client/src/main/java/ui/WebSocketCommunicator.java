@@ -31,7 +31,7 @@ public class WebSocketCommunicator extends Endpoint {
 
                 ServerMessageInterface serverMessage = gsonBuilder.fromJson(message, ServerMessage.class);
 
-                System.out.println(serverMessage.getMessage());
+                observer.notify(serverMessage);
             }
         });
     }

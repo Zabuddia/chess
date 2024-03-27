@@ -1,10 +1,13 @@
 package ui;
 
 import chess.ChessGame;
+import chess.ChessMove;
+import chess.ChessPosition;
 import model.GameData;
 import request.*;
 import response.*;
 import webSocketMessages.userCommands.JoinPlayerCommand;
+import webSocketMessages.userCommands.MakeMoveCommand;
 
 import java.util.ArrayList;
 
@@ -76,5 +79,47 @@ public class ServerFacade {
         var path = "/db";
         ClearRequest clearRequest = new ClearRequest(true);
         httpCommunicator.makeRequest("DELETE", path, clearRequest, ClearResponse.class, null);
+    }
+    public void makeMove(int gameID, String authToken, String move) {
+        char firstLetter = move.charAt(0);
+        char secondLetter = move.charAt(1);
+        char thirdLetter = move.charAt(2);
+        char fourthLetter = move.charAt(3);
+        switch (firstLetter) {
+            case 'a' -> firstLetter = '1';
+            case 'b' -> firstLetter = '2';
+            case 'c' -> firstLetter = '3';
+            case 'd' -> firstLetter = '4';
+            case 'e' -> firstLetter = '5';
+            case 'f' -> firstLetter = '6';
+            case 'g' -> firstLetter = '7';
+            case 'h' -> firstLetter = '8';
+        }
+        switch (thirdLetter) {
+            case 'a' -> thirdLetter = '1';
+            case 'b' -> thirdLetter = '2';
+            case 'c' -> thirdLetter = '3';
+            case 'd' -> thirdLetter = '4';
+            case 'e' -> thirdLetter = '5';
+            case 'f' -> thirdLetter = '6';
+            case 'g' -> thirdLetter = '7';
+            case 'h' -> thirdLetter = '8';
+        }
+        int firstNumber = Character.getNumericValue(firstLetter) - 1;
+        int secondNumber = Character.getNumericValue(secondLetter) - 1;
+        int thirdNumber = Character.getNumericValue(thirdLetter) - 1;
+        int fourthNumber = Character.getNumericValue(fourthLetter) - 1;
+
+        ChessPosition start = new ChessPosition(firstNumber, secondNumber);
+        ChessPosition end = new ChessPosition(thirdNumber, fourthNumber);
+        ChessMove chessMove = new ChessMove(start, end, null);
+
+        MakeMoveCommand makeMoveCommand = new MakeMoveCommand(authToken, gameID, chessMove);
+
+        try {
+            webSocketCommunicator.send(makeMoveCommand);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

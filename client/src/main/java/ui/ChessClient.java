@@ -2,10 +2,7 @@ package ui;
 
 import chess.ChessGame;
 import model.GameData;
-import webSocketMessages.serverMessages.ErrorMessage;
-import webSocketMessages.serverMessages.LoadGameMessage;
-import webSocketMessages.serverMessages.NotificationMessage;
-import webSocketMessages.serverMessages.ServerMessage;
+import webSocketMessages.serverMessages.*;
 
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -13,8 +10,10 @@ import java.util.Scanner;
 public class ChessClient implements ServerMessageObserver{
     private static final ServerFacade serverFacade = new ServerFacade(8080);
     private static String authToken = null;
+    private static int gameID = -1;
+    private static ChessGame.TeamColor teamColor = null;
     @Override
-    public void notify(ServerMessage message) {
+    public void notify(ServerMessageInterface message) {
         switch (message.getServerMessageType()) {
             case NOTIFICATION -> displayNotification(((NotificationMessage) message).getMessage());
             case ERROR -> displayError(((ErrorMessage) message).getErrorMessage());
@@ -199,7 +198,6 @@ public class ChessClient implements ServerMessageObserver{
         Scanner scanner = new Scanner(System.in);
         String gameName = scanner.nextLine();
         serverFacade.createGame(gameName, authToken);
-        ChessBoardUI.printBoard();
         postloginUI();
     }
     private static void listGames() {
@@ -214,28 +212,32 @@ public class ChessClient implements ServerMessageObserver{
             System.out.println("BlackPlayer: " + game.blackUsername());
             i++;
         }
-        ChessBoardUI.printBoard();
         postloginUI();
     }
     private static void joinGame() {
         System.out.println("Enter the game ID:");
         System.out.print("> ");
         Scanner scanner = new Scanner(System.in);
-        String gameID = scanner.nextLine();
+        gameID = Integer.parseInt(scanner.nextLine());
         System.out.println("Enter White or Black:");
         System.out.print("> ");
         String color = scanner.nextLine();
-        serverFacade.joinGame(ChessGame.TeamColor.valueOf(color.toUpperCase()), Integer.parseInt(gameID), authToken);
-        ChessBoardUI.printBoard();
-        postloginUI();
+        if (color.toLowerCase().equals("white")) {
+            teamColor = ChessGame.TeamColor.WHITE;
+        } else if (color.toLowerCase().equals("black")) {
+            teamColor = ChessGame.TeamColor.BLACK;
+        } else {
+            teamColor = null;
+        }
+        serverFacade.joinGame(ChessGame.TeamColor.valueOf(color.toUpperCase()), gameID, authToken);
+        gameplayUI();
     }
     private static void joinObserver() {
         System.out.println("Enter the game ID:");
         System.out.print("> ");
         Scanner scanner = new Scanner(System.in);
-        String gameID = scanner.nextLine();
-        serverFacade.joinGame(null, Integer.parseInt(gameID), authToken);
-        ChessBoardUI.printBoard();
+        gameID = Integer.parseInt(scanner.nextLine());
+        serverFacade.joinGame(null, gameID, authToken);
         postloginUI();
     }
     private static void makeMove() {
@@ -243,7 +245,7 @@ public class ChessClient implements ServerMessageObserver{
         System.out.print("> ");
         Scanner scanner = new Scanner(System.in);
         String move = scanner.nextLine();
-        // serverFacade.makeMove(move, authToken);
+        serverFacade.makeMove(gameID, authToken, move);
         gameplayUI();
     }
     private static void highlightLegalMoves() {
@@ -255,7 +257,6 @@ public class ChessClient implements ServerMessageObserver{
         gameplayUI();
     }
     private static void redrawChessBoard() {
-        ChessBoardUI.printBoard();
         gameplayUI();
     }
     private static void leave() {
@@ -269,13 +270,23 @@ public class ChessClient implements ServerMessageObserver{
         postloginUI();
     }
     private static void displayNotification(String message) {
+        System.out.println();
         System.out.println(message);
+        System.out.print("Enter your choice > ");
     }
     private static void displayError(String errorMessage) {
+        System.out.println();
         System.out.println(errorMessage);
+        System.out.print("Enter your choice > ");
     }
     private static void loadGame(ChessGame game) {
-        ChessBoardUI.printBoard();
+        if (teamColor == null) {
+            ChessBoardUI.printBoard(game, ChessGame.TeamColor.WHITE);
+        } else if (teamColor == ChessGame.TeamColor.WHITE) {
+            ChessBoardUI.printBoard(game, ChessGame.TeamColor.WHITE);
+        } else {
+            ChessBoardUI.printBoard(game, ChessGame.TeamColor.BLACK);
+        }
         gameplayUI();
     }
 }
