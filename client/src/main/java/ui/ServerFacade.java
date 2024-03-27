@@ -11,11 +11,13 @@ import java.util.ArrayList;
 public class ServerFacade {
     private final HttpCommunicator httpCommunicator;
     private WebSocketCommunicator webSocketCommunicator;
-    private ChessClient client = new ChessClient();
-    int port;
     public ServerFacade(int port) {
-        this.port = port;
         httpCommunicator = new HttpCommunicator("http://localhost:" + port);
+        try {
+            webSocketCommunicator = new WebSocketCommunicator();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
     public ArrayList<GameData> listGames(String authToken) {
         var path = "/game";
@@ -57,9 +59,10 @@ public class ServerFacade {
         var path = "/game";
         JoinGameRequest joinGameRequest = new JoinGameRequest(color, gameID);
         httpCommunicator.makeRequest("PUT", path, joinGameRequest, JoinGameResponse.class, authToken);
+
         JoinPlayerCommand joinPlayerCommand = new JoinPlayerCommand(authToken, gameID, color);
         try {
-            webSocketCommunicator = new WebSocketCommunicator("ws://localhost:" + port + "/connect", client);
+            webSocketCommunicator.send(joinPlayerCommand);
         } catch (Exception e) {
             e.printStackTrace();
         }

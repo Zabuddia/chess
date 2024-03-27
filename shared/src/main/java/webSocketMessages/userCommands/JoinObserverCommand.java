@@ -7,5 +7,7 @@ public class JoinObserverCommand extends UserGameCommand implements GameCommand 
         this.gameID = gameID;
         this.commandType = CommandType.JOIN_OBSERVER;
     }
-
+    public int getGameID() {
+        return gameID;
+    }
 }

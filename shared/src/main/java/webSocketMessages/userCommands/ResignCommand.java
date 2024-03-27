@@ -7,4 +7,7 @@ public class ResignCommand extends UserGameCommand implements GameCommand {
         this.gameID = gameID;
         this.commandType = CommandType.RESIGN;
     }
+    public int getGameID() {
+        return gameID;
+    }
 }

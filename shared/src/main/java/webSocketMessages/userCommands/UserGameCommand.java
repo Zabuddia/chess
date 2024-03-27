@@ -33,6 +33,9 @@ public class UserGameCommand implements GameCommand {
     public CommandType getCommandType() {
         return this.commandType;
     }
+    public int getGameID() {
+        return -1;
+    }
 
     @Override
     public boolean equals(Object o) {

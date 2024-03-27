@@ -8,7 +8,7 @@ import java.util.Objects;
  * Note: You can add to this class, but you should not alter the existing
  * methods.
  */
-public class ServerMessage {
+public class ServerMessage implements ServerMessageInterface {
     ServerMessageType serverMessageType;
 
     public enum ServerMessageType {
@@ -23,6 +23,9 @@ public class ServerMessage {
 
     public ServerMessageType getServerMessageType() {
         return this.serverMessageType;
+    }
+    public String getMessage() {
+        return null;
     }
 
     @Override

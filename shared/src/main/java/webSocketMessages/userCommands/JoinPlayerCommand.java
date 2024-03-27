@@ -11,4 +11,7 @@ public class JoinPlayerCommand extends UserGameCommand implements GameCommand {
         this.playerColor = playerColor;
         this.commandType = CommandType.JOIN_PLAYER;
     }
+    public int getGameID() {
+        return gameID;
+    }
 }

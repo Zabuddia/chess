@@ -11,4 +11,7 @@ public class MakeMoveCommand extends UserGameCommand implements GameCommand {
         this.move = move;
         this.commandType = CommandType.MAKE_MOVE;
     }
+    public int getGameID() {
+        return gameID;
+    }
 }

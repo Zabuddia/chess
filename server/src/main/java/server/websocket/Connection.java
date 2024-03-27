@@ -4,16 +4,16 @@ import org.eclipse.jetty.websocket.api.Session;
 
 public class Connection {
     private static Session session;
-    private final String authToken;
-    public Connection(Session session, String authToken) {
+    private final int gameID;
+    public Connection(Session session, int gameID) {
         this.session = session;
-        this.authToken = authToken;
+        this.gameID = gameID;
     }
     public Session getSession() {
         return session;
     }
-    public String getAuthToken() {
-        return authToken;
+    public int getGameID() {
+        return gameID;
     }
     public static void send(String message) {
         try {

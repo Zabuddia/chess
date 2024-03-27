@@ -4,22 +4,22 @@ import org.eclipse.jetty.websocket.api.Session;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class ConnectionManager {
-    public final ConcurrentHashMap<String, Connection> connections = new ConcurrentHashMap<>();
+    public final ConcurrentHashMap<Integer, Connection> connections = new ConcurrentHashMap<>();
 
-    public void addConnection(String authToken, Session session) {
-        Connection connection = new Connection(session, authToken);
-        connections.put(authToken, connection);
+    public void addConnection(int gameID, Session session) {
+        Connection connection = new Connection(session, gameID);
+        connections.put(gameID, connection);
     }
 
     public void removeConnection(String authToken) {
         connections.remove(authToken);
     }
 
-    public Connection getConnection(String authToken, Session session) {
-        return connections.get(authToken);
+    public Connection getConnection(int gameID, Session session) {
+        return connections.get(gameID);
     }
 
-    public void broadcastMessage(String senderAuthToken, String message) {
+    public void broadcastMessage(int senderAuthToken, String message) {
         connections.forEach((authToken, connection) -> {
             if (!authToken.equals(senderAuthToken) && connection.getSession().isOpen()) {
                 try {
