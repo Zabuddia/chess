@@ -1,5 +1,7 @@
 package webSocketMessages.userCommands;
 
+import chess.ChessMove;
+
 import java.util.Objects;
 
 /**
@@ -36,6 +38,9 @@ public class UserGameCommand implements GameCommand {
     }
     public int getGameID() {
         return -1;
+    }
+    public ChessMove getMove() {
+        return null;
     }
 
     @Override

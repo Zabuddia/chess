@@ -66,8 +66,6 @@ public class WebSocketHandler {
 
         String message = gson.toJson(serverMessage);
 
-        session.getRemote().sendString(message);
-
         connectionManager.addConnection(command.getAuthString(), command.getGameID(), session);
 
         connectionManager.broadcastGroup(command.getAuthString(), command.getGameID(), message);
@@ -78,6 +76,12 @@ public class WebSocketHandler {
         Gson gson = builder.create();
 
         ChessGame game = gameDAO.getGameData(command.getGameID()).game();
+
+        try {
+            game.makeMove(command.getMove());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         ServerMessageInterface serverMessage = new LoadGameMessage(game);
 
@@ -96,8 +100,6 @@ public class WebSocketHandler {
 
         String message = gson.toJson(serverMessage);
 
-        session.getRemote().sendString(message);
-
         connectionManager.removeConnection(command.getAuthString());
 
         connectionManager.broadcastGroup(command.getAuthString(), command.getGameID(), message);
@@ -112,8 +114,6 @@ public class WebSocketHandler {
         ServerMessageInterface serverMessage = new NotificationMessage(username + " resigned from the game");
 
         String message = gson.toJson(serverMessage);
-
-        session.getRemote().sendString(message);
 
         connectionManager.removeConnection(command.getAuthString());
 

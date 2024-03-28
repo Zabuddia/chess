@@ -30,6 +30,7 @@ public class ChessClient implements ServerMessageObserver{
         System.out.println("Register");
         System.out.println("Quit");
         System.out.println("Help");
+        //ChessBoardUI.printBoard(new ChessGame(), ChessGame.TeamColor.WHITE);
         System.out.println();
         System.out.print("Enter your choice > ");
         Scanner scanner = new Scanner(System.in);
@@ -281,6 +282,7 @@ public class ChessClient implements ServerMessageObserver{
         System.out.print("Enter your choice > ");
     }
     private static void loadGame(ChessGame game) {
+        System.out.println();
         if (teamColor == null) {
             ChessBoardUI.printBoard(game, ChessGame.TeamColor.WHITE);
         } else if (teamColor == ChessGame.TeamColor.WHITE) {
@@ -288,6 +290,5 @@ public class ChessClient implements ServerMessageObserver{
         } else {
             ChessBoardUI.printBoard(game, ChessGame.TeamColor.BLACK);
         }
-        gameplayUI();
     }
 }

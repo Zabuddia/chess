@@ -14,9 +14,9 @@ public class ChessBoardUI {
     private static final int BOARD_SIZE_IN_SQUARES = 8;
     private static final ChessPiece[][] board = new ChessPiece[BOARD_SIZE_IN_SQUARES][BOARD_SIZE_IN_SQUARES];
     public static void printBoard(ChessGame game, ChessGame.TeamColor teamColor) {
-        for (int row = 0; row < BOARD_SIZE_IN_SQUARES; row++) {
-            for (int col = 0; col < BOARD_SIZE_IN_SQUARES; col++) {
-                board[row][col] = game.getBoard().getPiece(new ChessPosition(row, col));
+        for (int row = 1; row <= BOARD_SIZE_IN_SQUARES; row++) {
+            for (int col = 1; col <= BOARD_SIZE_IN_SQUARES; col++) {
+                board[row - 1][col - 1] = game.getBoard().getPiece(new ChessPosition(row, col));
             }
         }
 
@@ -33,12 +33,12 @@ public class ChessBoardUI {
         out.print(RESET_BG_COLOR);
         out.println();
     }
-    private static void drawWhiteChessBoard(PrintStream out) {
+    private static void drawBlackChessBoard(PrintStream out) {
         drawEndRow(out, 2);
         drawMiddleRows(out, 2);
         drawEndRow(out, 2);
     }
-    private static void drawBlackChessBoard(PrintStream out) {
+    private static void drawWhiteChessBoard(PrintStream out) {
         drawEndRow(out, 1);
         drawMiddleRows(out, 1);
         drawEndRow(out, 1);
@@ -48,7 +48,7 @@ public class ChessBoardUI {
         out.print(SET_TEXT_COLOR_BLACK);
         out.print("   ");
 
-        if (color == 1) {
+        if (color == 2) {
             for (int i = 0; i < BOARD_SIZE_IN_SQUARES; i++) {
                 out.print(" " + (char) ('h' - i) + " ");
             }
@@ -70,7 +70,7 @@ public class ChessBoardUI {
     private static void drawRow(PrintStream out, int row, int color) {
         out.print(SET_BG_COLOR_LIGHT_GREY);
         out.print(SET_TEXT_COLOR_BLACK);
-        if (color == 2) {
+        if (color == 1) {
             out.print(" " + (char) ('8' - row) + " ");
         } else {
             out.print(" " + (char) ('1' + row) + " ");
@@ -78,9 +78,10 @@ public class ChessBoardUI {
         for (int col = 0; col < BOARD_SIZE_IN_SQUARES; col++) {
             drawSquare(out, row, col, color);
         }
+        //Make text not bold
         out.print(SET_BG_COLOR_LIGHT_GREY);
         out.print(SET_TEXT_COLOR_BLACK);
-        if (color == 2) {
+        if (color == 1) {
             out.print(" " + (char) ('8' - row) + " ");
         } else {
             out.print(" " + (char) ('1' + row) + " ");
@@ -123,7 +124,7 @@ public class ChessBoardUI {
                 out.print(SET_TEXT_COLOR_BLUE);
             }
         } else {
-            if (board[row][col] != null && board[7 - row][7 - col].getTeamColor() == ChessGame.TeamColor.BLACK) {
+            if (board[7 - row][7 - col] != null && board[7 - row][7 - col].getTeamColor() == ChessGame.TeamColor.BLACK) {
                 out.print(SET_TEXT_COLOR_RED);
             } else {
                 out.print(SET_TEXT_COLOR_BLUE);

@@ -87,32 +87,32 @@ public class ServerFacade {
         char thirdLetter = move.charAt(2);
         char fourthLetter = move.charAt(3);
         switch (firstLetter) {
-            case 'a' -> firstLetter = '1';
-            case 'b' -> firstLetter = '2';
-            case 'c' -> firstLetter = '3';
-            case 'd' -> firstLetter = '4';
-            case 'e' -> firstLetter = '5';
-            case 'f' -> firstLetter = '6';
-            case 'g' -> firstLetter = '7';
-            case 'h' -> firstLetter = '8';
+            case 'a' -> firstLetter = '8';
+            case 'b' -> firstLetter = '7';
+            case 'c' -> firstLetter = '6';
+            case 'd' -> firstLetter = '5';
+            case 'e' -> firstLetter = '4';
+            case 'f' -> firstLetter = '3';
+            case 'g' -> firstLetter = '2';
+            case 'h' -> firstLetter = '1';
         }
         switch (thirdLetter) {
-            case 'a' -> thirdLetter = '1';
-            case 'b' -> thirdLetter = '2';
-            case 'c' -> thirdLetter = '3';
-            case 'd' -> thirdLetter = '4';
-            case 'e' -> thirdLetter = '5';
-            case 'f' -> thirdLetter = '6';
-            case 'g' -> thirdLetter = '7';
-            case 'h' -> thirdLetter = '8';
+            case 'a' -> thirdLetter = '8';
+            case 'b' -> thirdLetter = '7';
+            case 'c' -> thirdLetter = '6';
+            case 'd' -> thirdLetter = '5';
+            case 'e' -> thirdLetter = '4';
+            case 'f' -> thirdLetter = '3';
+            case 'g' -> thirdLetter = '2';
+            case 'h' -> thirdLetter = '1';
         }
-        int firstNumber = Character.getNumericValue(firstLetter) - 1;
-        int secondNumber = Character.getNumericValue(secondLetter) - 1;
-        int thirdNumber = Character.getNumericValue(thirdLetter) - 1;
-        int fourthNumber = Character.getNumericValue(fourthLetter) - 1;
+        int firstNumber = Character.getNumericValue(firstLetter);
+        int secondNumber = Character.getNumericValue(secondLetter);
+        int thirdNumber = Character.getNumericValue(thirdLetter);
+        int fourthNumber = Character.getNumericValue(fourthLetter);
 
-        ChessPosition start = new ChessPosition(firstNumber, secondNumber);
-        ChessPosition end = new ChessPosition(thirdNumber, fourthNumber);
+        ChessPosition start = new ChessPosition(secondNumber, firstNumber);
+        ChessPosition end = new ChessPosition(fourthNumber, thirdNumber);
         ChessMove chessMove = new ChessMove(start, end, null);
 
         MakeMoveCommand makeMoveCommand = new MakeMoveCommand(authToken, gameID, chessMove);
@@ -124,7 +124,6 @@ public class ServerFacade {
         }
     }
     public void redrawChessBoard(int gameID, String authToken) {
-        var path = "/game";
         RedrawBoardCommand redrawBoardCommand = new RedrawBoardCommand(authToken, gameID);
         try {
             webSocketCommunicator.send(redrawBoardCommand);
