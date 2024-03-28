@@ -119,6 +119,36 @@ public class WebSocketHandler {
         builder.registerTypeAdapter(ServerMessage.class, new ServerMessageDeserializer());
         Gson gson = builder.create();
 
+        if (!authDAO.getAuth(command.getAuthString())) {
+            ServerMessageInterface serverMessage = new ErrorMessage("Error: Unauthorized");
+
+            String message = gson.toJson(serverMessage);
+
+            connectionManager.addConnection(command.getAuthString(), command.getGameID(), session);
+
+            connectionManager.broadcastOne(command.getAuthString(), message);
+
+            connectionManager.removeConnection(command.getAuthString());
+
+            return;
+        }
+
+        int gameID = command.getGameID();
+
+        if (!gameDAO.getGame(gameID)) {
+            ServerMessageInterface serverMessage = new ErrorMessage("Error: No game with that ID");
+
+            String message = gson.toJson(serverMessage);
+
+            connectionManager.addConnection(command.getAuthString(), gameID, session);
+
+            connectionManager.broadcastOne(command.getAuthString(), message);
+
+            connectionManager.removeConnection(command.getAuthString());
+
+            return;
+        }
+
         String username = authDAO.getUsername(command.getAuthString());
 
         ServerMessageInterface serverMessage = new NotificationMessage(username + " joined the game as observer");
@@ -128,6 +158,14 @@ public class WebSocketHandler {
         connectionManager.addConnection(command.getAuthString(), command.getGameID(), session);
 
         connectionManager.broadcastGroup(command.getAuthString(), command.getGameID(), message);
+
+        ChessGame game = gameDAO.getGameData(command.getGameID()).game();
+
+        ServerMessageInterface serverMessage2 = new LoadGameMessage(game);
+
+        String message2 = gson.toJson(serverMessage2);
+
+        connectionManager.broadcastOne(command.getAuthString(), message2);
     }
     private void move(GameCommand command, Session session) throws IOException {
         GsonBuilder builder = new GsonBuilder();
