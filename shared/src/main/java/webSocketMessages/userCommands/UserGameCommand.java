@@ -1,6 +1,7 @@
 package webSocketMessages.userCommands;
 
 import chess.ChessMove;
+import chess.ChessPosition;
 
 import java.util.Objects;
 
@@ -22,7 +23,8 @@ public class UserGameCommand implements GameCommand {
         MAKE_MOVE,
         LEAVE,
         RESIGN,
-        REDRAW_BOARD
+        REDRAW_BOARD,
+        HIGHLIGHT_MOVES
     }
 
     protected CommandType commandType;
@@ -42,7 +44,9 @@ public class UserGameCommand implements GameCommand {
     public ChessMove getMove() {
         return null;
     }
-
+    public ChessPosition getPosition() {
+        return null;
+    }
     @Override
     public boolean equals(Object o) {
         if (this == o)

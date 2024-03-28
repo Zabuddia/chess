@@ -1,6 +1,7 @@
 package ui;
 
 import chess.ChessGame;
+import chess.ChessPosition;
 import model.GameData;
 import webSocketMessages.serverMessages.*;
 
@@ -17,7 +18,7 @@ public class ChessClient implements ServerMessageObserver{
         switch (message.getServerMessageType()) {
             case NOTIFICATION -> displayNotification(((NotificationMessage) message).getMessage());
             case ERROR -> displayError(((ErrorMessage) message).getErrorMessage());
-            case LOAD_GAME -> loadGame(((LoadGameMessage) message).getGame());
+            case LOAD_GAME -> loadGame(((LoadGameMessage) message).getGame(), ((LoadGameMessage) message).highlightMoves, ((LoadGameMessage) message).position);
         }
     }
 
@@ -230,7 +231,7 @@ public class ChessClient implements ServerMessageObserver{
         } else {
             teamColor = null;
         }
-        serverFacade.joinGame(ChessGame.TeamColor.valueOf(color.toUpperCase()), gameID, authToken);
+        serverFacade.joinGame(ChessGame.TeamColor.valueOf(color.toUpperCase()), gameID, authToken);;
         gameplayUI();
     }
     private static void joinObserver() {
@@ -238,7 +239,7 @@ public class ChessClient implements ServerMessageObserver{
         System.out.print("> ");
         Scanner scanner = new Scanner(System.in);
         gameID = Integer.parseInt(scanner.nextLine());
-        serverFacade.joinGame(null, gameID, authToken);
+        serverFacade.joinObserver(gameID, authToken);
         postloginUI();
     }
     private static void makeMove() {
@@ -254,7 +255,7 @@ public class ChessClient implements ServerMessageObserver{
         System.out.print("> ");
         Scanner scanner = new Scanner(System.in);
         String position = scanner.nextLine();
-        // serverFacade.highlightLegalMoves(position, authToken);
+        serverFacade.highlightLegalMoves(gameID, authToken, position);
         gameplayUI();
     }
     private static void redrawChessBoard() {
@@ -268,7 +269,7 @@ public class ChessClient implements ServerMessageObserver{
     }
     private static void resign() {
         System.out.println("You have resigned from the game.");
-        // serverFacade.resign(authToken);
+        serverFacade.resign(gameID, authToken);
         postloginUI();
     }
     private static void displayNotification(String message) {
@@ -281,14 +282,14 @@ public class ChessClient implements ServerMessageObserver{
         System.out.println(errorMessage);
         System.out.print("Enter your choice > ");
     }
-    private static void loadGame(ChessGame game) {
+    private static void loadGame(ChessGame game, boolean highlightMoves, ChessPosition position) {
         System.out.println();
         if (teamColor == null) {
-            ChessBoardUI.printBoard(game, ChessGame.TeamColor.WHITE);
+            ChessBoardUI.printBoard(game, ChessGame.TeamColor.WHITE, highlightMoves, position);
         } else if (teamColor == ChessGame.TeamColor.WHITE) {
-            ChessBoardUI.printBoard(game, ChessGame.TeamColor.WHITE);
+            ChessBoardUI.printBoard(game, ChessGame.TeamColor.WHITE, highlightMoves, position);
         } else {
-            ChessBoardUI.printBoard(game, ChessGame.TeamColor.BLACK);
+            ChessBoardUI.printBoard(game, ChessGame.TeamColor.BLACK, highlightMoves, position);
         }
     }
 }

@@ -35,6 +35,7 @@ public class WebSocketHandler {
                 case LEAVE -> leave(command, session);
                 case RESIGN -> resign(command, session);
                 case REDRAW_BOARD -> redraw(command, session);
+                case HIGHLIGHT_MOVES -> highlightMoves(command, session);
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -115,6 +116,10 @@ public class WebSocketHandler {
 
         String username = authDAO.getUsername(command.getAuthString());
 
+        ChessGame game = gameDAO.getGameData(command.getGameID()).game();
+
+        game.gameOver();
+
         ServerMessageInterface serverMessage = new NotificationMessage(username + " resigned from the game");
 
         String message = gson.toJson(serverMessage);
@@ -135,5 +140,22 @@ public class WebSocketHandler {
         String message = gson.toJson(serverMessage);
 
         connectionManager.broadcastOne(command.getAuthString(), message);
+    }
+    private void highlightMoves(GameCommand command, Session session) throws IOException {
+        GsonBuilder builder = new GsonBuilder();
+        builder.registerTypeAdapter(ServerMessage.class, new ServerMessageDeserializer());
+        Gson gson = builder.create();
+
+        ChessGame game = gameDAO.getGameData(command.getGameID()).game();
+
+        ServerMessageInterface serverMessage = new LoadGameMessage(game);
+
+        ((LoadGameMessage) serverMessage).highlightMoves = true;
+
+        ((LoadGameMessage) serverMessage).position = command.getPosition();
+
+        String message = gson.toJson(serverMessage);
+
+        connectionManager.broadcastAll(command.getGameID(), message);
     }
 }

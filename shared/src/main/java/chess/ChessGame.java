@@ -11,6 +11,7 @@ import java.util.Collection;
  */
 public class ChessGame {
 
+    private boolean gameState = true;
     private TeamColor teamTurn = TeamColor.WHITE;
     private ChessBoard board = new ChessBoard();
     private ChessMove previousMove = null;
@@ -155,6 +156,9 @@ public class ChessGame {
      * @throws InvalidMoveException if move is invalid
      */
     public void makeMove(ChessMove move) throws InvalidMoveException {
+        if (!gameState) {
+            throw new InvalidMoveException();
+        }
         ChessPosition startPosition = move.startPosition();
         ChessPosition endPosition = move.endPosition();
         ChessPiece piece = board.getPiece(startPosition);
@@ -307,5 +311,8 @@ public class ChessGame {
      */
     public ChessBoard getBoard() {
         return board;
+    }
+    public void gameOver() {
+        gameState = false;
     }
 }

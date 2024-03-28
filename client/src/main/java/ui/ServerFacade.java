@@ -6,10 +6,7 @@ import chess.ChessPosition;
 import model.GameData;
 import request.*;
 import response.*;
-import webSocketMessages.userCommands.JoinPlayerCommand;
-import webSocketMessages.userCommands.LeaveCommand;
-import webSocketMessages.userCommands.MakeMoveCommand;
-import webSocketMessages.userCommands.RedrawBoardCommand;
+import webSocketMessages.userCommands.*;
 
 import java.util.ArrayList;
 
@@ -68,6 +65,18 @@ public class ServerFacade {
         JoinPlayerCommand joinPlayerCommand = new JoinPlayerCommand(authToken, gameID, color);
         try {
             webSocketCommunicator.send(joinPlayerCommand);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    public void joinObserver(int gameID, String authToken) {
+        var path = "/game";
+        JoinGameRequest joinGameRequest = new JoinGameRequest(null, gameID);
+        httpCommunicator.makeRequest("PUT", path, joinGameRequest, JoinGameResponse.class, authToken);
+
+        JoinObserverCommand joinObserverCommand = new JoinObserverCommand(authToken, gameID);
+        try {
+            webSocketCommunicator.send(joinObserverCommand);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -136,6 +145,49 @@ public class ServerFacade {
         LeaveCommand leaveCommand = new LeaveCommand(authToken, gameID);
         try {
             webSocketCommunicator.send(leaveCommand);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    public void resign(int gameID, String authToken) {
+        ResignCommand resignCommand = new ResignCommand(authToken, gameID);
+        try {
+            webSocketCommunicator.send(resignCommand);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    public void highlightLegalMoves(int gameID, String authToken, String position) {
+        char firstLetter = position.charAt(0);
+        char secondLetter = position.charAt(1);
+        switch (firstLetter) {
+            case 'a' -> firstLetter = '1';
+            case 'b' -> firstLetter = '2';
+            case 'c' -> firstLetter = '3';
+            case 'd' -> firstLetter = '4';
+            case 'e' -> firstLetter = '5';
+            case 'f' -> firstLetter = '6';
+            case 'g' -> firstLetter = '7';
+            case 'h' -> firstLetter = '8';
+        }
+        switch (secondLetter) {
+            case '1' -> secondLetter = '8';
+            case '2' -> secondLetter = '7';
+            case '3' -> secondLetter = '6';
+            case '4' -> secondLetter = '5';
+            case '5' -> secondLetter = '4';
+            case '6' -> secondLetter = '3';
+            case '7' -> secondLetter = '2';
+            case '8' -> secondLetter = '1';
+        }
+
+        int firstNumber = Character.getNumericValue(firstLetter);
+        int secondNumber = Character.getNumericValue(secondLetter);
+
+        ChessPosition chessPosition = new ChessPosition(secondNumber, firstNumber);
+        HighlightMovesCommand highlightMovesCommand = new HighlightMovesCommand(authToken, gameID, chessPosition);
+        try {
+            webSocketCommunicator.send(highlightMovesCommand);
         } catch (Exception e) {
             e.printStackTrace();
         }
