@@ -328,6 +328,9 @@ public class ChessClient implements ServerMessageObserver {
         System.out.println(errorMessage);
         System.out.print(RESET_TEXT_COLOR);
         System.out.print(RESET_BG_COLOR);
+        if (errorMessage.equals("Error: A player has already joined the game with that color")) {
+            postloginUI();
+        }
     }
     private static void loadGame(ChessGame game, ChessPosition position) {
         System.out.println();
