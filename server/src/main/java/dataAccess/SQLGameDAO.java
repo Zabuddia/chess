@@ -107,6 +107,57 @@ public class SQLGameDAO extends SQLDAO implements GameDAO {
         }
     }
 
+    public void playerLeave(int gameID, String username) {
+        String whiteUsername = null;
+        String blackUsername = null;
+        String gameName = null;
+        ChessGame game = null;
+
+        try (var conn = DatabaseManager.getConnection()) {
+            var statement = "SELECT * FROM game WHERE gameID = ?";
+            try (var preparedStatement = conn.prepareStatement(statement)) {
+                preparedStatement.setInt(1, gameID);
+                try (var resultSet = preparedStatement.executeQuery()) {
+                    if (resultSet.next()) {
+                        String oldWhiteUsername = resultSet.getString("whiteUsername");
+                        String oldBlackUsername = resultSet.getString("blackUsername");
+                        if (username.equals(oldWhiteUsername)) {
+                            whiteUsername = null;
+                        } else {
+                            whiteUsername = oldWhiteUsername;
+                        }
+                        if (username.equals(oldBlackUsername)) {
+                            blackUsername = null;
+                        } else {
+                            blackUsername = oldBlackUsername;
+                        }
+                        gameName = resultSet.getString("gameName");
+                        String gameString = resultSet.getString("game");
+                        game = gson.fromJson(gameString, ChessGame.class);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        var statement = "DELETE FROM game WHERE gameID = ?";
+        try {
+            executeUpdate(statement, gameID);
+        } catch (DataAccessException e) {
+            e.printStackTrace();
+        }
+
+        String gameString = gson.toJson(game);
+
+        var makeGame = "INSERT INTO game (gameID, whiteUsername, blackUsername, gameName, game) VALUES (?, ?, ?, ?, ?)";
+        try {
+            executeUpdate(makeGame, gameID, whiteUsername, blackUsername, gameName, gameString);
+        } catch (DataAccessException e) {
+            e.printStackTrace();
+        }
+    }
+
     public String updateGame(ChessGame.TeamColor clientColor, int gameID, String username) {
         if (!getGame(gameID)) {
             return "No game with that ID";

@@ -84,4 +84,22 @@ public class MemoryGameDAO implements GameDAO {
 
         gameList.add(newGame);
     }
+    public void playerLeave(int gameID, String username) {
+        GameData gameToUpdate = null;
+        for (GameData game : gameList) {
+            if (game.gameID() == gameID) {
+                gameToUpdate = game;
+            }
+        }
+
+        if (gameToUpdate == null) {
+            return;
+        }
+
+        gameList.remove(gameToUpdate);
+
+        GameData newGame = new GameData(gameID, gameToUpdate.whiteUsername(), gameToUpdate.blackUsername(), gameToUpdate.gameName(), gameToUpdate.game());
+
+        gameList.add(newGame);
+    }
 }

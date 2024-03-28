@@ -17,4 +17,6 @@ public interface GameDAO {
     String updateGame(ChessGame.TeamColor clientColor, int gameID, String username);
 
     void moveGame(int gameID, ChessGame game);
+
+    void playerLeave(int gameID, String username);
 }

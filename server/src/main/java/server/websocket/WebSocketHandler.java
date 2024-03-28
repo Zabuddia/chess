@@ -98,6 +98,8 @@ public class WebSocketHandler {
 
         String username = authDAO.getUsername(command.getAuthString());
 
+        gameDAO.playerLeave(command.getGameID(), username);
+
         ServerMessageInterface serverMessage = new NotificationMessage(username + " left the game");
 
         String message = gson.toJson(serverMessage);
