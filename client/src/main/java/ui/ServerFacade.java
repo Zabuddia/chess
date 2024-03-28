@@ -7,6 +7,7 @@ import model.GameData;
 import request.*;
 import response.*;
 import webSocketMessages.userCommands.JoinPlayerCommand;
+import webSocketMessages.userCommands.LeaveCommand;
 import webSocketMessages.userCommands.MakeMoveCommand;
 import webSocketMessages.userCommands.RedrawBoardCommand;
 
@@ -127,6 +128,14 @@ public class ServerFacade {
         RedrawBoardCommand redrawBoardCommand = new RedrawBoardCommand(authToken, gameID);
         try {
             webSocketCommunicator.send(redrawBoardCommand);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    public void leave(int gameID, String authToken) {
+        LeaveCommand leaveCommand = new LeaveCommand(authToken, gameID);
+        try {
+            webSocketCommunicator.send(leaveCommand);
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -97,6 +97,16 @@ public class SQLGameDAO extends SQLDAO implements GameDAO {
         return gameData;
     }
 
+    public void moveGame(int gameID, ChessGame game) {
+        String gameString = gson.toJson(game);
+        var statement = "UPDATE game SET game = ? WHERE gameID = ?";
+        try {
+            executeUpdate(statement, gameString, gameID);
+        } catch (DataAccessException e) {
+            e.printStackTrace();
+        }
+    }
+
     public String updateGame(ChessGame.TeamColor clientColor, int gameID, String username) {
         if (!getGame(gameID)) {
             return "No game with that ID";

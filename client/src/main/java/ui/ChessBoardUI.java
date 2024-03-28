@@ -78,7 +78,7 @@ public class ChessBoardUI {
         for (int col = 0; col < BOARD_SIZE_IN_SQUARES; col++) {
             drawSquare(out, row, col, color);
         }
-        //Make text not bold
+        out.print(RESET_TEXT_BOLD_FAINT);
         out.print(SET_BG_COLOR_LIGHT_GREY);
         out.print(SET_TEXT_COLOR_BLACK);
         if (color == 1) {

@@ -83,6 +83,8 @@ public class WebSocketHandler {
             e.printStackTrace();
         }
 
+        gameDAO.moveGame(command.getGameID(), game);
+
         ServerMessageInterface serverMessage = new LoadGameMessage(game);
 
         String message = gson.toJson(serverMessage);

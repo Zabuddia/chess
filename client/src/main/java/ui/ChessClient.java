@@ -263,7 +263,7 @@ public class ChessClient implements ServerMessageObserver{
     }
     private static void leave() {
         System.out.println("You have left the game.");
-        // serverFacade.leave(authToken);
+        serverFacade.leave(gameID, authToken);
         postloginUI();
     }
     private static void resign() {
