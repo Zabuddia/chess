@@ -15,18 +15,39 @@ public class HttpCommunicator {
     public HttpCommunicator(String url) {
         serverUrl = url;
     }
-    private static <T> T readBody(HttpURLConnection http, Class<T> responseClass) throws IOException {
+    private static <T> T readBody(HttpURLConnection http, Class<T> responseClass) {
         T response = null;
-        if (http.getContentLength() < 0) {
-            try (InputStream respBody = http.getInputStream()) {
+        InputStream respBody = null;
+        // Determine whether to read from the input stream or the error stream based on the HTTP status code.
+        try {
+            int responseCode = http.getResponseCode();
+            if (responseCode >= 200 && responseCode < 400) {
+                // Successful response
+                respBody = http.getInputStream();
+            } else {
+                // Error response
+                respBody = http.getErrorStream();
+            }
+            // Check if the response body exists and the response class is not null
+            if (respBody != null && responseClass != null) {
                 InputStreamReader reader = new InputStreamReader(respBody);
-                if (responseClass != null) {
-                    response = new Gson().fromJson(reader, responseClass);
+                response = new Gson().fromJson(reader, responseClass);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            // Ensure the InputStream is closed after reading
+            if (respBody != null) {
+                try {
+                    respBody.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
             }
         }
         return response;
     }
+
     private static void writeBody(Object request, HttpURLConnection http) throws IOException {
         if (request != null) {
             http.addRequestProperty("Content-Type", "application/json");
@@ -37,11 +58,17 @@ public class HttpCommunicator {
         }
     }
     public <T> T makeRequest(String method, String path, Object request, Class<T> responseClass, String authToken) {
+        URL url;
+        HttpURLConnection http = null;
         try {
-            URL url = (new URI(serverUrl + path)).toURL();
-            HttpURLConnection http = (HttpURLConnection) url.openConnection();
+            url = (new URI(serverUrl + path)).toURL();
+            http = (HttpURLConnection) url.openConnection();
             http.setRequestMethod(method);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
 
+        try {
             if (!method.equals("GET") && request != null) {
                 http.setDoOutput(true);
                 if (authToken != null) {
@@ -54,10 +81,9 @@ public class HttpCommunicator {
 
             http.connect();
             return readBody(http, responseClass);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            return null;
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+        return null;
     }
-
 }

@@ -15,6 +15,7 @@ public class ChessClient implements ServerMessageObserver{
     private static String authToken = null;
     private static int gameID = -1;
     private static ChessGame.TeamColor teamColor = null;
+    private static ArrayList<GameData> games = new ArrayList<>();
     @Override
     public void notify(ServerMessageInterface message) {
         switch (message.getServerMessageType()) {
@@ -33,7 +34,6 @@ public class ChessClient implements ServerMessageObserver{
         System.out.println("Register");
         System.out.println("Quit");
         System.out.println("Help");
-        //ChessBoardUI.printBoard(new ChessGame(), ChessGame.TeamColor.WHITE);
         System.out.println();
         System.out.print("Enter your choice > ");
         Scanner scanner = new Scanner(System.in);
@@ -140,8 +140,14 @@ public class ChessClient implements ServerMessageObserver{
         System.out.println("Enter your password:");
         System.out.print("> ");
         String password = scanner.nextLine();
-        authToken = serverFacade.login(username, password);
-        postloginUI();
+        String response = serverFacade.login(username, password);
+        if (response.equals("Error: unauthorized")) {
+            displayError("Invalid username or password. Please try again.");
+            preloginUI();
+        } else {
+            authToken = response;
+            postloginUI();
+        }
     }
     private static void register() {
         System.out.println("Enter your username:");
@@ -154,22 +160,35 @@ public class ChessClient implements ServerMessageObserver{
         System.out.println("Enter your email:");
         System.out.print("> ");
         String email = scanner.nextLine();
-        authToken = serverFacade.register(username, password, email);
-        postloginUI();
+        String response = serverFacade.register(username, password, email);
+        if (response.equals("Error: already taken")) {
+            displayError("Username already taken. Please try again.");
+            preloginUI();
+        } else {
+            authToken = response;
+            postloginUI();
+        }
     }
     private static void quit() {
         System.out.println("Goodbye!");
         System.exit(0);
     }
     private static void preloginHelp() {
-        System.out.println("Welcome to Chess! Here is what you can do:");
+        System.out.println();
+        System.out.print(SET_TEXT_COLOR_BLUE);
+        System.out.println("Here is what you can do:");
         System.out.println("Login: Log in to your account");
         System.out.println("Register: Create a new account");
         System.out.println("Quit: Exit the game");
         System.out.println("Help: Display this message");
+        System.out.println();
+        System.out.print(RESET_TEXT_COLOR);
+        System.out.print(RESET_BG_COLOR);
         preloginUI();
     }
     private static void postloginHelp() {
+        System.out.println();
+        System.out.print(SET_TEXT_COLOR_BLUE);
         System.out.println("Here is what you can do:");
         System.out.println("Create Game: Create a new game");
         System.out.println("List Games: List all available games");
@@ -178,9 +197,14 @@ public class ChessClient implements ServerMessageObserver{
         System.out.println("Logout: Log out of your account");
         System.out.println("Quit: Exit the game");
         System.out.println("Help: Display this message");
+        System.out.println();
+        System.out.print(RESET_TEXT_COLOR);
+        System.out.print(RESET_BG_COLOR);
         postloginUI();
     }
     private static void gameplayHelp() {
+        System.out.println();
+        System.out.print(SET_TEXT_COLOR_BLUE);
         System.out.println("Here is what you can do:");
         System.out.println("Make Move: Make a move in the game");
         System.out.println("Highlight Legal Moves: Highlight all legal moves for a piece");
@@ -188,6 +212,9 @@ public class ChessClient implements ServerMessageObserver{
         System.out.println("Leave: Leave the game");
         System.out.println("Resign: Resign from the game");
         System.out.println("Help: Display this message");
+        System.out.println();
+        System.out.print(RESET_TEXT_COLOR);
+        System.out.print(RESET_BG_COLOR);
         gameplayUI();
     }
     private static void logout() {
@@ -206,11 +233,10 @@ public class ChessClient implements ServerMessageObserver{
     }
     private static void listGames() {
         System.out.println("Here are the available games:");
-        ArrayList<GameData> games = serverFacade.listGames(authToken);
+        games = serverFacade.listGames(authToken);
         int i = 1;
         for (GameData game : games) {
             System.out.print(i + ". ");
-            System.out.print("ID: " + game.gameID() + " ");
             System.out.print("Name: " + game.gameName() + " ");
             System.out.print("WhitePlayer: " + game.whiteUsername() + " ");
             System.out.println("BlackPlayer: " + game.blackUsername());
@@ -219,10 +245,15 @@ public class ChessClient implements ServerMessageObserver{
         postloginUI();
     }
     private static void joinGame() {
-        System.out.println("Enter the game ID:");
+        if (games.isEmpty()) {
+            System.out.println("Either create a game or list games first.");
+            postloginUI();
+        }
+        System.out.println("Enter the game number:");
         System.out.print("> ");
         Scanner scanner = new Scanner(System.in);
-        gameID = Integer.parseInt(scanner.nextLine());
+        int gameNumber = Integer.parseInt(scanner.nextLine());
+        gameID = games.get(gameNumber - 1).gameID();
         System.out.println("Enter White or Black:");
         System.out.print("> ");
         String color = scanner.nextLine();
@@ -237,12 +268,17 @@ public class ChessClient implements ServerMessageObserver{
         gameplayUI();
     }
     private static void joinObserver() {
+        if (games.isEmpty()) {
+            System.out.println("Either create a game or list games first.");
+            postloginUI();
+        }
         System.out.println("Enter the game ID:");
         System.out.print("> ");
         Scanner scanner = new Scanner(System.in);
-        gameID = Integer.parseInt(scanner.nextLine());
+        int gameNumber = Integer.parseInt(scanner.nextLine());
+        gameID = games.get(gameNumber - 1).gameID();
         serverFacade.joinObserver(gameID, authToken);
-        postloginUI();
+        gameplayUI();
     }
     private static void makeMove() {
         System.out.println("Enter the move:");
@@ -285,7 +321,6 @@ public class ChessClient implements ServerMessageObserver{
         System.out.println(errorMessage);
         System.out.print(RESET_TEXT_COLOR);
         System.out.print(RESET_BG_COLOR);
-        System.out.print("Enter your choice > ");
     }
     private static void loadGame(ChessGame game, boolean highlightMoves, ChessPosition position) {
         System.out.println();

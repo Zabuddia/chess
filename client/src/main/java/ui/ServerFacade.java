@@ -9,6 +9,7 @@ import response.*;
 import webSocketMessages.userCommands.*;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class ServerFacade {
     private final HttpCommunicator httpCommunicator;
@@ -37,6 +38,9 @@ public class ServerFacade {
         if (loginResponse == null) {
             return null;
         }
+        if (Objects.equals(loginResponse.message(), "Error: unauthorized")) {
+            return "Error: unauthorized";
+        }
         return loginResponse.authToken();
     }
     public String register(String username, String password, String email) {
@@ -45,6 +49,9 @@ public class ServerFacade {
         RegisterResponse registerResponse = httpCommunicator.makeRequest("POST", path, registerRequest, RegisterResponse.class, null);
         if (registerResponse == null) {
             return null;
+        }
+        if (Objects.equals(registerResponse.message(), "Error: already taken")) {
+            return "Error: already taken";
         }
         return registerResponse.authToken();
     }
