@@ -170,16 +170,6 @@ public class ServerFacade {
             case 'g' -> firstLetter = '7';
             case 'h' -> firstLetter = '8';
         }
-        switch (secondLetter) {
-            case '1' -> secondLetter = '8';
-            case '2' -> secondLetter = '7';
-            case '3' -> secondLetter = '6';
-            case '4' -> secondLetter = '5';
-            case '5' -> secondLetter = '4';
-            case '6' -> secondLetter = '3';
-            case '7' -> secondLetter = '2';
-            case '8' -> secondLetter = '1';
-        }
 
         int firstNumber = Character.getNumericValue(firstLetter);
         int secondNumber = Character.getNumericValue(secondLetter);

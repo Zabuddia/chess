@@ -5,6 +5,8 @@ import chess.ChessPosition;
 import model.GameData;
 import webSocketMessages.serverMessages.*;
 
+import static ui.EscapeSequences.*;
+
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -279,7 +281,9 @@ public class ChessClient implements ServerMessageObserver{
     }
     private static void displayError(String errorMessage) {
         System.out.println();
+        System.out.print(SET_TEXT_COLOR_RED);
         System.out.println(errorMessage);
+        System.out.print(RESET_TEXT_COLOR);
         System.out.print("Enter your choice > ");
     }
     private static void loadGame(ChessGame game, boolean highlightMoves, ChessPosition position) {

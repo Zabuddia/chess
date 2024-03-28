@@ -14,4 +14,7 @@ public class JoinPlayerCommand extends UserGameCommand implements GameCommand {
     public int getGameID() {
         return gameID;
     }
+    public ChessGame.TeamColor getPlayerColor() {
+        return playerColor;
+    }
 }

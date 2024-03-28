@@ -121,7 +121,9 @@ public class ChessBoardUI {
         };
     }
     private static void drawSquare(PrintStream out, int row, int col, int color) {
-        if (highlightedSquares[row][col]) {
+        if (color == 1 && highlightedSquares[7 - row][col]) {
+            out.print(SET_BG_COLOR_YELLOW);
+        } else if (color == 2 && highlightedSquares[row][7 - col]) {
             out.print(SET_BG_COLOR_YELLOW);
         } else if ((row + col) % 2 == 0) {
             out.print(SET_BG_COLOR_WHITE);

@@ -13,6 +13,7 @@ import webSocketMessages.userCommands.UserGameCommand;
 import webSocketMessages.userCommands.UserGameCommandDeserializer;
 
 import java.io.IOException;
+import java.util.Objects;
 
 @WebSocket
 public class WebSocketHandler {
@@ -46,23 +47,72 @@ public class WebSocketHandler {
         builder.registerTypeAdapter(ServerMessage.class, new ServerMessageDeserializer());
         Gson gson = builder.create();
 
+        if (!authDAO.getAuth(command.getAuthString())) {
+            ServerMessageInterface serverMessage = new ErrorMessage("Error: Unauthorized");
+
+            String message = gson.toJson(serverMessage);
+
+            connectionManager.addConnection(command.getAuthString(), command.getGameID(), session);
+
+            connectionManager.broadcastOne(command.getAuthString(), message);
+
+            connectionManager.removeConnection(command.getAuthString());
+
+            return;
+        }
+
         String username = authDAO.getUsername(command.getAuthString());
 
-        ServerMessageInterface serverMessage = new NotificationMessage(username + " joined the game");
+        int gameID = command.getGameID();
 
-        String message = gson.toJson(serverMessage);
+        if (!gameDAO.getGame(gameID)) {
+            ServerMessageInterface serverMessage = new ErrorMessage("Error: No game with that ID");
 
-        connectionManager.addConnection(command.getAuthString(), command.getGameID(), session);
+            String message = gson.toJson(serverMessage);
 
-        connectionManager.broadcastGroup(command.getAuthString(), command.getGameID(), message);
+            connectionManager.addConnection(command.getAuthString(), gameID, session);
 
-        ChessGame game = gameDAO.getGameData(command.getGameID()).game();
+            connectionManager.broadcastOne(command.getAuthString(), message);
 
-        ServerMessageInterface serverMessage2 = new LoadGameMessage(game);
+            connectionManager.removeConnection(command.getAuthString());
 
-        String message2 = gson.toJson(serverMessage2);
+            return;
+        }
 
-        connectionManager.broadcastOne(command.getAuthString(), message2);
+        ChessGame.TeamColor playerColor = command.getPlayerColor();
+
+        String oldWhiteUsername = gameDAO.getGameData(gameID).whiteUsername();
+        String oldBlackUsername = gameDAO.getGameData(gameID).blackUsername();
+
+        if ((playerColor == ChessGame.TeamColor.WHITE && !Objects.equals(username, oldWhiteUsername)) || (playerColor == ChessGame.TeamColor.BLACK && !Objects.equals(username, oldBlackUsername))) {
+            ServerMessageInterface serverMessage = new ErrorMessage("Error: A player has already joined the game with that color");
+
+            String message = gson.toJson(serverMessage);
+
+            connectionManager.addConnection(command.getAuthString(), gameID, session);
+
+            connectionManager.broadcastOne(command.getAuthString(), message);
+
+            connectionManager.removeConnection(command.getAuthString());
+        } else {
+            gameDAO.updateGame(command.getPlayerColor(), gameID, username);
+
+            ServerMessageInterface serverMessage = new NotificationMessage(username + " joined the game");
+
+            String message = gson.toJson(serverMessage);
+
+            connectionManager.addConnection(command.getAuthString(), command.getGameID(), session);
+
+            connectionManager.broadcastGroup(command.getAuthString(), command.getGameID(), message);
+
+            ChessGame game = gameDAO.getGameData(command.getGameID()).game();
+
+            ServerMessageInterface serverMessage2 = new LoadGameMessage(game);
+
+            String message2 = gson.toJson(serverMessage2);
+
+            connectionManager.broadcastOne(command.getAuthString(), message2);
+        }
     }
     private void observe(GameCommand command, Session session) throws IOException {
         GsonBuilder builder = new GsonBuilder();
@@ -164,6 +214,6 @@ public class WebSocketHandler {
 
         String message = gson.toJson(serverMessage);
 
-        connectionManager.broadcastAll(command.getGameID(), message);
+        connectionManager.broadcastOne(command.getAuthString(), message);
     }
 }

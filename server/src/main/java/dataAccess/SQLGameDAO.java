@@ -69,7 +69,6 @@ public class SQLGameDAO extends SQLDAO implements GameDAO {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
             return false;
         }
     }

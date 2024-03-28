@@ -1,5 +1,6 @@
 package webSocketMessages.userCommands;
 
+import chess.ChessGame;
 import chess.ChessMove;
 import chess.ChessPosition;
 
@@ -45,6 +46,9 @@ public class UserGameCommand implements GameCommand {
         return null;
     }
     public ChessPosition getPosition() {
+        return null;
+    }
+    public ChessGame.TeamColor getPlayerColor() {
         return null;
     }
     @Override
