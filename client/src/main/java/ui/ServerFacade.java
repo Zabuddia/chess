@@ -91,7 +91,7 @@ public class ServerFacade {
         ClearRequest clearRequest = new ClearRequest(true);
         httpCommunicator.makeRequest("DELETE", path, clearRequest, ClearResponse.class, null);
     }
-    public void makeMove(int gameID, String authToken, String move) {
+    public void makeMove(int gameID, String authToken, ChessGame.TeamColor teamColor, String move) {
         char firstLetter = move.charAt(0);
         char secondLetter = move.charAt(1);
         char thirdLetter = move.charAt(2);
@@ -125,7 +125,7 @@ public class ServerFacade {
         ChessPosition end = new ChessPosition(fourthNumber, thirdNumber);
         ChessMove chessMove = new ChessMove(start, end, null);
 
-        MakeMoveCommand makeMoveCommand = new MakeMoveCommand(authToken, gameID, chessMove);
+        MakeMoveCommand makeMoveCommand = new MakeMoveCommand(authToken, teamColor, gameID, chessMove);
 
         try {
             webSocketCommunicator.send(makeMoveCommand);

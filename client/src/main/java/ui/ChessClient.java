@@ -249,7 +249,7 @@ public class ChessClient implements ServerMessageObserver{
         System.out.print("> ");
         Scanner scanner = new Scanner(System.in);
         String move = scanner.nextLine();
-        serverFacade.makeMove(gameID, authToken, move);
+        serverFacade.makeMove(gameID, authToken, teamColor, move);
         gameplayUI();
     }
     private static void highlightLegalMoves() {

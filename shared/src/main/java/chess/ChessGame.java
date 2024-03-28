@@ -313,4 +313,7 @@ public class ChessGame {
     public void gameOver() {
         gameState = false;
     }
+    public boolean getGameState() {
+        return gameState;
+    }
 }

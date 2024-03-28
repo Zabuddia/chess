@@ -4,11 +4,13 @@ import chess.ChessGame;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import dataAccess.*;
+import model.GameData;
 import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.api.annotations.WebSocket;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketMessage;
 import webSocketMessages.serverMessages.*;
 import webSocketMessages.userCommands.GameCommand;
+import webSocketMessages.userCommands.MakeMoveCommand;
 import webSocketMessages.userCommands.UserGameCommand;
 import webSocketMessages.userCommands.UserGameCommandDeserializer;
 
@@ -32,7 +34,7 @@ public class WebSocketHandler {
             switch (command.getCommandType()) {
                 case JOIN_PLAYER -> join(command, session);
                 case JOIN_OBSERVER -> observe(command, session);
-                case MAKE_MOVE -> move(command, session);
+                case MAKE_MOVE -> move((MakeMoveCommand) command, session);
                 case LEAVE -> leave(command, session);
                 case RESIGN -> resign(command, session);
                 case REDRAW_BOARD -> redraw(command, session);
@@ -167,14 +169,67 @@ public class WebSocketHandler {
 
         connectionManager.broadcastOne(command.getAuthString(), message2);
     }
-    private void move(GameCommand command, Session session) throws IOException {
+    private void move(MakeMoveCommand command, Session session) throws IOException {
         GsonBuilder builder = new GsonBuilder();
         builder.registerTypeAdapter(ServerMessage.class, new ServerMessageDeserializer());
         Gson gson = builder.create();
 
-        ChessGame game = gameDAO.getGameData(command.getGameID()).game();
+        int gameID = command.getGameID();
 
-        if (game.getTeamTurn() != command.getPlayerColor()) {
+        String whiteUsername = gameDAO.getGameData(gameID).whiteUsername();
+        String blackUsername = gameDAO.getGameData(gameID).blackUsername();
+
+        ChessGame game = gameDAO.getGameData(gameID).game();
+
+        String username = authDAO.getUsername(command.getAuthString());
+
+        if (!Objects.equals(username, whiteUsername) && !Objects.equals(username, blackUsername)) {
+            ServerMessageInterface serverMessage = new ErrorMessage("Error: You are not a player in this game");
+
+            String message = gson.toJson(serverMessage);
+
+            connectionManager.broadcastOne(command.getAuthString(), message);
+
+            return;
+        }
+
+        ChessGame.TeamColor turn = game.getTeamTurn();
+
+        String turnString = turn == ChessGame.TeamColor.WHITE ? "white" : "black";
+
+        ChessGame.TeamColor playerColor = command.getPlayerColor();
+
+        if (playerColor == null && username.equals(turnString)) {
+            try {
+                game.makeMove(command.getMove());
+            } catch (Exception e) {
+                ServerMessageInterface serverMessage = new ErrorMessage("Error: Invalid move");
+
+                String message = gson.toJson(serverMessage);
+
+                connectionManager.broadcastOne(command.getAuthString(), message);
+
+                return;
+            }
+
+            gameDAO.moveGame(command.getGameID(), game);
+
+            ServerMessageInterface serverMessage = new LoadGameMessage(game);
+
+            String message = gson.toJson(serverMessage);
+
+            connectionManager.broadcastAll(command.getGameID(), message);
+
+            ServerMessageInterface serverMessage2 = new NotificationMessage(username + " moved " + command.getMove().toString());
+
+            String message2 = gson.toJson(serverMessage2);
+
+            connectionManager.broadcastGroup(command.getAuthString(), command.getGameID(), message2);
+
+            return;
+        }
+
+        if (playerColor != turn) {
             ServerMessageInterface serverMessage = new ErrorMessage("Error: Not your turn");
 
             String message = gson.toJson(serverMessage);
@@ -204,8 +259,6 @@ public class WebSocketHandler {
 
         connectionManager.broadcastAll(command.getGameID(), message);
 
-        String username = authDAO.getUsername(command.getAuthString());
-
         ServerMessageInterface serverMessage2 = new NotificationMessage(username + " moved " + command.getMove().toString());
 
         String message2 = gson.toJson(serverMessage2);
@@ -234,19 +287,45 @@ public class WebSocketHandler {
         builder.registerTypeAdapter(ServerMessage.class, new ServerMessageDeserializer());
         Gson gson = builder.create();
 
+        int gameID = command.getGameID();
+
+        GameData gameData = gameDAO.getGameData(gameID);
+
         String username = authDAO.getUsername(command.getAuthString());
 
-        ChessGame game = gameDAO.getGameData(command.getGameID()).game();
+        if (!Objects.equals(username, gameData.whiteUsername()) && !Objects.equals(username, gameData.blackUsername())) {
+            ServerMessageInterface serverMessage = new ErrorMessage("Error: You are not a player in this game");
+
+            String message = gson.toJson(serverMessage);
+
+            connectionManager.broadcastOne(command.getAuthString(), message);
+
+            return;
+        }
+
+        ChessGame game = gameDAO.getGameData(gameID).game();
+
+        if (!game.getGameState()) {
+            ServerMessageInterface serverMessage = new ErrorMessage("Error: Game is already over");
+
+            String message = gson.toJson(serverMessage);
+
+            connectionManager.broadcastOne(command.getAuthString(), message);
+
+            return;
+        }
 
         game.gameOver();
+
+        gameDAO.moveGame(gameID, game);
 
         ServerMessageInterface serverMessage = new NotificationMessage(username + " resigned from the game");
 
         String message = gson.toJson(serverMessage);
 
-        connectionManager.removeConnection(command.getAuthString());
+        connectionManager.broadcastAll(command.getGameID(), message);
 
-        connectionManager.broadcastGroup(command.getAuthString(), command.getGameID(), message);
+        connectionManager.removeConnection(command.getAuthString());
     }
     private void redraw(GameCommand command, Session session) throws IOException {
         GsonBuilder builder = new GsonBuilder();
