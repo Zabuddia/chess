@@ -29,7 +29,7 @@ public class ChessBoardUI {
             }
         }
 
-        if (position != null) {
+        if (position != null && game.getBoard().getPiece(position).getTeamColor() == teamColor) {
             Collection<ChessMove> validMoves = game.validMoves(position);
             for (ChessMove move : validMoves) {
                 highlightedSquares[move.endPosition().getRow()][move.endPosition().getColumn()] = true;

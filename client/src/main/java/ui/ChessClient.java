@@ -271,7 +271,7 @@ public class ChessClient implements ServerMessageObserver {
         } else {
             teamColor = null;
         }
-        serverFacade.joinGame(ChessGame.TeamColor.valueOf(color.toUpperCase()), gameID, authToken);;
+        serverFacade.joinGame(ChessGame.TeamColor.valueOf(color.toUpperCase()), gameID, authToken);
         gameplayUI();
     }
     private static void joinObserver() {
