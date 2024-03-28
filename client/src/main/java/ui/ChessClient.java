@@ -257,6 +257,7 @@ public class ChessClient implements ServerMessageObserver{
         gameplayUI();
     }
     private static void redrawChessBoard() {
+        serverFacade.redrawChessBoard(gameID, authToken);
         gameplayUI();
     }
     private static void leave() {

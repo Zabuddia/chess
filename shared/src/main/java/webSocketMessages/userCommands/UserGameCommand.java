@@ -19,7 +19,8 @@ public class UserGameCommand implements GameCommand {
         JOIN_OBSERVER,
         MAKE_MOVE,
         LEAVE,
-        RESIGN
+        RESIGN,
+        REDRAW_BOARD
     }
 
     protected CommandType commandType;

@@ -34,6 +34,7 @@ public class WebSocketHandler {
                 case MAKE_MOVE -> move(command, session);
                 case LEAVE -> leave(command, session);
                 case RESIGN -> resign(command, session);
+                case REDRAW_BOARD -> redraw(command, session);
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -117,5 +118,18 @@ public class WebSocketHandler {
         connectionManager.removeConnection(command.getAuthString());
 
         connectionManager.broadcastGroup(command.getAuthString(), command.getGameID(), message);
+    }
+    private void redraw(GameCommand command, Session session) throws IOException {
+        GsonBuilder builder = new GsonBuilder();
+        builder.registerTypeAdapter(ServerMessage.class, new ServerMessageDeserializer());
+        Gson gson = builder.create();
+
+        ChessGame game = gameDAO.getGameData(command.getGameID()).game();
+
+        ServerMessageInterface serverMessage = new LoadGameMessage(game);
+
+        String message = gson.toJson(serverMessage);
+
+        connectionManager.broadcastOne(command.getAuthString(), message);
     }
 }

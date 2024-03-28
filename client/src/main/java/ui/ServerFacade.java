@@ -8,6 +8,7 @@ import request.*;
 import response.*;
 import webSocketMessages.userCommands.JoinPlayerCommand;
 import webSocketMessages.userCommands.MakeMoveCommand;
+import webSocketMessages.userCommands.RedrawBoardCommand;
 
 import java.util.ArrayList;
 
@@ -118,6 +119,15 @@ public class ServerFacade {
 
         try {
             webSocketCommunicator.send(makeMoveCommand);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    public void redrawChessBoard(int gameID, String authToken) {
+        var path = "/game";
+        RedrawBoardCommand redrawBoardCommand = new RedrawBoardCommand(authToken, gameID);
+        try {
+            webSocketCommunicator.send(redrawBoardCommand);
         } catch (Exception e) {
             e.printStackTrace();
         }

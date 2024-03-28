@@ -25,6 +25,7 @@ public class SQLGameDAO extends SQLDAO implements GameDAO {
     public int createGame(String gameName) {
         int id = -1;
         ChessGame game = new ChessGame();
+        game.getBoard().resetBoard();
         String gameString = gson.toJson(game);
         var statement = "INSERT INTO game (gameName, game) VALUES (?, ?)";
         try {
