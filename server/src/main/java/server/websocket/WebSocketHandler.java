@@ -99,7 +99,7 @@ public class WebSocketHandler {
         } else {
             gameDAO.updateGame(command.getPlayerColor(), gameID, username);
 
-            ServerMessageInterface serverMessage = new NotificationMessage(username + " joined the game");
+            ServerMessageInterface serverMessage = new NotificationMessage(username + " joined the game as " + (playerColor == ChessGame.TeamColor.WHITE ? "white" : "black") + " player");
 
             String message = gson.toJson(serverMessage);
 
@@ -264,6 +264,38 @@ public class WebSocketHandler {
         String message2 = gson.toJson(serverMessage2);
 
         connectionManager.broadcastGroup(command.getAuthString(), command.getGameID(), message2);
+
+        ChessGame.TeamColor opponentColor = playerColor == ChessGame.TeamColor.WHITE ? ChessGame.TeamColor.BLACK : ChessGame.TeamColor.WHITE;
+
+        String opponentUsername = playerColor == ChessGame.TeamColor.WHITE ? blackUsername : whiteUsername;
+
+        if (game.isInCheck(opponentColor)) {
+            ServerMessageInterface serverMessage3 = new NotificationMessage(opponentUsername + " is in check");
+
+            String message3 = gson.toJson(serverMessage3);
+
+            connectionManager.broadcastAll(gameID, message3);
+        }
+
+        if (game.isInCheckmate(opponentColor)) {
+            ServerMessageInterface serverMessage4 = new NotificationMessage(opponentUsername + " is in checkmate " + turnString + " wins!");
+
+            String message4 = gson.toJson(serverMessage4);
+
+            game.gameOver();
+
+            connectionManager.broadcastAll(gameID, message4);
+        }
+
+        if (game.isInStalemate(opponentColor)) {
+            ServerMessageInterface serverMessage5 = new NotificationMessage(opponentUsername + " is in stalemate. It's a tie!");
+
+            String message5 = gson.toJson(serverMessage5);
+
+            game.gameOver();
+
+            connectionManager.broadcastAll(gameID, message5);
+        }
     }
     private void leave(GameCommand command, Session session) throws IOException {
         GsonBuilder builder = new GsonBuilder();

@@ -284,6 +284,7 @@ public class ChessClient implements ServerMessageObserver{
         System.out.print(SET_TEXT_COLOR_RED);
         System.out.println(errorMessage);
         System.out.print(RESET_TEXT_COLOR);
+        System.out.print(RESET_BG_COLOR);
         System.out.print("Enter your choice > ");
     }
     private static void loadGame(ChessGame game, boolean highlightMoves, ChessPosition position) {

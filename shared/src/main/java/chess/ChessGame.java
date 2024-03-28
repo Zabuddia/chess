@@ -227,6 +227,9 @@ public class ChessGame {
      * @return True if the specified team is in check
      */
     public boolean isInCheck(TeamColor teamColor) {
+        if (teamColor == null) {
+            return false;
+        }
         ChessPosition kingPosition = board.getKingPosition(teamColor);
         TeamColor opponentColor = (teamColor == TeamColor.WHITE) ? TeamColor.BLACK : TeamColor.WHITE;
         Collection<ChessPosition> occupiedPositionsList = board.occupiedPositionsOfAColor(opponentColor);
@@ -273,6 +276,9 @@ public class ChessGame {
      * @return True if the specified team is in checkmate
      */
     public boolean isInCheckmate(TeamColor teamColor) {
+        if (teamColor == null) {
+            return false;
+        }
         if (!isInCheck(teamColor)) {
             return false;
         }
