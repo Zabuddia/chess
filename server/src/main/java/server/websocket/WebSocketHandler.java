@@ -9,10 +9,7 @@ import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.api.annotations.WebSocket;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketMessage;
 import webSocketMessages.serverMessages.*;
-import webSocketMessages.userCommands.GameCommand;
-import webSocketMessages.userCommands.MakeMoveCommand;
-import webSocketMessages.userCommands.UserGameCommand;
-import webSocketMessages.userCommands.UserGameCommandDeserializer;
+import webSocketMessages.userCommands.*;
 
 import java.io.IOException;
 import java.util.Objects;
@@ -34,11 +31,11 @@ public class WebSocketHandler {
             switch (command.getCommandType()) {
                 case JOIN_PLAYER -> join(command, session);
                 case JOIN_OBSERVER -> observe(command, session);
-                case MAKE_MOVE -> move((MakeMoveCommand) command, session);
-                case LEAVE -> leave(command, session);
-                case RESIGN -> resign(command, session);
-                case REDRAW_BOARD -> redraw(command, session);
-                case HIGHLIGHT_MOVES -> highlightMoves(command, session);
+                case MAKE_MOVE -> move((MakeMoveCommand) command);
+                case LEAVE -> leave(command);
+                case RESIGN -> resign(command);
+                case REDRAW_BOARD -> redraw(command);
+                case HIGHLIGHT_MOVES -> highlightMoves(command);
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -169,7 +166,7 @@ public class WebSocketHandler {
 
         connectionManager.broadcastOne(command.getAuthString(), message2);
     }
-    private void move(MakeMoveCommand command, Session session) throws IOException {
+    private void move(MakeMoveCommand command) throws IOException {
         GsonBuilder builder = new GsonBuilder();
         builder.registerTypeAdapter(ServerMessage.class, new ServerMessageDeserializer());
         Gson gson = builder.create();
@@ -297,7 +294,7 @@ public class WebSocketHandler {
             connectionManager.broadcastAll(gameID, message5);
         }
     }
-    private void leave(GameCommand command, Session session) throws IOException {
+    private void leave(GameCommand command) throws IOException {
         GsonBuilder builder = new GsonBuilder();
         builder.registerTypeAdapter(ServerMessage.class, new ServerMessageDeserializer());
         Gson gson = builder.create();
@@ -314,7 +311,7 @@ public class WebSocketHandler {
 
         connectionManager.broadcastGroup(command.getAuthString(), command.getGameID(), message);
     }
-    private void resign(GameCommand command, Session session) throws IOException {
+    private void resign(GameCommand command) throws IOException {
         GsonBuilder builder = new GsonBuilder();
         builder.registerTypeAdapter(ServerMessage.class, new ServerMessageDeserializer());
         Gson gson = builder.create();
@@ -359,7 +356,7 @@ public class WebSocketHandler {
 
         connectionManager.removeConnection(command.getAuthString());
     }
-    private void redraw(GameCommand command, Session session) throws IOException {
+    private void redraw(GameCommand command) throws IOException {
         GsonBuilder builder = new GsonBuilder();
         builder.registerTypeAdapter(ServerMessage.class, new ServerMessageDeserializer());
         Gson gson = builder.create();
@@ -372,7 +369,7 @@ public class WebSocketHandler {
 
         connectionManager.broadcastOne(command.getAuthString(), message);
     }
-    private void highlightMoves(GameCommand command, Session session) throws IOException {
+    private void highlightMoves(GameCommand command) throws IOException {
         GsonBuilder builder = new GsonBuilder();
         builder.registerTypeAdapter(ServerMessage.class, new ServerMessageDeserializer());
         Gson gson = builder.create();
@@ -380,8 +377,6 @@ public class WebSocketHandler {
         ChessGame game = gameDAO.getGameData(command.getGameID()).game();
 
         ServerMessageInterface serverMessage = new LoadGameMessage(game);
-
-        ((LoadGameMessage) serverMessage).highlightMoves = true;
 
         ((LoadGameMessage) serverMessage).position = command.getPosition();
 

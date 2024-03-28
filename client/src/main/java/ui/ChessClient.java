@@ -21,7 +21,7 @@ public class ChessClient implements ServerMessageObserver {
         switch (message.getServerMessageType()) {
             case NOTIFICATION -> displayNotification(((NotificationMessage) message).getMessage());
             case ERROR -> displayError(((ErrorMessage) message).getErrorMessage());
-            case LOAD_GAME -> loadGame(((LoadGameMessage) message).getGame(), ((LoadGameMessage) message).highlightMoves, ((LoadGameMessage) message).position);
+            case LOAD_GAME -> loadGame(((LoadGameMessage) message).getGame(), ((LoadGameMessage) message).position);
         }
     }
 
@@ -329,14 +329,14 @@ public class ChessClient implements ServerMessageObserver {
         System.out.print(RESET_TEXT_COLOR);
         System.out.print(RESET_BG_COLOR);
     }
-    private static void loadGame(ChessGame game, boolean highlightMoves, ChessPosition position) {
+    private static void loadGame(ChessGame game, ChessPosition position) {
         System.out.println();
         if (teamColor == null) {
-            ChessBoardUI.printBoard(game, ChessGame.TeamColor.WHITE, highlightMoves, position);
+            ChessBoardUI.printBoard(game, ChessGame.TeamColor.WHITE, position);
         } else if (teamColor == ChessGame.TeamColor.WHITE) {
-            ChessBoardUI.printBoard(game, ChessGame.TeamColor.WHITE, highlightMoves, position);
+            ChessBoardUI.printBoard(game, ChessGame.TeamColor.WHITE, position);
         } else {
-            ChessBoardUI.printBoard(game, ChessGame.TeamColor.BLACK, highlightMoves, position);
+            ChessBoardUI.printBoard(game, ChessGame.TeamColor.BLACK, position);
         }
     }
 }

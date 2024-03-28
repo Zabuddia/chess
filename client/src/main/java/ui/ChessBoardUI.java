@@ -14,11 +14,9 @@ import static ui.EscapeSequences.*;
 public class ChessBoardUI {
 
     private static final int BOARD_SIZE_IN_SQUARES = 8;
-    private boolean highlightMoves = false;
-    private ChessPosition position = null;
     private static final ChessPiece[][] board = new ChessPiece[BOARD_SIZE_IN_SQUARES][BOARD_SIZE_IN_SQUARES];
     private static boolean[][] highlightedSquares = new boolean[BOARD_SIZE_IN_SQUARES][BOARD_SIZE_IN_SQUARES];
-    public static void printBoard(ChessGame game, ChessGame.TeamColor teamColor, boolean highlightMoves, ChessPosition position) {
+    public static void printBoard(ChessGame game, ChessGame.TeamColor teamColor, ChessPosition position) {
         for (int row = 1; row <= BOARD_SIZE_IN_SQUARES; row++) {
             for (int col = 1; col <= BOARD_SIZE_IN_SQUARES; col++) {
                 board[row - 1][col - 1] = game.getBoard().getPiece(new ChessPosition(row, col));
