@@ -174,10 +174,26 @@ public class WebSocketHandler {
 
         ChessGame game = gameDAO.getGameData(command.getGameID()).game();
 
+        if (game.getTeamTurn() != command.getPlayerColor()) {
+            ServerMessageInterface serverMessage = new ErrorMessage("Error: Not your turn");
+
+            String message = gson.toJson(serverMessage);
+
+            connectionManager.broadcastOne(command.getAuthString(), message);
+
+            return;
+        }
+
         try {
             game.makeMove(command.getMove());
         } catch (Exception e) {
-            e.printStackTrace();
+            ServerMessageInterface serverMessage = new ErrorMessage("Error: Invalid move");
+
+            String message = gson.toJson(serverMessage);
+
+            connectionManager.broadcastOne(command.getAuthString(), message);
+
+            return;
         }
 
         gameDAO.moveGame(command.getGameID(), game);
@@ -187,6 +203,14 @@ public class WebSocketHandler {
         String message = gson.toJson(serverMessage);
 
         connectionManager.broadcastAll(command.getGameID(), message);
+
+        String username = authDAO.getUsername(command.getAuthString());
+
+        ServerMessageInterface serverMessage2 = new NotificationMessage(username + " moved " + command.getMove().toString());
+
+        String message2 = gson.toJson(serverMessage2);
+
+        connectionManager.broadcastGroup(command.getAuthString(), command.getGameID(), message2);
     }
     private void leave(GameCommand command, Session session) throws IOException {
         GsonBuilder builder = new GsonBuilder();
