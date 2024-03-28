@@ -10,7 +10,7 @@ import static ui.EscapeSequences.*;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class ChessClient implements ServerMessageObserver{
+public class ChessClient implements ServerMessageObserver {
     private static final ServerFacade serverFacade = new ServerFacade(8080);
     private static String authToken = null;
     private static int gameID = -1;
@@ -52,7 +52,9 @@ public class ChessClient implements ServerMessageObserver{
                 preloginHelp();
                 break;
             default:
-                System.out.println("Invalid choice. Please try again.");
+                System.out.println();
+                displayError("Invalid choice. Please try again.");
+                System.out.println();
                 preloginUI();
         }
     }
@@ -92,7 +94,9 @@ public class ChessClient implements ServerMessageObserver{
                 postloginHelp();
                 break;
             default:
-                System.out.println("Invalid choice. Please try again.");
+                System.out.println();
+                displayError("Invalid choice. Please try again.");
+                System.out.println();
                 postloginUI();
         }
     }
@@ -128,7 +132,9 @@ public class ChessClient implements ServerMessageObserver{
                 gameplayHelp();
                 break;
             default:
-                System.out.println("Invalid choice. Please try again.");
+                System.out.println();
+                displayError("Invalid choice. Please try again.");
+                System.out.println();
                 gameplayUI();
         }
     }
@@ -242,6 +248,7 @@ public class ChessClient implements ServerMessageObserver{
             System.out.println("BlackPlayer: " + game.blackUsername());
             i++;
         }
+        System.out.println();
         postloginUI();
     }
     private static void joinGame() {
@@ -257,9 +264,9 @@ public class ChessClient implements ServerMessageObserver{
         System.out.println("Enter White or Black:");
         System.out.print("> ");
         String color = scanner.nextLine();
-        if (color.toLowerCase().equals("white")) {
+        if (color.equalsIgnoreCase("white")) {
             teamColor = ChessGame.TeamColor.WHITE;
-        } else if (color.toLowerCase().equals("black")) {
+        } else if (color.equalsIgnoreCase("black")) {
             teamColor = ChessGame.TeamColor.BLACK;
         } else {
             teamColor = null;
