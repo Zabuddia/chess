@@ -55,6 +55,14 @@ public class WebSocketHandler {
         connectionManager.addConnection(command.getAuthString(), command.getGameID(), session);
 
         connectionManager.broadcastGroup(command.getAuthString(), command.getGameID(), message);
+
+        ChessGame game = gameDAO.getGameData(command.getGameID()).game();
+
+        ServerMessageInterface serverMessage2 = new LoadGameMessage(game);
+
+        String message2 = gson.toJson(serverMessage2);
+
+        connectionManager.broadcastOne(command.getAuthString(), message2);
     }
     private void observe(GameCommand command, Session session) throws IOException {
         GsonBuilder builder = new GsonBuilder();
