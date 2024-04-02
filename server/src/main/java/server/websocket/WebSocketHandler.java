@@ -188,18 +188,12 @@ public class WebSocketHandler {
             try {
                 game.makeMove(command.getMove());
             } catch (Exception e) {
-                ServerMessageInterface serverMessage = new ErrorMessage("Error: Invalid move");
+                ServerMessageInterface serverMessage = new ErrorMessage("Error: Not a valid move");
                 String message = gson.toJson(serverMessage);
                 connectionManager.broadcastOne(command.getAuthString(), message);
                 return;
             }
-            gameDAO.moveGame(command.getGameID(), game);
-            ServerMessageInterface serverMessage = new LoadGameMessage(game);
-            String message = gson.toJson(serverMessage);
-            connectionManager.broadcastAll(command.getGameID(), message);
-            ServerMessageInterface serverMessage2 = new NotificationMessage(username + " moved " + command.getMove().toString());
-            String message2 = gson.toJson(serverMessage2);
-            connectionManager.broadcastGroup(command.getAuthString(), command.getGameID(), message2);
+            socketMakeMove(command, gson, game, username);
             return;
         }
 
@@ -217,13 +211,7 @@ public class WebSocketHandler {
             connectionManager.broadcastOne(command.getAuthString(), message);
             return;
         }
-        gameDAO.moveGame(command.getGameID(), game);
-        ServerMessageInterface serverMessage = new LoadGameMessage(game);
-        String message = gson.toJson(serverMessage);
-        connectionManager.broadcastAll(command.getGameID(), message);
-        ServerMessageInterface serverMessage2 = new NotificationMessage(username + " moved " + command.getMove().toString());
-        String message2 = gson.toJson(serverMessage2);
-        connectionManager.broadcastGroup(command.getAuthString(), command.getGameID(), message2);
+        socketMakeMove(command, gson, game, username);
         ChessGame.TeamColor opponentColor = playerColor == ChessGame.TeamColor.WHITE ? ChessGame.TeamColor.BLACK : ChessGame.TeamColor.WHITE;
         String opponentUsername = playerColor == ChessGame.TeamColor.WHITE ? blackUsername : whiteUsername;
         if (game.isInCheck(opponentColor)) {
@@ -244,6 +232,17 @@ public class WebSocketHandler {
             connectionManager.broadcastAll(gameID, message5);
         }
     }
+
+    private void socketMakeMove(MakeMoveCommand command, Gson gson, ChessGame game, String username) {
+        gameDAO.moveGame(command.getGameID(), game);
+        ServerMessageInterface serverMessage1 = new LoadGameMessage(game);
+        String message = gson.toJson(serverMessage1);
+        connectionManager.broadcastAll(command.getGameID(), message);
+        ServerMessageInterface serverMessage2 = new NotificationMessage(username + " moved " + command.getMove().toString());
+        String message2 = gson.toJson(serverMessage2);
+        connectionManager.broadcastGroup(command.getAuthString(), command.getGameID(), message2);
+    }
+
     private void leave(GameCommand command) throws IOException {
         GsonBuilder builder = new GsonBuilder();
         builder.registerTypeAdapter(ServerMessage.class, new ServerMessageDeserializer());
