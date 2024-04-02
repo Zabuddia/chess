@@ -65,7 +65,7 @@ public class WebSocketHandler {
         int gameID = command.getGameID();
 
         if (!gameDAO.getGame(gameID)) {
-            ServerMessageInterface serverMessage = new ErrorMessage("Error: No game with that ID");
+            ServerMessageInterface serverMessage = new ErrorMessage("Error: There is no game with that ID");
 
             String message = gson.toJson(serverMessage);
 
@@ -119,7 +119,7 @@ public class WebSocketHandler {
         Gson gson = builder.create();
 
         if (!authDAO.getAuth(command.getAuthString())) {
-            ServerMessageInterface serverMessage = new ErrorMessage("Error: Unauthorized");
+            ServerMessageInterface serverMessage = new ErrorMessage("Error: You are unauthorized");
 
             String message = gson.toJson(serverMessage);
 
