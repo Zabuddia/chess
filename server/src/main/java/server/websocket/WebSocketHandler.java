@@ -170,127 +170,77 @@ public class WebSocketHandler {
         GsonBuilder builder = new GsonBuilder();
         builder.registerTypeAdapter(ServerMessage.class, new ServerMessageDeserializer());
         Gson gson = builder.create();
-
         int gameID = command.getGameID();
-
         String whiteUsername = gameDAO.getGameData(gameID).whiteUsername();
         String blackUsername = gameDAO.getGameData(gameID).blackUsername();
-
         ChessGame game = gameDAO.getGameData(gameID).game();
-
         String username = authDAO.getUsername(command.getAuthString());
-
         if (!Objects.equals(username, whiteUsername) && !Objects.equals(username, blackUsername)) {
             ServerMessageInterface serverMessage = new ErrorMessage("Error: You are not a player in this game");
-
             String message = gson.toJson(serverMessage);
-
             connectionManager.broadcastOne(command.getAuthString(), message);
-
             return;
         }
-
         ChessGame.TeamColor turn = game.getTeamTurn();
-
         String turnString = turn == ChessGame.TeamColor.WHITE ? "white" : "black";
-
         ChessGame.TeamColor playerColor = command.getPlayerColor();
-
         if (playerColor == null && username.equals(turnString)) {
             try {
                 game.makeMove(command.getMove());
             } catch (Exception e) {
                 ServerMessageInterface serverMessage = new ErrorMessage("Error: Invalid move");
-
                 String message = gson.toJson(serverMessage);
-
                 connectionManager.broadcastOne(command.getAuthString(), message);
-
                 return;
             }
-
             gameDAO.moveGame(command.getGameID(), game);
-
             ServerMessageInterface serverMessage = new LoadGameMessage(game);
-
             String message = gson.toJson(serverMessage);
-
             connectionManager.broadcastAll(command.getGameID(), message);
-
             ServerMessageInterface serverMessage2 = new NotificationMessage(username + " moved " + command.getMove().toString());
-
             String message2 = gson.toJson(serverMessage2);
-
             connectionManager.broadcastGroup(command.getAuthString(), command.getGameID(), message2);
-
             return;
         }
 
         if (playerColor != turn) {
             ServerMessageInterface serverMessage = new ErrorMessage("Error: Not your turn");
-
             String message = gson.toJson(serverMessage);
-
             connectionManager.broadcastOne(command.getAuthString(), message);
-
             return;
         }
-
         try {
             game.makeMove(command.getMove());
         } catch (Exception e) {
             ServerMessageInterface serverMessage = new ErrorMessage("Error: Invalid move");
-
             String message = gson.toJson(serverMessage);
-
             connectionManager.broadcastOne(command.getAuthString(), message);
-
             return;
         }
-
         gameDAO.moveGame(command.getGameID(), game);
-
         ServerMessageInterface serverMessage = new LoadGameMessage(game);
-
         String message = gson.toJson(serverMessage);
-
         connectionManager.broadcastAll(command.getGameID(), message);
-
         ServerMessageInterface serverMessage2 = new NotificationMessage(username + " moved " + command.getMove().toString());
-
         String message2 = gson.toJson(serverMessage2);
-
         connectionManager.broadcastGroup(command.getAuthString(), command.getGameID(), message2);
-
         ChessGame.TeamColor opponentColor = playerColor == ChessGame.TeamColor.WHITE ? ChessGame.TeamColor.BLACK : ChessGame.TeamColor.WHITE;
-
         String opponentUsername = playerColor == ChessGame.TeamColor.WHITE ? blackUsername : whiteUsername;
-
         if (game.isInCheck(opponentColor)) {
             ServerMessageInterface serverMessage3 = new NotificationMessage(opponentUsername + " is in check");
-
             String message3 = gson.toJson(serverMessage3);
-
             connectionManager.broadcastAll(gameID, message3);
         }
-
         if (game.isInCheckmate(opponentColor)) {
             ServerMessageInterface serverMessage4 = new NotificationMessage(opponentUsername + " is in checkmate " + turnString + " wins!");
-
             String message4 = gson.toJson(serverMessage4);
-
             game.gameOver();
-
             connectionManager.broadcastAll(gameID, message4);
         }
-
         if (game.isInStalemate(opponentColor)) {
             ServerMessageInterface serverMessage5 = new NotificationMessage(opponentUsername + " is in stalemate. It's a tie!");
-
             String message5 = gson.toJson(serverMessage5);
-
             game.gameOver();
-
             connectionManager.broadcastAll(gameID, message5);
         }
     }

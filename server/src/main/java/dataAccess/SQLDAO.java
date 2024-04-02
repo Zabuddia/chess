@@ -95,14 +95,4 @@ public class SQLDAO {
             ex.printStackTrace();
         }
     }
-    protected void deleteDatabase() {
-        try (var conn = DatabaseManager.getConnection()) {
-            var statement = "DROP DATABASE IF EXISTS " + DatabaseManager.getDatabaseName();
-            try (var preparedStatement = conn.prepareStatement(statement)) {
-                preparedStatement.executeUpdate();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 }
