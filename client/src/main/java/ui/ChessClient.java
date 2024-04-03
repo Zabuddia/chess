@@ -29,6 +29,7 @@ public class ChessClient implements ServerMessageObserver {
         preloginUI();
     }
     private static void preloginUI() {
+        System.out.println();
         System.out.println("Welcome to Chess! Here is what you can do:");
         System.out.println("Login");
         System.out.println("Register");
@@ -59,6 +60,7 @@ public class ChessClient implements ServerMessageObserver {
         }
     }
     private static void postloginUI() {
+        System.out.println();
         System.out.println("Welcome to Chess! Here is what you can do:");
         System.out.println("Create Game");
         System.out.println("List Games");
@@ -101,6 +103,7 @@ public class ChessClient implements ServerMessageObserver {
         }
     }
     private static void gameplayUI() {
+        System.out.println();
         System.out.println("Here is what you can do:");
         System.out.println("Make Move");
         System.out.println("Highlight Legal Moves");
@@ -130,6 +133,9 @@ public class ChessClient implements ServerMessageObserver {
                 break;
             case "help":
                 gameplayHelp();
+                break;
+            case "wrong color":
+                postloginUI();
                 break;
             default:
                 System.out.println();
@@ -279,7 +285,7 @@ public class ChessClient implements ServerMessageObserver {
             System.out.println("Either create a game or list games first.");
             postloginUI();
         }
-        System.out.println("Enter the game ID:");
+        System.out.println("Enter the game number:");
         System.out.print("> ");
         Scanner scanner = new Scanner(System.in);
         int gameNumber = Integer.parseInt(scanner.nextLine());
@@ -326,11 +332,11 @@ public class ChessClient implements ServerMessageObserver {
         System.out.println();
         System.out.print(SET_TEXT_COLOR_RED);
         System.out.println(errorMessage);
+        if (errorMessage.equals("Error: A player has already joined the game with that color")) {
+            System.out.println("Please enter \"wrong color\" to return to the previous menu.");
+        }
         System.out.print(RESET_TEXT_COLOR);
         System.out.print(RESET_BG_COLOR);
-        if (errorMessage.equals("Error: A player has already joined the game with that color")) {
-            postloginUI();
-        }
     }
     private static void loadGame(ChessGame game, ChessPosition position) {
         System.out.println();
