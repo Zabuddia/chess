@@ -259,7 +259,12 @@ public class ChessClient implements ServerMessageObserver {
     }
     private static void joinGame() {
         if (games.isEmpty()) {
+            System.out.println();
+            System.out.print(SET_TEXT_COLOR_BLUE);
             System.out.println("Either create a game or list games first.");
+            System.out.print(RESET_TEXT_COLOR);
+            System.out.print(RESET_BG_COLOR);
+            System.out.println();
             postloginUI();
         }
         System.out.println("Enter the game number:");
